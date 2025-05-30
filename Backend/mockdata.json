@@ -1,0 +1,98 @@
+{
+  "USUARIO": [
+    {
+      "id_usuario": 0,
+      "nombre": "juan",
+      "sexo": "hombre",
+      "foto_perfil": "https://fotos/juan.png",
+      "email": "juancito@gmail.com"
+    },
+    {
+      "id_usuario": 1,
+      "nombre": "maria",
+      "sexo": "mujer",
+      "foto_perfil": "https://fotos/maria.png",
+      "email": "maria123@gmail.com"
+    },
+    {
+      "id_usuario": 2,
+      "nombre": "lucas",
+      "sexo": "hombre",
+      "foto_perfil": "https://fotos/lucas.png",
+      "email": "lucas.lopez@gmail.com"
+    }
+  ],
+  "GENERADOR": [
+    {
+      "id_generador": 0,
+      "id_usuario": 0,
+      "ciudad": "alta gracia",
+      "calle": "arzobispo castellanos",
+      "numero_vivienda": 44
+    },
+    {
+      "id_generador": 1,
+      "id_usuario": 0,
+      "ciudad": "cordoba",
+      "calle": "avenida siempre viva",
+      "numero_vivienda": 742
+    },
+    {
+      "id_generador": 2,
+      "id_usuario": 2,
+      "ciudad": "villa carlos paz",
+      "calle": "san martín",
+      "numero_vivienda": 123
+    }
+  ],
+  "MEDICION_POR_HORA": [
+    {
+      "id_medicion": 0,
+      "id_generador": 0,
+      "voltaje_generado": 5,
+      "consumo": 35,
+      "velocidad_viento": 15,
+      "direccion_viento": 180,
+      "humedad": 15,
+      "temperatura": 25,
+      "fecha": "2025-05-29",
+      "hora": "23:00"
+    },
+    {
+      "id_medicion": 1,
+      "id_generador": 1,
+      "voltaje_generado": 6,
+      "consumo": 30,
+      "velocidad_viento": 10,
+      "direccion_viento": 200,
+      "humedad": 20,
+      "temperatura": 22,
+      "fecha": "2025-05-29",
+      "hora": "22:00"
+    },
+    {
+      "id_medicion": 2,
+      "id_generador": 2,
+      "voltaje_generado": 7,
+      "consumo": 45,
+      "velocidad_viento": 20,
+      "direccion_viento": 150,
+      "humedad": 10,
+      "temperatura": 28,
+      "fecha": "2025-05-29",
+      "hora": "21:00"
+    },
+    {
+      "id_medicion": 3,
+      "id_generador": 0,
+      "voltaje_generado": 4.8,
+      "consumo": 40,
+      "velocidad_viento": 13,
+      "direccion_viento": 175,
+      "humedad": 18,
+      "temperatura": 24,
+      "fecha": "2025-05-28",
+      "hora": "20:00"
+    }
+  ]
+}
