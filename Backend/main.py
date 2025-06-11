@@ -1,30 +1,39 @@
-from sqlmodel import select, create_engine, Session
+from sqlmodel import create_engine
 from dotenv import dotenv_values
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI
 import Tablas
+
+# Carpeta de Services, (funciones para interactuar con la base de datos)
+from Services import GeneradorService
 
 Config = dotenv_values(".env")  # Configuraciones
 engine = create_engine(
-    "mysql+pymysql://root:password@localhost:3306/test"
+    f"{Config['ENGINE']}://{Config['USER']}:{Config['PASSWORD']}@{Config['HOST']}:{Config['PORT']}/{Config['DATABASE']}",
 )  # motor para la base de datos
+print("Base de datos conectada")
+
+
+class Rutas:
+    Generador = "/generador"
+    Usuario = "/usuario"
+
 
 app = FastAPI()
 
 
-@app.get("/generador/")
-def get_id(user_id: int = Query(None, ge=0)):
-    with Session(engine) as session:
-        # Armar la query
-        query = select(Tablas.GENERADOR.id_generador).where(
-            Tablas.GENERADOR.id_usuario == user_id
-        )
-        # Ejecutar la query
-        generadores = session.exec(query).all()
-        # Si no encuentra ningun generador devuelve una lista vacía
-        if not generadores:
-            return HTTPException(status_code=404, detail="usuario no encontrado")
+# endpoint para crear un generador
+@app.post(Rutas.Generador)
+def crear_generador(generador: Tablas.GENERADOR):
+    return GeneradorService.crear(engine, generador)
 
-        # Devuelve el último elemento porque queremos que se asocie el
-        # generador que el cliente compró y acaba de instalar con el
-        # ultimo id de un generador en su cuenta ya que este ya está creado
-        return {"id_nuevo_generador": generadores[-1]}
+
+# endpoint para obtener un generador por su id
+@app.get(Rutas.Generador)
+def obtener_generador(id_generador: str):
+    return GeneradorService.obtener(engine, id_generador)
+
+
+# endpoint para borrar un generador por su id
+@app.delete(Rutas.Generador)
+def borrar_generador(id_generador: str):
+    return GeneradorService.borrar(engine, id_generador)
