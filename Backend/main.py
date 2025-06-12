@@ -21,6 +21,8 @@ class Rutas:
 app = FastAPI()
 
 
+# GENERADOR :
+#   Página :
 # endpoint para crear un generador
 @app.post(Rutas.Generador)
 def crear_generador(generador: Tablas.GENERADOR):
@@ -29,11 +31,17 @@ def crear_generador(generador: Tablas.GENERADOR):
 
 # endpoint para obtener un generador por su id
 @app.get(Rutas.Generador)
-def obtener_generador(id_generador: str):
+def obtener_generador(id_generador: int):
     return GeneradorService.obtener(engine, id_generador)
 
 
 # endpoint para borrar un generador por su id
 @app.delete(Rutas.Generador)
-def borrar_generador(id_generador: str):
+def borrar_generador(id_generador: int):
     return GeneradorService.borrar(engine, id_generador)
+
+
+#   Hardware :
+@app.patch(Rutas.Generador + "/config_mac")
+def config_macAddress(email_usuario: str, macAddress: str):
+    return GeneradorService.config_macAddress(engine, email_usuario, macAddress)
