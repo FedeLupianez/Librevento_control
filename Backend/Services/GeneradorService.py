@@ -68,21 +68,14 @@ def obtener(engine, id_generador: int) -> GENERADOR | HTTPException:
         return generador
 
 
-def config_macAddress(
-    engine, email_usuario: str, macAddress: str
-) -> dict | HTTPException:
+def config_macAddress(engine, id_usuario: int, macAddress: str) -> dict | HTTPException:
     """Función para configurar una macAddress de un generador en la base de datos
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
-        email_usuario (str) : email del usuario
+        id_usuario (int) : id del usuario
         macAddress (str) : macAddress del dispositivo
     """
     with Session(engine) as session:
-        query = select(USUARIO.id_usuario).where(USUARIO.email == email_usuario)
-        id_usuario = session.exec(query).first()
-        if not (id_usuario):
-            return HTTPException(status_code=404, detail="usuario no encontrado")
-
         query = (
             select(GENERADOR)
             .where(GENERADOR.id_usuario == id_usuario)

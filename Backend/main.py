@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import Tablas
 
 # Carpeta de Services, (funciones para interactuar con la base de datos)
-from Services import GeneradorService
+from Services import GeneradorService, UsuarioService
 
 Config = dotenv_values(".env")  # Configuraciones
 engine = create_engine(
@@ -43,5 +43,26 @@ def borrar_generador(id_generador: int):
 
 #   Hardware :
 @app.patch(Rutas.Generador + "/config_mac")
-def config_macAddress(email_usuario: str, macAddress: str):
-    return GeneradorService.config_macAddress(engine, email_usuario, macAddress)
+def config_macAddress(id_usuario: int, macAddress: str):
+    return GeneradorService.config_macAddress(engine, id_usuario, macAddress)
+
+
+# Endpoints de usuario :
+@app.post(Rutas.Usuario)
+def crear_usuario(usuario: Tablas.USUARIO):
+    return UsuarioService.crear(engine, usuario)
+
+
+@app.get(Rutas.Usuario)
+def obtener_usuario(id_usuario: int):
+    return UsuarioService.obtener(engine, id_usuario)
+
+
+@app.get(Rutas.Usuario)
+def obtener_id(email_usuario: str):
+    return UsuarioService.obtener_id(engine, email_usuario)
+
+
+@app.delete(Rutas.Usuario)
+def borrar_usuario(id_usuario: int):
+    return UsuarioService.borrar(engine, id_usuario)
