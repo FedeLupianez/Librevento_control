@@ -4,3 +4,10 @@ export interface User {
     sex: string,
     imageUrl: string;
 }
+
+export class EmptyUser implements User {
+    id: number = -1;
+    name: string = "default";
+    sex: string = "default";
+    imageUrl: string = "default";
+}
