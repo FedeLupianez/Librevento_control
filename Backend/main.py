@@ -1,6 +1,6 @@
 from sqlmodel import create_engine
 from dotenv import dotenv_values
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import Tablas
 
 # Carpeta de Services, (funciones para interactuar con la base de datos)
@@ -8,14 +8,14 @@ from Services import GeneradorService, UsuarioService
 
 Config = dotenv_values(".env")  # Configuraciones
 engine = create_engine(
-    f"{Config['ENGINE']}://{Config['USER']}:{Config['PASSWORD']}@{Config['HOST']}:{Config['PORT']}/{Config['DATABASE']}",
+    f"{Config['ENGINE']}://{Config['USER']}:{Config['PASSWORD']}@{Config['HOST']}/{Config['DATABASE']}",
 )  # motor para la base de datos
 print("Base de datos conectada")
-
 
 class Rutas:
     Generador = "/generador"
     Usuario = "/usuario"
+    Login = "/login"
 
 
 app = FastAPI()
@@ -50,19 +50,41 @@ def config_macAddress(id_usuario: int, macAddress: str):
 # Endpoints de usuario :
 @app.post(Rutas.Usuario)
 def crear_usuario(usuario: Tablas.USUARIO):
-    return UsuarioService.crear(engine, usuario)
+    try:
+        return UsuarioService.crear(engine, usuario)
+    except HTTPException as e:
+        return e
+    
 
 
 @app.get(Rutas.Usuario)
 def obtener_usuario(id_usuario: int):
-    return UsuarioService.obtener(engine, id_usuario)
+    try:
+        return UsuarioService.obtener(engine, id_usuario)
+    except HTTPException as e:
+        return e
 
 
 @app.get(Rutas.Usuario)
 def obtener_id(email_usuario: str):
-    return UsuarioService.obtener_id(engine, email_usuario)
+    try:
+        return UsuarioService.obtener_id(engine, email_usuario)
+    except HTTPException as e:
+        return e
 
 
 @app.delete(Rutas.Usuario)
 def borrar_usuario(id_usuario: int):
-    return UsuarioService.borrar(engine, id_usuario)
+    try:
+        return UsuarioService.borrar(engine, id_usuario)
+    except HTTPException as e:
+        return e
+
+
+
+@app.get(Rutas.Login)
+def login(email_usuario: str, clave: str):
+    try :
+        return UsuarioService.login(engine, email_usuario, clave)
+    except HTTPException as e:
+        return e

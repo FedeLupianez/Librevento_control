@@ -9,6 +9,7 @@ class USUARIO(SQLModel, table=True):
     sexo: str
     foto_perfil: str
     email: str
+    clave: str
 
 
 class GENERADOR(SQLModel, table=True):

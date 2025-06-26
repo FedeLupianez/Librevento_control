@@ -2,6 +2,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlmodel import Session, select
 from Tablas import USUARIO
 from fastapi import HTTPException
+import bcrypt
 
 
 def crear(engine, usuario: USUARIO) -> dict | HTTPException:
@@ -9,25 +10,29 @@ def crear(engine, usuario: USUARIO) -> dict | HTTPException:
     engine (sqlalchemy.exc.engine) : conexión con la base de datos
     usuario (Tablas.USUARIO) : objeto clase USUARIO a crear
     """
+    tempClave = usuario.clave.encode("utf-8")
+    # Haseo la password
+    usuario.clave = bcrypt.hashpw(tempClave, bcrypt.gensalt())
     with Session(engine) as session:
         try:
             session.add(usuario)
             session.commit()
+            session.refresh(usuario)
         except IntegrityError as e:
             print(e)
             session.rollback()
-            return HTTPException(
+            raise HTTPException(
                 status_code=400, detail="Violación de restricción de datos"
             )
         except OperationalError as e:
             print(e)
             session.rollback()
-            return HTTPException(status_code=500, detail="Error en base de datos")
+            raise HTTPException(status_code=500, detail="Error en base de datos")
         except Exception as e:
             print(e)
             session.rollback()
-            return HTTPException(status_code=500, detail="Error inesperado")
-        return {"message": "Usuario creado exitosamente"}
+            raise HTTPException(status_code=500, detail="Error inesperado")
+        return {"message": "Usuario creado exitosamente", "id": usuario.id_usuario}
 
 
 def borrar(engine, id_usuario: int) -> dict | HTTPException:
@@ -41,7 +46,7 @@ def borrar(engine, id_usuario: int) -> dict | HTTPException:
         usuario = session.exec(query).first()
 
         if not (usuario):
-            return HTTPException(status_code=404, detail="Usuario no encontrado")
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         session.delete(usuario)
         session.commit()
@@ -58,8 +63,9 @@ def obtener(engine, id_usuario: int) -> USUARIO | HTTPException:
         query = select(USUARIO).where(USUARIO.id_usuario == id_usuario)
         usuario = session.exec(query).first()
         if not (usuario):
-            return HTTPException(status_code=404, detail="Usuario no encontrado")
-        return usuario
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        session.refresh(usuario)
+        return {"detail": "Usuario encontrado", "usuario": usuario}
 
 
 def obtener_id(engine, email_usuario: str) -> int | HTTPException:
@@ -72,5 +78,24 @@ def obtener_id(engine, email_usuario: str) -> int | HTTPException:
         query = select(USUARIO.id_usuario).where(USUARIO.email == email_usuario)
         id_usuario = session.exec(query).first()
         if not (id_usuario):
-            return HTTPException(status_code=404, detail="usuario no encontrado")
-        return id_usuario
+            raise HTTPException(status_code=404, detail="usuario no encontrado")
+        return {"detail": "Usuario encontrado", "id_usuario": id_usuario}
+    
+def login(engine, email_usuario: str, clave: str) -> dict | HTTPException:
+    """Función para obtener un registro de usuario por su email
+    Args:
+        engine (sqlalchemy.exc.engine) : conexión con la base de datos
+        email_usuario (str) : email del usuario a obtener
+        clave (str) : clave que puso el usuario
+    """
+    tempClave = clave.encode('utf-8')
+    with Session(engine) as session:
+        usuario = session.exec(select(USUARIO).where(USUARIO.email == email_usuario)).first()
+
+        if not usuario:
+            raise HTTPException(status_code=404, detail="usuario no encontrado")
+
+        if not bcrypt.checkpw(tempClave, usuario.clave.encode('utf-8')):
+            raise HTTPException(status_code=404, detail="clave incorrecta")
+
+        return {"detail" : "Usuario logueado", "data": usuario}
