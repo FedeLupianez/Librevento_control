@@ -14,6 +14,7 @@
 <style>
 	section {
 		display: flex;
+		padding: 0% 7% 0% 7%;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
