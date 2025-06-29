@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 import Tablas
 
 # Carpeta de Services, (funciones para interactuar con la base de datos)
-from Services import GeneradorService, UsuarioService
+from Services import GeneradorService, UsuarioService, MedicionService
 
 Config = dotenv_values("test.env")  # Configuraciones
 engine = create_engine(
@@ -17,6 +17,7 @@ class Rutas:
     Generador = "/generador"
     Usuario = "/usuario"
     Login = "/login"
+    Medicion = "/medicion"
 
 
 app = FastAPI()
@@ -31,6 +32,7 @@ def crear_generador(generador: Tablas.GENERADOR):
         return GeneradorService.crear(engine, generador)
     except HTTPException as error:
         print(error)
+        return error
 
 
 # endpoint para obtener un generador por su id
@@ -40,6 +42,7 @@ def obtener_generador(id_generador: int):
         return GeneradorService.obtener(engine, id_generador)
     except HTTPException as error:
         print(error)
+        return error
 
 
 # endpoint para borrar un generador por su id
@@ -49,6 +52,7 @@ def borrar_generador(id_generador: int):
         return GeneradorService.borrar(engine, id_generador)
     except HTTPException as error:
         print(error)
+        return error
 
 
 #   Hardware :
@@ -58,6 +62,7 @@ def config_macAddress(id_usuario: int, macAddress: str):
         return GeneradorService.config_macAddress(engine, id_usuario, macAddress)
     except HTTPException as error:
         print(error)
+        return error
 
 
 # Endpoints de usuario :
@@ -65,37 +70,52 @@ def config_macAddress(id_usuario: int, macAddress: str):
 def crear_usuario(usuario: Tablas.USUARIO):
     try:
         return UsuarioService.crear(engine, usuario)
-    except HTTPException as e:
-        return e
+    except HTTPException as error:
+        print(error)
+        return error
 
 
 @app.get(Rutas.Usuario)
 def obtener_usuario(id_usuario: int):
     try:
         return UsuarioService.obtener(engine, id_usuario)
-    except HTTPException as e:
-        return e
+    except HTTPException as error:
+        print(error)
+        return error
 
 
 @app.get(Rutas.Usuario)
 def obtener_id(email_usuario: str):
     try:
         return UsuarioService.obtener_id(engine, email_usuario)
-    except HTTPException as e:
-        return e
+    except HTTPException as error:
+        print(error)
+        return error
 
 
 @app.delete(Rutas.Usuario)
 def borrar_usuario(id_usuario: int):
     try:
         return UsuarioService.borrar(engine, id_usuario)
-    except HTTPException as e:
-        return e
+    except HTTPException as error:
+        print(error)
+        return error
 
 
 @app.get(Rutas.Login)
 def login(email_usuario: str, clave: str):
     try:
         return UsuarioService.login(engine, email_usuario, clave)
-    except HTTPException as e:
-        return e
+    except HTTPException as error:
+        print(error)
+        return error
+
+
+# Endpoints para las mediciones:
+@app.post(Rutas.Medicion)
+def crear(medicion: Tablas.MEDICION_POR_HORA):
+    try:
+        return MedicionService.crear(engine, medicion)
+    except HTTPException as error:
+        print(error)
+        return error
