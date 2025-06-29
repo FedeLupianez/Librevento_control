@@ -6,7 +6,7 @@ import Tablas
 # Carpeta de Services, (funciones para interactuar con la base de datos)
 from Services import GeneradorService, UsuarioService
 
-Config = dotenv_values(".env")  # Configuraciones
+Config = dotenv_values("test.env")  # Configuraciones
 engine = create_engine(
     f"{Config['ENGINE']}://{Config['USER']}:{Config['PASSWORD']}@{Config['HOST']}/{Config['DATABASE']}",
 )  # motor para la base de datos

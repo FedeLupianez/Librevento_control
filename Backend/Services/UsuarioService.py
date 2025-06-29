@@ -11,8 +11,9 @@ def crear(engine, usuario: USUARIO) -> dict | HTTPException:
     usuario (Tablas.USUARIO) : objeto clase USUARIO a crear
     """
     tempClave = usuario.clave.encode("utf-8")
-    # Haseo la password
-    usuario.clave = bcrypt.hashpw(tempClave, bcrypt.gensalt())
+    # Hasheo la password
+    claveHasheada = bcrypt.hashpw(tempClave, bcrypt.gensalt())
+    usuario.clave = claveHasheada.decode("utf-8")
     with Session(engine) as session:
         try:
             session.add(usuario)
@@ -53,7 +54,7 @@ def borrar(engine, id_usuario: int) -> dict | HTTPException:
         return {"message": "usuario borrado exitosamente"}
 
 
-def obtener(engine, id_usuario: int) -> USUARIO | HTTPException:
+def obtener(engine, id_usuario: int) -> dict | HTTPException:
     """Función para obtener un registro de usuario por su id
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
@@ -68,7 +69,7 @@ def obtener(engine, id_usuario: int) -> USUARIO | HTTPException:
         return {"detail": "Usuario encontrado", "usuario": usuario}
 
 
-def obtener_id(engine, email_usuario: str) -> int | HTTPException:
+def obtener_id(engine, email_usuario: str) -> dict | HTTPException:
     """Función para obtener un registro de usuario por su email
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
@@ -80,7 +81,8 @@ def obtener_id(engine, email_usuario: str) -> int | HTTPException:
         if not (id_usuario):
             raise HTTPException(status_code=404, detail="usuario no encontrado")
         return {"detail": "Usuario encontrado", "id_usuario": id_usuario}
-    
+
+
 def login(engine, email_usuario: str, clave: str) -> dict | HTTPException:
     """Función para obtener un registro de usuario por su email
     Args:
@@ -88,14 +90,16 @@ def login(engine, email_usuario: str, clave: str) -> dict | HTTPException:
         email_usuario (str) : email del usuario a obtener
         clave (str) : clave que puso el usuario
     """
-    tempClave = clave.encode('utf-8')
+    tempClave = clave.encode("utf-8")
     with Session(engine) as session:
-        usuario = session.exec(select(USUARIO).where(USUARIO.email == email_usuario)).first()
+        usuario = session.exec(
+            select(USUARIO).where(USUARIO.email == email_usuario)
+        ).first()
 
         if not usuario:
             raise HTTPException(status_code=404, detail="usuario no encontrado")
 
-        if not bcrypt.checkpw(tempClave, usuario.clave.encode('utf-8')):
+        if not bcrypt.checkpw(tempClave, usuario.clave.encode("utf-8")):
             raise HTTPException(status_code=404, detail="clave incorrecta")
 
-        return {"detail" : "Usuario logueado", "data": usuario}
+        return {"detail": "Usuario logueado", "data": usuario}

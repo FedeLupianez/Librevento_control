@@ -6,7 +6,6 @@ from typing import Optional
 class USUARIO(SQLModel, table=True):
     id_usuario: int = Field(default=None, primary_key=True)
     nombre: str
-    sexo: str
     foto_perfil: str
     email: str
     clave: str
