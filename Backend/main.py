@@ -12,6 +12,7 @@ engine = create_engine(
 )  # motor para la base de datos
 print("Base de datos conectada")
 
+
 class Rutas:
     Generador = "/generador"
     Usuario = "/usuario"
@@ -26,25 +27,37 @@ app = FastAPI()
 # endpoint para crear un generador
 @app.post(Rutas.Generador)
 def crear_generador(generador: Tablas.GENERADOR):
-    return GeneradorService.crear(engine, generador)
+    try:
+        return GeneradorService.crear(engine, generador)
+    except HTTPException as error:
+        print(error)
 
 
 # endpoint para obtener un generador por su id
 @app.get(Rutas.Generador)
 def obtener_generador(id_generador: int):
-    return GeneradorService.obtener(engine, id_generador)
+    try:
+        return GeneradorService.obtener(engine, id_generador)
+    except HTTPException as error:
+        print(error)
 
 
 # endpoint para borrar un generador por su id
 @app.delete(Rutas.Generador)
 def borrar_generador(id_generador: int):
-    return GeneradorService.borrar(engine, id_generador)
+    try:
+        return GeneradorService.borrar(engine, id_generador)
+    except HTTPException as error:
+        print(error)
 
 
 #   Hardware :
 @app.patch(Rutas.Generador + "/config_mac")
 def config_macAddress(id_usuario: int, macAddress: str):
-    return GeneradorService.config_macAddress(engine, id_usuario, macAddress)
+    try:
+        return GeneradorService.config_macAddress(engine, id_usuario, macAddress)
+    except HTTPException as error:
+        print(error)
 
 
 # Endpoints de usuario :
@@ -54,7 +67,6 @@ def crear_usuario(usuario: Tablas.USUARIO):
         return UsuarioService.crear(engine, usuario)
     except HTTPException as e:
         return e
-    
 
 
 @app.get(Rutas.Usuario)
@@ -81,10 +93,9 @@ def borrar_usuario(id_usuario: int):
         return e
 
 
-
 @app.get(Rutas.Login)
 def login(email_usuario: str, clave: str):
-    try :
+    try:
         return UsuarioService.login(engine, email_usuario, clave)
     except HTTPException as e:
         return e

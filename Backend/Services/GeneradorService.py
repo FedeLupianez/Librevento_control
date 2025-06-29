@@ -1,6 +1,6 @@
 from sqlmodel import Session, desc, select
 from sqlalchemy.exc import IntegrityError, OperationalError
-from Tablas import GENERADOR, USUARIO
+from Tablas import GENERADOR
 from fastapi import HTTPException
 
 
@@ -15,20 +15,17 @@ def crear(engine, generador: GENERADOR) -> dict | HTTPException:
         try:
             session.add(generador)  # Agrego el objeto a la session
             session.commit()  # Confirmo los cambios
-        except IntegrityError as e:
-            print(e)
+        except IntegrityError:
             session.rollback()
-            return HTTPException(
+            raise HTTPException(
                 status_code=400, detail="Violación de restricción de datos"
             )
-        except OperationalError as e:
-            print(e)
+        except OperationalError:
             session.rollback()
-            return HTTPException(status_code=500, detail="Error en base de datos")
-        except Exception as e:
-            print(e)
+            raise HTTPException(status_code=500, detail="Error en base de datos")
+        except Exception:
             session.rollback()
-            return HTTPException(status_code=500, detail="Error inesperado")
+            raise HTTPException(status_code=500, detail="Error inesperado")
         return {"message": "generador creado exitosamente"}
 
 
@@ -45,7 +42,7 @@ def borrar(engine, id_generador: int) -> dict | HTTPException:
         generador = session.exec(query).first()
 
         if not (generador):
-            return HTTPException(status_code=404, detail="generador no encontrado")
+            raise HTTPException(status_code=404, detail="generador no encontrado")
 
         session.delete(generador)
         session.commit()
@@ -63,7 +60,7 @@ def obtener(engine, id_generador: int) -> GENERADOR | HTTPException:
         generador = session.exec(query).first()
         if not (generador):
             # Devuelve un error si no encuentra el generador
-            return HTTPException(status_code=404, detail="Generador no encontrado")
+            raise HTTPException(status_code=404, detail="Generador no encontrado")
 
         return generador
 
@@ -84,7 +81,7 @@ def config_macAddress(engine, id_usuario: int, macAddress: str) -> dict | HTTPEx
         generador = session.exec(query).first()
 
         if not (generador):
-            return HTTPException(
+            raise HTTPException(
                 status_code=404, detail="El usuario no tiene generadores"
             )
         generador.macAddress = macAddress
