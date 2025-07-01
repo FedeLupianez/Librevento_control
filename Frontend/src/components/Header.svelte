@@ -45,44 +45,38 @@
 					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
 				</div>
 
-<<<<<<< Updated upstream
-			<!-- Menú desplegable -->
-			<div
-				class="absolute left-0 z-20 mt-1 hidden w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
-			>
-				<a
-					href="/consumo-dia"
-					class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">Consumo por día</a
-				>
-				<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Consumo por mes</a
-				>
-				<a href="/alertas" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Alertas de consumo</a
-=======
 				<!-- Menú desplegable -->
 				<div
 					class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
->>>>>>> Stashed changes
 				>
-					<a href="/voltaje" class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
-						<span class="text-white">Voltaje Generado</span>
-					</a>
-
-					<a
-						href="/consumo-dia"
-						class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+					<div
+						class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
 					>
-						<span class="text-white">Consumo por día</span>
-					</a>
+						<a
+							href="/voltaje"
+							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
+							<span class="text-white">Voltaje Generado</span>
+						</a>
 
-					<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
-						<span class="text-white">Consumo por mes</span>
-					</a>
+						<a
+							href="/consumo-dia"
+							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
+							<span class="text-white">Consumo por día</span>
+						</a>
 
-					<a href="/alertas" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
-						<span class="text-white">Alertas de consumo</span>
-					</a>
+						<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+							<span class="text-white">Consumo por mes</span>
+						</a>
+
+						<a
+							href="/alertas"
+							class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
+							<span class="text-white">Alertas de consumo</span>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
