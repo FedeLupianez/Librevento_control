@@ -59,10 +59,29 @@
 				>
 			</div>
 		</div>
-		<button class="flex cursor-pointer flex-row items-center justify-center gap-1 font-bold">
-			editar
-			<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
-		</button>
+		<div class="group relative">
+			<button class="flex cursor-pointer flex-row items-center justify-center gap-1 font-bold">
+				editar
+				<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+			</button>
+
+			<div
+				class="absolute -top-1 left-0 z-10 hidden rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:block"
+			>
+				<span class="font-bold text-[#2f3e2f]">editar</span>
+			</div>
+
+			<div
+				class="absolute left-0 z-20 mt-1 hidden w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
+			>
+				<a href="/login" class="px-4 py-2 font-bold hover:bg-[#6b8755]">
+					<span class="text-white">Iniciar Sesión</span>
+				</a>
+				<a href="/sign_up" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+					<span class="text-white">Crear Cuenta</span>
+				</a>
+			</div>
+		</div>
 	</div>
 
 	<button class="cursor-pointer">
