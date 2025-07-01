@@ -29,8 +29,8 @@
 			principal
 			<Icon icon="bx:leaf" class="h-5 w-5" />
 		</button>
+
 		<div class="group relative">
-			<!-- se hace una familia uwu de los div adentro -->
 			<button class="flex cursor-pointer items-center gap-1 font-bold text-[#2f3e2f]">
 				estadísticas
 				<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
@@ -38,31 +38,49 @@
 
 			<!-- botón gris -->
 			<div
-				class="absolute -top-1 left-0 z-10 hidden rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:block"
+				class="absolute -top-1 -left-2.5 z-10 hidden flex-col rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:flex"
 			>
-				<span class="font-bold text-[#2f3e2f]">estadísticas</span>
-			</div>
+				<div class="flex flex-row items-center gap-1">
+					<span class="font-bold text-[#2f3e2f]">estadísticas</span>
+					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+				</div>
 
-			<!-- Menú desplegable -->
-			<div
-				class="absolute left-0 z-20 mt-1 hidden w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
-			>
-				<a href="/voltaje" class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Voltaje
-				</a>
-				<a
-					href="/consumo-dia"
-					class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Consumo por día
-				</a>
-				<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Consumo por mes> ></a
+				<!-- Menú desplegable -->
+				<div
+					class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
 				>
-				<a href="/alertas" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Alertas de consumo</a
-				>
+					<div
+						class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
+					>
+						<a
+							href="/voltaje"
+							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
+							<span class="text-white">Voltaje Generado</span>
+						</a>
+
+						<a
+							href="/consumo-dia"
+							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
+							<span class="text-white">Consumo por día</span>
+						</a>
+
+						<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+							<span class="text-white">Consumo por mes</span>
+						</a>
+
+						<a
+							href="/alertas"
+							class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
+							<span class="text-white">Alertas de consumo</span>
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
+
 		<div class="group relative">
 			<button class="flex cursor-pointer flex-row items-center justify-center gap-1 font-bold">
 				editar
@@ -70,20 +88,23 @@
 			</button>
 
 			<div
-				class="absolute -top-1 left-0 z-10 hidden rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:block"
+				class="absolute -top-1 -left-2.5 z-10 hidden flex-col rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:flex"
 			>
-				<span class="font-bold text-[#2f3e2f]">editar</span>
-			</div>
+				<div class="flex flex-row items-center gap-1">
+					<span class="font-bold text-[#2f3e2f]">editar</span>
+					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+				</div>
 
-			<div
-				class="absolute left-0 z-20 mt-1 hidden w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
-			>
-				<a href="/login" class="px-4 py-2 font-bold hover:bg-[#6b8755]">
-					<span class="text-white">Iniciar Sesión</span>
-				</a>
-				<a href="/sign_up" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
-					<span class="text-white">Crear Cuenta</span>
-				</a>
+				<div
+					class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
+				>
+					<a href="/login" class="px-4 py-2 font-bold hover:bg-[#6b8755]">
+						<span class="text-white">Iniciar Sesión</span>
+					</a>
+					<a href="/sign_up" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+						<span class="text-white">Crear Cuenta</span>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
