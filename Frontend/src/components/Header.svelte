@@ -47,12 +47,16 @@
 			<div
 				class="absolute left-0 z-20 mt-1 hidden w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
 			>
+				<a href="/voltaje" class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+					>Voltaje
+				</a>
 				<a
 					href="/consumo-dia"
-					class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">Consumo por día</a
-				>
+					class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+					>Consumo por día
+				</a>
 				<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-					>Consumo por mes</a
+					>Consumo por mes> ></a
 				>
 				<a href="/alertas" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 					>Alertas de consumo</a
