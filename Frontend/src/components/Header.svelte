@@ -45,34 +45,27 @@
 					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
 				</div>
 
-					<div
-						class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
+				<div
+					class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
+				>
+					<a href="/voltaje" class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+						<span class="text-white">Voltaje Generado</span>
+					</a>
+
+					<a
+						href="/consumo-dia"
+						class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 					>
-						<a
-							href="/voltaje"
-							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-						>
-							<span class="text-white">Voltaje Generado</span>
-						</a>
+						<span class="text-white">Consumo por día</span>
+					</a>
 
-						<a
-							href="/consumo-dia"
-							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-						>
-							<span class="text-white">Consumo por día</span>
-						</a>
+					<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+						<span class="text-white">Consumo por mes</span>
+					</a>
 
-						<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
-							<span class="text-white">Consumo por mes</span>
-						</a>
-
-						<a
-							href="/alertas"
-							class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
-						>
-							<span class="text-white">Alertas de consumo</span>
-						</a>
-					</div>
+					<a href="/alertas" class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+						<span class="text-white">Alertas de consumo</span>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -113,5 +106,4 @@
 		{/if}
 	</button>
 </div>
-
 <div class="h-0.5 w-228 bg-gray-500"></div>
