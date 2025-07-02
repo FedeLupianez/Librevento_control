@@ -45,10 +45,6 @@
 					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
 				</div>
 
-				<!-- Menú desplegable -->
-				<div
-					class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
-				>
 					<div
 						class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
 					>
