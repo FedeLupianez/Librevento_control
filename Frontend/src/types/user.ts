@@ -1,13 +1,8 @@
-export interface User {
-	id: number;
-	name: string;
-	sex: string;
-	imageUrl: string;
-}
-
-export default class EmptyUser implements User {
-	id = 0;
-	name = '';
-	sex = '';
-	imageUrl = '';
+export default interface User {
+	id_usuario: number;
+	nombre: string;
+	sexo: string;
+	foto_perfil: string;
+	email_usuario: string;
+	clave: string;
 }
