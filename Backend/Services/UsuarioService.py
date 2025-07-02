@@ -33,7 +33,7 @@ def crear(engine, usuario: USUARIO) -> dict | HTTPException:
             print(e)
             session.rollback()
             raise HTTPException(status_code=500, detail="Error inesperado")
-        return {"message": "Usuario creado exitosamente", "id": usuario.id_usuario}
+        return {"id":usuario.id_usuario}
 
 
 def borrar(engine, id_usuario: int) -> dict | HTTPException:
@@ -66,7 +66,7 @@ def obtener(engine, id_usuario: int) -> dict | HTTPException:
         if not (usuario):
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
         session.refresh(usuario)
-        return {"detail": "Usuario encontrado", "usuario": usuario}
+        return usuario.dict(exclude={"clave"})
 
 
 def obtener_id(engine, email_usuario: str) -> dict | HTTPException:
@@ -80,7 +80,7 @@ def obtener_id(engine, email_usuario: str) -> dict | HTTPException:
         id_usuario = session.exec(query).first()
         if not (id_usuario):
             raise HTTPException(status_code=404, detail="usuario no encontrado")
-        return {"detail": "Usuario encontrado", "id_usuario": id_usuario}
+        return {"id":id_usuario}
 
 
 def login(engine, email_usuario: str, clave: str) -> dict | HTTPException:
@@ -102,4 +102,4 @@ def login(engine, email_usuario: str, clave: str) -> dict | HTTPException:
         if not bcrypt.checkpw(tempClave, usuario.clave.encode("utf-8")):
             raise HTTPException(status_code=404, detail="clave incorrecta")
 
-        return {"detail": "Usuario logueado", "data": usuario}
+        return usuario.dict(exclude={"clave"})
