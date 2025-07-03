@@ -27,9 +27,12 @@
 	};
 </script>
 
-<div class="flex flex-col items-center justify-center">
-	<h1 class="text-2xl font-bold">Inicio de Sesión</h1>
-	<input type="text" name="username" placeholder="Usuario" bind:value={name} required />
-	<input type="password" name="password" placeholder="Contraseña" bind:value={password} required />
-	<button type="submit" on:click|preventDefault={login}>Iniciar Sesión</button>
+<div class="flex w-full min-h-150 justify-center items-center">
+	<div class="flex flex-col h-100 items-between justify-center gap-10 p-15 border-2 rounded-2xl border-[#7A9660]">
+		<h1 class="text-2xl font-bold">Inicio de Sesión</h1>
+		<input type="text" name="username" placeholder="Usuario" class="text-center" bind:value={name} required />
+		<input type="password" name="password" placeholder="Contraseña" class="text-center" bind:value={password} required />
+		<button type="submit" class="bg-[#7A9660] text-white rounded-2xl p-2 cursor-pointer hover:bg-[#6b8755]" on:click|preventDefault={login}>Iniciar Sesión</button>
+
+	</div>
 </div>
