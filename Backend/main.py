@@ -9,7 +9,7 @@ import Tablas
 # Carpeta de Services, (funciones para interactuar con la base de datos)
 from Services import GeneradorService, UsuarioService, MedicionService
 
-Config = dotenv_values("test.env")  # Configuraciones
+Config = dotenv_values(".env")  # Configuraciones
 engine = create_engine(
     f"{Config['ENGINE']}://{Config['USER']}:{Config['PASSWORD']}@{Config['HOST']}/{Config['DATABASE']}",
 )  # motor para la base de datos
@@ -77,15 +77,6 @@ async def config_macAddress(id_usuario: int, macAddress: str):
 
 
 # Endpoints de usuario :
-
-@app.get(Rutas.Usuario + '/actual')
-async def usuario_actual(request: Request):
-    usuario = request.session.get("usuario")
-    if not usuario:
-        raise HTTPException(status_code=401, detail="Usuario no logueado")
-    print(usuario)
-    return usuario
-
 @app.post(Rutas.Usuario)
 async def crear_usuario(usuario: Tablas.USUARIO, request: Request):
     try:
@@ -148,12 +139,57 @@ async def login(data: loginInput, request: Request):
         print(error)
         raise error
 
+@app.get(Rutas.Usuario + '/actual')
+async def usuario_actual(request: Request):
+    usuario = request.session.get("usuario")
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Usuario no logueado")
+    print(usuario)
+    return usuario
+
+@app.get(Rutas.Usuario + '/logout')
+async def logout(request: Request):
+    request.session.clear()
+    return {"message": "Usuario deslogueado"}
 
 # Endpoints para las mediciones:
 @app.post(Rutas.Medicion)
 async def crear(medicion: Tablas.MEDICION_POR_HORA):
     try:
         return MedicionService.crear(engine, medicion)
+    except HTTPException as error:
+        print(error)
+        raise error
+
+@app.get(Rutas.Medicion + '/id')
+async def obtener(id_medicion: int):
+    try:
+        return MedicionService.obtener(engine, id_medicion)
+    except HTTPException as error:
+        print(error)
+        raise error
+
+@app.get(Rutas.Medicion + '/obtener_id')
+async def obtener_id(macAddress: str):
+    try:
+        return MedicionService.obtener_id(engine, macAddress)
+    except HTTPException as error:
+        print(error)
+        raise error
+
+@app.get(Rutas.Medicion + '/obtener_voltajes')
+async def obtener_voltajes(macAddress: str, id_generador: int | None = None):
+    try:
+        return MedicionService.obtener_voltajes(engine, macAddress, id_generador)
+    except HTTPException as error:
+        print(error)
+        raise error
+
+
+@app.get(Rutas.Medicion + '/obtener_consumos')
+async def obtener_consumos(macAddress: str, id_generador: int | None = None):
+    try:
+        return MedicionService.obtener_consumos(engine, macAddress, id_generador)
     except HTTPException as error:
         print(error)
         raise error

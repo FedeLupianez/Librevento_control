@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlmodel import Session, select
-from Tablas import MEDICION_POR_HORA
+from Tablas import MEDICION_POR_HORA, GENERADOR
 from fastapi import HTTPException
 
 
@@ -31,7 +31,7 @@ def crear(engine, medicion: MEDICION_POR_HORA) -> dict | HTTPException:
         return {"message": "Medicion creada exitosamente"}
 
 
-def obtener(engine, id_medicion: int):
+def obtener(engine, id_medicion: int) -> dict | HTTPException:
     with Session(engine) as session:
         query = select(MEDICION_POR_HORA).where(
             MEDICION_POR_HORA.id_medicion == id_medicion
@@ -42,3 +42,32 @@ def obtener(engine, id_medicion: int):
             raise HTTPException(status_code=404, detail="medicion no encontrada")
         session.refresh(medicion)
         return {"detail": "Medicion encontrada", "medicion": medicion}
+
+def obtener_id(engine, macAddress: str) -> dict | HTTPException:
+    with Session(engine) as session:
+        id = session.exec(select(GENERADOR.id_generador).where(GENERADOR.macAddress == macAddress)).first()
+        if not(id):
+            raise HTTPException(status_code=404, detail="Generador no encontrado")
+        return id
+
+def obtener_voltajes(engine, macAddress: str, id_generador: int | None = None) -> dict | HTTPException:
+    with Session(engine) as session:
+        id = id_generador or obtener_id(engine, macAddress)
+
+        query = select(MEDICION_POR_HORA.voltaje_generado).where(MEDICION_POR_HORA.id_generador == id)
+        voltajes: list[int] = session.exec(query)
+        if not(voltajes):
+            raise HTTPException(status_code=404, detail="Voltajes no encontrados")
+
+        return {"detail": "Voltajes encontrados", "data": voltajes}
+
+def obtener_consumos(engine, macAddress: str, id_generador: int | None = None) -> dict | HTTPException:
+    with Session(engine) as session:
+        id = id_generador or obtener_id(engine, macAddress)
+
+        query = select(MEDICION_POR_HORA.consumo).where(MEDICION_POR_HORA.id_generador == id)
+        consumos: list[int] = session.exec(query)
+        if not(consumos):
+            raise HTTPException(status_code=404, detail="Consumos no encontrados")
+
+        return {"detail": "Consumos encontrados", "data": consumos}
