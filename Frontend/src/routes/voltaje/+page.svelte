@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LineChart from '../../components/LineChart.svelte';
+	import BarChart from '../../components/BarChart.svelte';
 </script>
 
-<LineChart />
+<BarChart />
