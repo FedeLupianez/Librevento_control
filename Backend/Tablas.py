@@ -12,7 +12,7 @@ class USUARIO(SQLModel, table=True):
 
 
 class GENERADOR(SQLModel, table=True):
-    id_generador: str = Field(primary_key=True)
+    id_generador: int = Field(primary_key=True)
     macAddress: Optional[str] = Field(default=None, nullable=True)
     id_usuario: int = Field(foreign_key="usuario.id_usuario")
     ciudad: str
@@ -22,7 +22,7 @@ class GENERADOR(SQLModel, table=True):
 
 class MEDICION_POR_HORA(SQLModel, table=True):
     id_medicion: int = Field(primary_key=True)
-    id_generador: str = Field(foreign_key="generador.id_generador")
+    id_generador: int = Field(foreign_key="generador.id_generador")
     voltaje_generado: int
     consumo: int
     velocidad_viento: int
