@@ -3,6 +3,7 @@
 	import flechita from '/public/flechita.svg';
 	import { onMount } from 'svelte';
 	import { user, fetchUser } from '../stores/user';
+	let showProfile = false;
 
 	onMount(() => {
 		fetchUser();
@@ -102,12 +103,48 @@
 		</div>
 	</div>
 
-	<button class="cursor-pointer">
-		{#if $user}
-			<img src={$user.foto_perfil} alt="Foto de perfil" class="h-10 w-10 rounded-full" />
-		{:else}
-			<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
+	<div class="group relative">
+		<button class="cursor-pointer" on:click={() => (showProfile = !showProfile)}>
+			{#if $user}
+				<img src={$user.foto_perfil} alt="Foto de perfil" class="h-10 w-10 rounded-full" />
+			{:else}
+				<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
+			{/if}
+		</button>
+
+		{#if showProfile}
+			<div class="mt-1 flex-col rounded-md bg-[#b9c3c8] absolute -top-4.5 -right-4.5 shadow-md min-w-52 p-0.5">
+				<div class="flex flex-row justify-around items-center">
+					{#if $user}
+						<span class="p-5">{$user.nombre}</span>
+					{:else}
+						<span class="p-5">Usuario</span>
+					{/if}
+					<button class="cursor-pointer flex flex-row" on:click={() => (showProfile = !showProfile)}>
+						{#if $user}
+							<img src={$user.foto_perfil} alt="Foto de perfil" class="h-10 w-10 rounded-full" />
+						{:else}
+							<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
+						{/if}
+					</button>
+				</div>
+
+
+				<div class="flex flex-col justify-center items-center">
+					{#if $user}
+						<a href="/logout" class="flex justify-center px-4 py-2 font-bold text-white hover:bg-[#6b8755] rounded-2xl w-full items-center">
+							<Icon icon="bx:log-out" class="h-5 w-5" />
+							<span class="text-red-500 rounded-2xl text-center">Cerrar Sesión</span>
+						</a>
+					{:else}
+						<a href="/login" class="flex justify-center px-4 py-2 font-bold text-white hover:bg-[#6b8755] rounded-2xl w-full items-center">
+							<span class="text-white rounded-2xl text-center">Iniciar Sesión</span>
+						</a>
+					{/if}
+				</div>
+			</div>
 		{/if}
-	</button>
+	</div>
+
 </div>
 <div class="h-0.5 w-228 bg-gray-500"></div>
