@@ -1,14 +1,24 @@
 <script lang="ts">
 	import { fetchUser, user } from '../../stores/user';
-	import * as Genderize from 'genderize';
 
 	let name: string = '';
 	let email: string = '';
 	let password: string = '';
 
+	const getGender = async (name: string): Promise<string> => {
+		try {
+			const response = await fetch(`https://api.genderize.io?name=${name}`);
+			const data = await response.json();
+			return data.gender || 'unknown';  // Retorna 'unknown' si no se puede determinar el género
+		} catch (error) {
+			console.error('Error al obtener el género:', error);
+			return 'unknown';
+		}
+	};
+
 	const handleSignUp = async () => {
 		const imageUrl: string = `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&size=128&background=random&color=fff&rounded=true&format=svg`;
-		const sexo: string = Genderize.getGender(name).gender;
+		const sexo: Promise<string> = getGender(name);
 
 		const response = await fetch('http://localhost:8000/user', {
 			method: 'POST',
@@ -19,7 +29,7 @@
 				nombre: name,
 				email_usuario: email,
 				clave: password,
-				sexo: sexo,
+				sexo: (await sexo).toString(),
 				foto_perfil: imageUrl
 			}),
 			credentials: 'include'
