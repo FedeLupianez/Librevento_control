@@ -34,6 +34,7 @@ app.add_middleware(
 )
 app.add_middleware(SessionMiddleware, secret_key=Config["SECRET_KEY"])
 
+
 # GENERADOR :
 #   Página :
 # endpoint para crear un generador
@@ -85,9 +86,9 @@ async def crear_usuario(usuario: Tablas.USUARIO, request: Request):
 
         tempUsuario = UsuarioService.obtener(engine, id_usuario)
         request.session["usuario"] = {
-           "id_usuario": tempUsuario["id_usuario"],
-           "nombre": tempUsuario["nombre"],
-           "email_usuario": tempUsuario["email"]
+            "id_usuario": tempUsuario["id_usuario"],
+            "nombre": tempUsuario["nombre"],
+            "email_usuario": tempUsuario["email"],
         }
         return {"message": "Usuario creado", "usuario": request.session["usuario"]}
     except HTTPException as error:
@@ -104,7 +105,7 @@ async def obtener_usuario(id_usuario: int):
         raise error
 
 
-@app.get(Rutas.Usuario + '/id')
+@app.get(Rutas.Usuario + "/id")
 async def obtener_id(email_usuario: str):
     try:
         return UsuarioService.obtener_id(engine, email_usuario)
@@ -121,25 +122,28 @@ async def borrar_usuario(id_usuario: int):
         print(error)
         raise error
 
+
 class loginInput(BaseModel):
     email_usuario: str
     clave: str
+
 
 @app.post(Rutas.Login)
 async def login(data: loginInput, request: Request):
     try:
         usuario = UsuarioService.login(engine, data.email_usuario, data.clave)
-        request.session['usuario'] = {
+        request.session["usuario"] = {
             "id_usuario": usuario["id_usuario"],
             "nombre": usuario["nombre"],
-            "email_usuario": usuario["email"]
+            "email_usuario": usuario["email"],
         }
         return {"message": "Usuario logueado", "usuario": request.session["usuario"]}
     except HTTPException as error:
         print(error)
         raise error
 
-@app.get(Rutas.Usuario + '/actual')
+
+@app.get(Rutas.Usuario + "/actual")
 async def usuario_actual(request: Request):
     usuario = request.session.get("usuario")
     if not usuario:
@@ -147,10 +151,12 @@ async def usuario_actual(request: Request):
     print(usuario)
     return usuario
 
-@app.get(Rutas.Usuario + '/logout')
+
+@app.get(Rutas.Usuario + "/logout")
 async def logout(request: Request):
     request.session.clear()
     return {"message": "Usuario deslogueado"}
+
 
 # Endpoints para las mediciones:
 @app.post(Rutas.Medicion)
@@ -161,7 +167,8 @@ async def crear(medicion: Tablas.MEDICION_POR_HORA):
         print(error)
         raise error
 
-@app.get(Rutas.Medicion + '/id')
+
+@app.get(Rutas.Medicion + "/id")
 async def obtener(id_medicion: int):
     try:
         return MedicionService.obtener(engine, id_medicion)
@@ -169,15 +176,17 @@ async def obtener(id_medicion: int):
         print(error)
         raise error
 
-@app.get(Rutas.Medicion + '/obtener_id')
-async def obtener_id(macAddress: str):
+
+@app.get(Rutas.Medicion + "/obtener_id")
+async def obtener_medicion_id(macAddress: str):
     try:
         return MedicionService.obtener_id(engine, macAddress)
     except HTTPException as error:
         print(error)
         raise error
 
-@app.get(Rutas.Medicion + '/obtener_voltajes')
+
+@app.get(Rutas.Medicion + "/obtener_voltajes")
 async def obtener_voltajes(macAddress: str, id_generador: int | None = None):
     try:
         return MedicionService.obtener_voltajes(engine, macAddress, id_generador)
@@ -186,7 +195,7 @@ async def obtener_voltajes(macAddress: str, id_generador: int | None = None):
         raise error
 
 
-@app.get(Rutas.Medicion + '/obtener_consumos')
+@app.get(Rutas.Medicion + "/obtener_consumos")
 async def obtener_consumos(macAddress: str, id_generador: int | None = None):
     try:
         return MedicionService.obtener_consumos(engine, macAddress, id_generador)

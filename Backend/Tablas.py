@@ -7,6 +7,7 @@ class USUARIO(SQLModel, table=True):
     id_usuario: int = Field(default=None, primary_key=True)
     nombre: str
     foto_perfil: str
+    sexo: str
     email: str
     clave: str
 
