@@ -1,19 +1,27 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import flechita from '/public/flechita.svg';
 	import { onMount } from 'svelte';
 	import { user, fetchUser } from '../stores/user';
 	import UserProfileButton from './UserProfileButton.svelte';
+	import DropDownButton from './DropDownButton.svelte';
 
 	let showMobile = false;
 	function updateShow() {
-		showMobile = window.innerWidth < 768;
+		showMobile = window.innerWidth < 900;
+	}
+
+	let title: string = 'Bienvenido';
+	function setTitle() {
+		if (!$user) return;
+		title = $user.sexo === 'male' ? 'Bienvenido,' : 'Bienvenida,';
 	}
 
 	onMount(() => {
 		fetchUser();
 		console.log($user);
 		updateShow();
+		setTitle();
+		console.log(showMobile);
 		window.addEventListener('resize', updateShow);
 
 		return () => {
@@ -26,14 +34,10 @@
 	<div class="flex flex-row items-center justify-between border-b-0 border-b-[#2f3e2f] px-15 py-5">
 		<h1 class="mr-15 items-center text-center">
 			{#if !$user}
-				<span class="text-[#2f3e2f]">Bienvenido</span>
+				<span class="text-[#2f3e2f]">{title}</span>
 			{:else}
 				<span class="text-[#2f3e2f]">
-					{#if $user.sexo == 'male'}
-						Bienvenido,
-					{:else}
-						Bienvenida,
-					{/if}
+					{title}
 				</span>
 				<span class="text-[#c2b280]">{$user.nombre}</span>
 			{/if}
@@ -45,24 +49,9 @@
 				<Icon icon="bx:leaf" class="h-5 w-5" />
 			</button>
 
-			<div class="group relative">
-				<button class="flex cursor-pointer items-center gap-1 font-bold text-[#2f3e2f]">
-					estadísticas
-					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
-				</button>
-
-				<!-- botón gris -->
-				<div
-					class="absolute -top-1 -left-2.5 z-10 hidden flex-col rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:flex"
-				>
-					<div class="flex flex-row items-center gap-1">
-						<span class="font-bold text-[#2f3e2f]">estadísticas</span>
-						<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
-					</div>
-
-					<div
-						class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
-					>
+			<DropDownButton text="estadísticas" mode="hover">
+				<slot slot="menu">
+					<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
 						<a
 							href="/voltaje"
 							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
@@ -88,26 +77,12 @@
 							<span class="text-white">Alertas de consumo</span>
 						</a>
 					</div>
-				</div>
-			</div>
+				</slot>
+			</DropDownButton>
 
-			<div class="group relative">
-				<button class="flex cursor-pointer flex-row items-center justify-center gap-1 font-bold">
-					editar
-					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
-				</button>
-
-				<div
-					class="absolute -top-1 -left-2.5 z-10 hidden flex-col rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:flex"
-				>
-					<div class="flex flex-row items-center gap-1">
-						<span class="font-bold text-[#2f3e2f]">editar</span>
-						<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
-					</div>
-
-					<div
-						class="mt-1 hidden w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md group-hover:flex"
-					>
+			<DropDownButton text="editar" mode="hover">
+				<slot slot="menu">
+					<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
 						<a href="/login" class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]">
 							<span class="text-white">Iniciar Sesión</span>
 						</a>
@@ -118,41 +93,79 @@
 							<span class="text-white">Crear Cuenta</span>
 						</a>
 					</div>
-				</div>
-			</div>
+				</slot>
+			</DropDownButton>
 			<UserProfileButton />
 		</div>
 	</div>
 	<div class="h-0.5 w-228 bg-gray-500"></div>
 {:else}
 	<div
-		class="mt-4 flex flex-row justify-around rounded-md bg-[#f5f5f5] p-4 font-bold text-[#2f3e2f] shadow md:hidden"
+		class="mt-4 flex flex-row items-center justify-around rounded-md bg-[#f5f5f5] p-4 font-bold text-[#2f3e2f] shadow"
 	>
-		<div class="flex flex-col items-center">
-			<a href="/" class="flex items-center gap-1">
-				<span class="text-[#2f3e2f]"> principal </span>
-				<Icon icon="bx:leaf" class="h-5 w-5 text-[#2f3e2f]" />
-			</a>
-			<!-- Estadísticas -->
-			<a href="/voltaje" class="hover:text-[#7A9660]">
-				<span class="text-[#2f3e2f]"> voltaje Generado </span>
-			</a>
-			<a href="/consumo-dia" class=" hover:text-[#7A9660]">
-				<span class="text-[#2f3e2f]"> consumo por dia </span>
-			</a>
-			<a href="/consumo-mes" class=" hover:text-[#7A9660]">
-				<span class="text-[#2f3e2f]"> consumo por Mes </span>
-			</a>
-			<a href="/alertas" class=" hover:text-[#7A9660]">
-				<span class="text-[#2f3e2f]"> alertas </span>
-			</a>
-			<!-- Editar -->
-			<a href="/login" class="hover:text-[#7A9660]">
-				<span class="text-[#2f3e2f]"> iniciar sesion </span>
-			</a>
-			<a href="/sign_up" class="hover:text-[#7A9660]">
-				<span class="text-[#2f3e2f]"> crear cuenta </span>
-			</a>
+		<div class="flex flex-col items-center justify-center">
+			<h1 class="items-center text-center">
+				{#if !$user}
+					<span class="text-[#2f3e2f]">{title}</span>
+				{:else}
+					<span class="text-[#2f3e2f]">
+						{title}
+					</span>
+					<span class="text-[#c2b280]">{$user.nombre}</span>
+				{/if}
+			</h1>
+			<div class="flex flex-row items-center justify-around gap-4">
+				<button class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold">
+					principal
+					<Icon icon="bx:leaf" class="h-5 w-5" />
+				</button>
+				<DropDownButton text="estadísticas" mode="button">
+					<slot slot="menu">
+						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
+							<a
+								href="/voltaje"
+								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+							>
+								<span class="text-white">Voltaje Generado</span>
+							</a>
+
+							<a
+								href="/consumo-dia"
+								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+							>
+								<span class="text-white">Consumo por día</span>
+							</a>
+
+							<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+								<span class="text-white">Consumo por mes</span>
+							</a>
+
+							<a
+								href="/alertas"
+								class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+							>
+								<span class="text-white">Alertas de consumo</span>
+							</a>
+						</div>
+					</slot>
+				</DropDownButton>
+
+				<DropDownButton text="editar" mode="button">
+					<slot slot="menu">
+						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
+							<a href="/login" class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]">
+								<span class="text-white">Iniciar Sesión</span>
+							</a>
+							<a
+								href="/sign_up"
+								class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+							>
+								<span class="text-white">Crear Cuenta</span>
+							</a>
+						</div>
+					</slot>
+				</DropDownButton>
+			</div>
 		</div>
 		<UserProfileButton />
 	</div>
