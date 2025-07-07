@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
-	import { user, fetchUser } from '../stores/user';
+	import { user, fetchUser, logoutUser } from '../stores/user';
 	import UserProfileButton from './UserProfileButton.svelte';
 	import DropDownButton from './DropDownButton.svelte';
 
@@ -157,11 +157,15 @@
 								<span class="text-white">Iniciar Sesión</span>
 							</a>
 							<a
-								href="/sign_up"
+								href="/signup"
 								class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 							>
 								<span class="text-white">Crear Cuenta</span>
 							</a>
+							<button
+								class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+								on:click={logoutUser}>Cerrar Sesión</button
+							>
 						</div>
 					</slot>
 				</DropDownButton>

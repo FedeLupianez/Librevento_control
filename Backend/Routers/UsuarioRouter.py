@@ -24,7 +24,9 @@ async def login(
             "id_usuario": usuario["id_usuario"],
             "nombre": usuario["nombre"],
             "email_usuario": usuario["email"],
+            "foto_perfil": usuario["foto_perfil"],
         }
+        print("usuario logueado : ", usuario)
         return {"message": "Usuario logueado", "usuario": request.session["usuario"]}
     except HTTPException as error:
         print(error)
@@ -44,6 +46,7 @@ async def crear_usuario(
 ):
     try:
         nuevoUsuario = UsuarioService.crear(engine, usuario)
+        print("nuevo usuario : ", nuevoUsuario)
         id_usuario: int = nuevoUsuario["id"]
 
         tempUsuario = UsuarioService.obtener(engine, id_usuario)
@@ -51,6 +54,7 @@ async def crear_usuario(
             "id_usuario": tempUsuario["id_usuario"],
             "nombre": tempUsuario["nombre"],
             "email_usuario": tempUsuario["email"],
+            "foto_perfil": tempUsuario["foto_perfil"],
         }
         return {"message": "Usuario creado", "usuario": request.session["usuario"]}
     except HTTPException as error:
@@ -90,5 +94,5 @@ async def usuario_actual(request: Request):
     usuario = request.session.get("usuario")
     if not usuario:
         raise HTTPException(status_code=401, detail="Usuario no logueado")
-    print(usuario)
+    print("usuario devuelto : ", usuario)
     return usuario
