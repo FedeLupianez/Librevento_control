@@ -43,31 +43,44 @@ def obtener(engine, id_medicion: int) -> dict | HTTPException:
         session.refresh(medicion)
         return {"detail": "Medicion encontrada", "medicion": medicion}
 
-def obtener_id(engine, macAddress: str) -> dict | HTTPException:
+
+def obtener_id(engine, macAddress: str) -> int | HTTPException:
     with Session(engine) as session:
-        id = session.exec(select(GENERADOR.id_generador).where(GENERADOR.macAddress == macAddress)).first()
-        if not(id):
+        id = session.exec(
+            select(GENERADOR.id_generador).where(GENERADOR.macaddress == macAddress)
+        ).first()
+        if not (id):
             raise HTTPException(status_code=404, detail="Generador no encontrado")
         return id
 
-def obtener_voltajes(engine, macAddress: str, id_generador: int | None = None) -> dict | HTTPException:
+
+def obtener_voltajes(
+    engine, macAddress: str, id_generador: int | None = None
+) -> dict | HTTPException:
     with Session(engine) as session:
         id = id_generador or obtener_id(engine, macAddress)
-
-        query = select(MEDICION_POR_HORA.voltaje_generado).where(MEDICION_POR_HORA.id_generador == id)
-        voltajes: list[int] = session.exec(query)
-        if not(voltajes):
+        query = select(MEDICION_POR_HORA.voltaje_generado).where(
+            MEDICION_POR_HORA.id_generador == id
+        )
+        resultado = session.exec(query).all()
+        voltajes = list(resultado)
+        if not (voltajes):
             raise HTTPException(status_code=404, detail="Voltajes no encontrados")
 
         return {"detail": "Voltajes encontrados", "data": voltajes}
 
-def obtener_consumos(engine, macAddress: str, id_generador: int | None = None) -> dict | HTTPException:
+
+def obtener_consumos(
+    engine, macAddress: str, id_generador: int | None = None
+) -> dict | HTTPException:
     with Session(engine) as session:
         id = id_generador or obtener_id(engine, macAddress)
-
-        query = select(MEDICION_POR_HORA.consumo).where(MEDICION_POR_HORA.id_generador == id)
-        consumos: list[int] = session.exec(query)
-        if not(consumos):
+        query = select(MEDICION_POR_HORA.consumo).where(
+            MEDICION_POR_HORA.id_generador == id
+        )
+        resultado = session.exec(query).all()
+        consumos = list(resultado)
+        if not (consumos):
             raise HTTPException(status_code=404, detail="Consumos no encontrados")
 
         return {"detail": "Consumos encontrados", "data": consumos}
