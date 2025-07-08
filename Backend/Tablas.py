@@ -14,7 +14,7 @@ class USUARIO(SQLModel, table=True):
 
 class GENERADOR(SQLModel, table=True):
     id_generador: int = Field(primary_key=True)
-    macAddress: Optional[str] = Field(default=None, nullable=True)
+    macaddress: Optional[str] = Field(default=None, nullable=True)
     id_usuario: int = Field(foreign_key="usuario.id_usuario")
     ciudad: str
     calle: str
