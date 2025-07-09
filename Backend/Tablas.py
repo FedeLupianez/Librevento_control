@@ -1,6 +1,7 @@
 from datetime import date, time
 from sqlmodel import Field, SQLModel
 from typing import Optional
+from sqlalchemy import text
 
 
 class USUARIO(SQLModel, table=True):
@@ -26,9 +27,17 @@ class MEDICION_POR_HORA(SQLModel, table=True):
     id_generador: int = Field(foreign_key="generador.id_generador")
     voltaje_generado: int
     consumo: int
-    velocidad_viento: int
+    velocidad: int
     direccion_viento: int
     humedad: int
     temperatura: int
-    fecha: Optional[date] = Field(default=None, nullable=False)
-    hora: Optional[time] = Field(default=None, nullable=False)
+    fecha: Optional[date] = Field(
+        default=None,
+        nullable=False,
+        sa_column_kwargs={"server_default": text("CURRENT_DATE")},
+    )
+    hora: Optional[time] = Field(
+        default=None,
+        nullable=False,
+        sa_column_kwargs={"server_default": text("CURRENT_DATE")},
+    )
