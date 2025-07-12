@@ -1,42 +1,49 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { Chart } from 'chart.js/auto';
+	import { onMount } from 'svelte';
+	import { Chart } from 'chart.js/auto';
 
-    let canvas: HTMLCanvasElement;
-    let chart: Chart | null = null;
+	let canvas: HTMLCanvasElement;
+	let chart: Chart | null = null;
+	export let data: Array<number>;
+	export let backgroundColorFunction: Function;
 
-    const data = {
-        labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
-        datasets: [
-            {
-                label: 'Voltaje Generado',
-                data: [8, 5, 3, 12],
-                backgroundColor: (ctx: any) => {
-                    const value = ctx.dataset.data[ctx.dataIndex];
-                    if (value >= 8)
-                        return '#789262';
-                    if (value >= 5 && value < 8)
-                        return '#ebdaa8';
-                    if (value < 5)
-                        return '#c85d4d';
-                },
-                borderRadius: 5
-            }
-        ]
-    }
-
-    const options = {
-        responsive: true,
-		maintainAspectRatio: false
-    }
+	const options = {
+		responsive: true,
+		maintainAspectRatio: false,
+		scales: {
+			y: {
+				beginAtZero: true,
+				min: 0,
+				max: 12,
+				ticks: {
+					stepSize: 1
+				}
+			}
+		}
+	};
 
 	onMount(() => {
+		data = [...data, ...Array(7 - data.length).fill(0)];
+		const dataSet = {
+			labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+			datasets: [
+				{
+					label: 'Voltaje Generado',
+					data: data,
+					backgroundColor: (ctx: any) => {
+						const value = ctx.dataset.data[ctx.dataIndex];
+						return backgroundColorFunction(value);
+					},
+					borderRadius: 5
+				}
+			]
+		};
+
 		chart = new Chart(canvas, {
 			type: 'bar',
-			data: data,
+			data: dataSet,
 			options
 		});
-		console.log(chart);
 
 		return () => {
 			chart?.destroy(); // Limpia el gráfico al desmontar el componente
