@@ -41,6 +41,15 @@ async def borrar_generador(id_generador: int, engine: Engine = Depends(get_engin
         return error
 
 
+@router.get("/macAddress")
+async def obtener_macAddress(id_usuario: int, engine: Engine = Depends(get_engine)):
+    try:
+        return GeneradorService.obtener_macAddress(engine, id_usuario)
+    except HTTPException as error:
+        print(error)
+        return error
+
+
 #   Hardware :
 @router.patch("/config_mac")
 async def config_macAddress(
