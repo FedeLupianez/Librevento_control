@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError, OperationalError
-from sqlmodel import Session, desc, select
+from sqlmodel import Session, asc, select
 from Tablas import MEDICION_POR_HORA, GENERADOR
 from fastapi import HTTPException
 
@@ -62,8 +62,8 @@ def obtener_voltajes(
         query = (
             select(MEDICION_POR_HORA.voltaje_generado)
             .where(MEDICION_POR_HORA.id_generador == id)
-            .order_by(desc(MEDICION_POR_HORA.fecha))
-            .order_by(desc(MEDICION_POR_HORA.hora))
+            .order_by(asc(MEDICION_POR_HORA.fecha))
+            .order_by(asc(MEDICION_POR_HORA.hora))
         )
         resultado = session.exec(query).all()
         voltajes = list(resultado)
@@ -81,8 +81,8 @@ def obtener_consumos(
         query = (
             select(MEDICION_POR_HORA.consumo)
             .where(MEDICION_POR_HORA.id_generador == id)
-            .order_by(desc(MEDICION_POR_HORA.fecha))
-            .order_by(desc(MEDICION_POR_HORA.hora))
+            .order_by(asc(MEDICION_POR_HORA.fecha))
+            .order_by(asc(MEDICION_POR_HORA.hora))
         )
         resultado = session.exec(query).all()
         consumos = list(resultado)

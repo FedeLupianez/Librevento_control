@@ -7,13 +7,6 @@ from dependencies import get_config
 from Routers import UsuarioRouter, GeneradorRouter, MedicionRouter
 
 
-class Rutas:
-    Generador = "/generador"
-    Usuario = "/usuario"
-    Login = "/login"
-    Medicion = "/medicion"
-
-
 Config: dict = get_config()
 
 app = FastAPI()
