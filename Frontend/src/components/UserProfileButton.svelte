@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { user } from '../stores/user';
+	import { logoutUser, user } from '../stores/user';
 	import Icon from '@iconify/svelte';
 
 	let showProfile: boolean = false;
@@ -12,10 +12,10 @@
 			<img
 				src={$user.foto_perfil}
 				alt="Foto de perfil"
-				class="h-10 min-h-10 w-10 min-w-10 rounded-full"
+				class="h-15 min-h-15 w-15 min-w-15 rounded-full"
 			/>
 		{:else}
-			<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
+			<Icon icon="bx:user" class="h-15 w-15 cursor-pointer rounded-full" />
 		{/if}
 	</button>
 
@@ -34,23 +34,23 @@
 						<img
 							src={$user.foto_perfil}
 							alt="Foto de perfil"
-							class="h-10 min-h-10 w-10 min-w-10 rounded-full"
+							class="h-15 min-h-15 w-15 min-w-15 rounded-full"
 						/>
 					{:else}
-						<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
+						<Icon icon="bx:user" class="h-15 w-15 cursor-pointer rounded-full" />
 					{/if}
 				</button>
 			</div>
 
 			<div class="flex flex-col items-center justify-center">
 				{#if $user}
-					<a
-						href="/logout"
+					<button
 						class="flex w-full items-center justify-center rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						on:click={logoutUser}
 					>
 						<Icon icon="bx:log-out" class="h-5 w-5" />
 						<span class="rounded-2xl text-center text-red-500">Cerrar Sesión</span>
-					</a>
+					</button>
 				{:else}
 					<a
 						href="/login"

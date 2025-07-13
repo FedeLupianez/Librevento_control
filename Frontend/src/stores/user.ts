@@ -33,6 +33,7 @@ export async function logoutUser() {
     if (response.ok) {
       const data = await response.json()
       console.log(data)
+      user.set(null)
     } else {
       console.warn('Error al cerrar sesión : ')
     }

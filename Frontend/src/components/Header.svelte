@@ -1,12 +1,13 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { user, fetchUser, logoutUser } from '../stores/user';
-	import { get } from 'svelte/store';
 	import UserProfileButton from './UserProfileButton.svelte';
 	import DropDownButton from './DropDownButton.svelte';
 
 	let showMobile = false;
+	let unsubscribe: () => void;
+
 	function updateShow() {
 		showMobile = window.innerWidth < 900;
 	}
@@ -18,17 +19,21 @@
 	}
 
 	onMount(() => {
-		const $user = get(user);
-		if (!$user) fetchUser();
-		console.log($user);
-		updateShow();
-		setTitle();
-		console.log(showMobile);
-		window.addEventListener('resize', updateShow);
+		unsubscribe = user.subscribe(async ($user) => {
+			if (!$user) fetchUser();
+			console.log('usuario : ', $user);
+			updateShow();
+			setTitle();
+			window.addEventListener('resize', updateShow);
 
-		return () => {
-			window.removeEventListener('resize', updateShow);
-		};
+			return () => {
+				window.removeEventListener('resize', updateShow);
+			};
+		});
+	});
+
+	onDestroy(() => {
+		if (unsubscribe) unsubscribe();
 	});
 </script>
 

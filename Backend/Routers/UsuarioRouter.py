@@ -25,6 +25,7 @@ async def login(
             "nombre": usuario["nombre"],
             "email_usuario": usuario["email"],
             "foto_perfil": usuario["foto_perfil"],
+            "sexo": usuario["sexo"],
         }
         print("usuario logueado : ", usuario)
         return {"message": "Usuario logueado", "usuario": request.session["usuario"]}
