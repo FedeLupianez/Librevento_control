@@ -1,8 +1,9 @@
 <script lang="ts">
 	import BarChart from '../../components/BarChart.svelte';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { user } from '../../stores/user';
-	import { get } from 'svelte/store';
+
+	let unsubscribe: () => void;
 
 	type Measurement = {
 		value: number;
@@ -22,11 +23,9 @@
 		if (value < 5) return '#c85d4d';
 	};
 
-	async function getMacAddress() {
-		const $user = get(user);
-		if (!$user) return [];
+	async function getMacAddress(id_user: number) {
 		const response = await fetch(
-			`http://localhost:8000/generador/macAddress?id_usuario=${$user.id_usuario}`,
+			`http://localhost:8000/generador/macAddress?id_usuario=${id_user}`,
 			{ method: 'GET', credentials: 'include' }
 		);
 		const data = await response.json();
@@ -34,29 +33,35 @@
 	}
 
 	onMount(async () => {
-		const $user = get(user);
-		if (!$user) return;
+		unsubscribe = user.subscribe(async ($user) => {
+			console.log('Usuario : ', $user);
+			if (!$user) return;
 
-		const macAddresses = await getMacAddress();
-		if (!macAddresses.data || macAddresses.data.length === 0) return;
+			const macAddresses = await getMacAddress($user.id_usuario);
+			if (!macAddresses.data || macAddresses.data.length === 0) return;
 
-		// Tomamos solo la data del primer mac para graficar
-		allGenerators = [];
-		const promises = macAddresses.data.map(async (mac: string) => {
-			const response = await fetch(
-				`http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}`,
-				{ method: 'GET', credentials: 'include' }
-			);
-			const result = await response.json();
+			// Tomamos solo la data del primer mac para graficar
+			allGenerators = [];
+			const promises = macAddresses.data.map(async (mac: string) => {
+				const response = await fetch(
+					`http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}`,
+					{ method: 'GET', credentials: 'include' }
+				);
+				const result = await response.json();
 
-			if (result.data && Array.isArray(result.data)) {
-				console.log(result.data);
-				return { mac, data: result.data };
-			}
-			return null;
+				if (result.data && Array.isArray(result.data)) {
+					console.log(result.data);
+					return { mac, data: result.data };
+				}
+				return null;
+			});
+			const results = await Promise.all(promises);
+			allGenerators = results.filter(Boolean) as GeneratorData[];
 		});
-		const results = await Promise.all(promises);
-		allGenerators = results.filter(Boolean) as GeneratorData[];
+	});
+
+	onDestroy(() => {
+		if (unsubscribe) unsubscribe();
 	});
 
 	const paddDataToMinimun = (data: Measurement[]) => {
