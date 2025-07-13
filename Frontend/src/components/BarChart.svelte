@@ -5,6 +5,7 @@
 	let canvas: HTMLCanvasElement;
 	let chart: Chart | null = null;
 	export let data: Array<number>;
+	export let labels: Array<string>;
 	export let backgroundColorFunction: Function;
 
 	const options = {
@@ -18,6 +19,11 @@
 				ticks: {
 					stepSize: 1
 				}
+			},
+			x: {
+				beginAtZero: true,
+				min: 0,
+				max: 7
 			}
 		}
 	};
@@ -25,7 +31,7 @@
 	onMount(() => {
 		data = [...data, ...Array(7 - data.length).fill(0)];
 		const dataSet = {
-			labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+			labels: labels,
 			datasets: [
 				{
 					label: 'Voltaje Generado',

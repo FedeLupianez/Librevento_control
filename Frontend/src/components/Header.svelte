@@ -2,6 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 	import { user, fetchUser, logoutUser } from '../stores/user';
+	import { get } from 'svelte/store';
 	import UserProfileButton from './UserProfileButton.svelte';
 	import DropDownButton from './DropDownButton.svelte';
 
@@ -17,7 +18,8 @@
 	}
 
 	onMount(() => {
-		fetchUser();
+		const $user = get(user);
+		if (!$user) fetchUser();
 		console.log($user);
 		updateShow();
 		setTitle();
@@ -60,13 +62,13 @@
 						</a>
 
 						<a
-							href="/consumo-dia"
+							href="/consumo_dia"
 							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 						>
 							<span class="text-white">Consumo por día</span>
 						</a>
 
-						<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+						<a href="/consumo_mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
 							<span class="text-white">Consumo por mes</span>
 						</a>
 
