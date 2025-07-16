@@ -41,10 +41,13 @@ async def obtener_medicion_id(macAddress: str, engine: Engine = Depends(get_engi
 async def obtener_voltajes(
     macAddress: str,
     id_generador: int | None = None,
+    filter: str | None = None,
     engine: Engine = Depends(get_engine),
 ):
     try:
-        return MedicionService.obtener_voltajes(engine, macAddress, id_generador)
+        return MedicionService.obtener_voltajes(
+            engine, macAddress, filter, id_generador
+        )
     except HTTPException as error:
         print(error)
         raise error
@@ -53,11 +56,14 @@ async def obtener_voltajes(
 @router.get("/obtener_consumos")
 async def obtener_consumos(
     macAddress: str,
+    filter: str | None = None,
     id_generador: int | None = None,
     engine: Engine = Depends(get_engine),
 ):
     try:
-        return MedicionService.obtener_consumos(engine, macAddress, id_generador)
+        return MedicionService.obtener_consumos(
+            engine, macAddress, filter, id_generador
+        )
     except HTTPException as error:
         print(error)
         raise error

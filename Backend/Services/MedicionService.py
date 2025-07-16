@@ -1,9 +1,7 @@
-from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError, OperationalError
-from sqlmodel import Session, asc, select
+from sqlmodel import Session, asc, select, func
 from Tablas import MEDICION_POR_HORA, GENERADOR
 from fastapi import HTTPException
-from datetime import date
 
 
 def crear(engine, medicion: MEDICION_POR_HORA) -> dict | HTTPException:
@@ -59,16 +57,39 @@ def obtener_id(engine, macAddress: str) -> int | HTTPException:
 def obtener_voltajes(
     engine,
     macAddress: str,
+    filter: str | None = None,
     id_generador: int | None = None,
 ) -> dict | HTTPException:
     with Session(engine) as session:
         id = id_generador or obtener_id(engine, macAddress)
-        query = (
-            select(MEDICION_POR_HORA.voltaje_generado, MEDICION_POR_HORA.fecha)
-            .where(MEDICION_POR_HORA.id_generador == id)
-            .order_by(asc(MEDICION_POR_HORA.fecha))
-            .order_by(asc(MEDICION_POR_HORA.hora))
-        )
+
+        if not filter:
+            query = select(
+                MEDICION_POR_HORA.voltaje_generado, MEDICION_POR_HORA.fecha
+            ).where(MEDICION_POR_HORA.id_generador == id)
+            query = query.order_by(asc(MEDICION_POR_HORA.fecha))
+            query = query.order_by(asc(MEDICION_POR_HORA.hora))
+        elif filter == "dia":
+            query = (
+                select(
+                    func.avg(MEDICION_POR_HORA.voltaje_generado),
+                    MEDICION_POR_HORA.fecha,
+                )
+                .where(MEDICION_POR_HORA.id_generador == id)
+                .group_by(MEDICION_POR_HORA.fecha)
+                .order_by(MEDICION_POR_HORA.fecha)
+            )
+        elif filter == "hora":
+            query = (
+                select(
+                    func.avg(MEDICION_POR_HORA.voltaje_generado),
+                    MEDICION_POR_HORA.hora,
+                )
+                .where(MEDICION_POR_HORA.id_generador == id)
+                .group_by(MEDICION_POR_HORA.hora)
+                .order_by(MEDICION_POR_HORA.hora)
+            )
+
         resultado = session.exec(query).all()
         voltajes = [{"value": v, "timestamp": str(f)} for v, f in resultado]
         if not (voltajes):
@@ -86,16 +107,39 @@ def obtener_voltajes(
 def obtener_consumos(
     engine,
     macAddress: str,
+    filter: str | None = None,
     id_generador: int | None = None,
 ) -> dict | HTTPException:
     with Session(engine) as session:
         id = id_generador or obtener_id(engine, macAddress)
-        query = (
-            select(MEDICION_POR_HORA.consumo, MEDICION_POR_HORA.fecha)
-            .where(MEDICION_POR_HORA.id_generador == id)
-            .order_by(asc(MEDICION_POR_HORA.fecha))
-            .order_by(asc(MEDICION_POR_HORA.hora))
-        )
+
+        if not filter:
+            query = select(MEDICION_POR_HORA.cosumo, MEDICION_POR_HORA.fecha).where(
+                MEDICION_POR_HORA.id_generador == id
+            )
+            query = query.order_by(asc(MEDICION_POR_HORA.fecha))
+            query = query.order_by(asc(MEDICION_POR_HORA.hora))
+        elif filter == "dia":
+            query = (
+                select(
+                    func.avg(MEDICION_POR_HORA.consumo),
+                    MEDICION_POR_HORA.fecha,
+                )
+                .where(MEDICION_POR_HORA.id_generador == id)
+                .group_by(MEDICION_POR_HORA.fecha)
+                .order_by(MEDICION_POR_HORA.fecha)
+            )
+        elif filter == "hora":
+            query = (
+                select(
+                    func.avg(MEDICION_POR_HORA.consumo),
+                    MEDICION_POR_HORA.hora,
+                )
+                .where(MEDICION_POR_HORA.id_generador == id)
+                .group_by(MEDICION_POR_HORA.hora)
+                .order_by(MEDICION_POR_HORA.hora)
+            )
+
         resultado = session.exec(query).all()
         consumos = [{"value": v, "timestamp": str(f)} for v, f in resultado]
         if not (consumos):
