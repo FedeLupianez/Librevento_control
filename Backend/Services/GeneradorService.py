@@ -84,6 +84,10 @@ def config_macAddress(engine, id_usuario: int, macAddress: str) -> dict | HTTPEx
             raise HTTPException(
                 status_code=404, detail="El usuario no tiene generadores"
             )
+        if generador.macaddress == macAddress:
+            raise HTTPException(
+                status_code=400, detail="El generador ya tiene la mac configurada"
+            )
         generador.macaddress = macAddress
         session.add(generador)
         session.commit()

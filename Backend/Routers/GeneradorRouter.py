@@ -18,7 +18,7 @@ async def crear_generador(
         return GeneradorService.crear(engine, generador)
     except HTTPException as error:
         print(error)
-        return error
+        raise error
 
 
 # endpoint para obtener un generador por su id
@@ -28,7 +28,7 @@ async def obtener_generador(id_generador: int, engine: Engine = Depends(get_engi
         return GeneradorService.obtener(engine, id_generador)
     except HTTPException as error:
         print(error)
-        return error
+        raise error
 
 
 # endpoint para borrar un generador por su id
@@ -38,7 +38,7 @@ async def borrar_generador(id_generador: int, engine: Engine = Depends(get_engin
         return GeneradorService.borrar(engine, id_generador)
     except HTTPException as error:
         print(error)
-        return error
+        raise error
 
 
 @router.get("/macAddress")
@@ -47,7 +47,7 @@ async def obtener_macAddress(id_usuario: int, engine: Engine = Depends(get_engin
         return GeneradorService.obtener_macAddress(engine, id_usuario)
     except HTTPException as error:
         print(error)
-        return error
+        raise error
 
 
 #   Hardware :
@@ -59,4 +59,4 @@ async def config_macAddress(
         return GeneradorService.config_macAddress(engine, id_usuario, macAddress)
     except HTTPException as error:
         print(error)
-        return error
+        raise error
