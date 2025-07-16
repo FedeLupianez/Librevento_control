@@ -3,7 +3,6 @@
 	export let mode: string;
 
 	let view_menu: boolean = false;
-	import flechita from '/public/flechita.svg';
 	function toggle() {
 		view_menu = !view_menu;
 	}
@@ -16,7 +15,7 @@
 			on:click={() => toggle()}
 		>
 			{text}
-			<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+			<img src="/public/images/flechita.svg" alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
 		</button>
 
 		{#if view_menu}
@@ -26,7 +25,11 @@
 					on:click={() => toggle()}
 				>
 					{text}
-					<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+					<img
+						src="/public/images/flechita.svg"
+						alt="flechita"
+						class="-top-0.4 relative h-3.5 w-3.5"
+					/>
 				</button>
 				<slot name="menu"></slot>
 			</div>
@@ -39,7 +42,7 @@
 			on:click={() => toggle()}
 		>
 			{text}
-			<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+			<img src="/public/images/flechita.svg" alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
 		</button>
 
 		<div
@@ -50,7 +53,11 @@
 				on:click={() => toggle()}
 			>
 				{text}
-				<img src={flechita} alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+				<img
+					src="/public/images/flechita.svg"
+					alt="flechita"
+					class="-top-0.4 relative h-3.5 w-3.5"
+				/>
 			</button>
 			<slot name="menu"></slot>
 		</div>
