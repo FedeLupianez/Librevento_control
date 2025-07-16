@@ -1,7 +1,9 @@
+from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError, OperationalError
-from sqlmodel import Session, select
+from sqlmodel import Session, asc, select
 from Tablas import MEDICION_POR_HORA, GENERADOR
 from fastapi import HTTPException
+from datetime import date
 
 
 def crear(engine, medicion: MEDICION_POR_HORA) -> dict | HTTPException:
@@ -41,33 +43,68 @@ def obtener(engine, id_medicion: int) -> dict | HTTPException:
         if not (medicion):
             raise HTTPException(status_code=404, detail="medicion no encontrada")
         session.refresh(medicion)
-        return {"detail": "Medicion encontrada", "medicion": medicion}
+        return {"detail": "Medicion encontrada", "medicion": medicion.model_dump()}
 
-def obtener_id(engine, macAddress: str) -> dict | HTTPException:
+
+def obtener_id(engine, macAddress: str) -> int | HTTPException:
     with Session(engine) as session:
-        id = session.exec(select(GENERADOR.id_generador).where(GENERADOR.macAddress == macAddress)).first()
-        if not(id):
+        id = session.exec(
+            select(GENERADOR.id_generador).where(GENERADOR.macaddress == macAddress)
+        ).first()
+        if not (id):
             raise HTTPException(status_code=404, detail="Generador no encontrado")
         return id
 
-def obtener_voltajes(engine, macAddress: str, id_generador: int | None = None) -> dict | HTTPException:
+
+def obtener_voltajes(
+    engine,
+    macAddress: str,
+    id_generador: int | None = None,
+) -> dict | HTTPException:
     with Session(engine) as session:
         id = id_generador or obtener_id(engine, macAddress)
-
-        query = select(MEDICION_POR_HORA.voltaje_generado).where(MEDICION_POR_HORA.id_generador == id)
-        voltajes: list[int] = session.exec(query)
-        if not(voltajes):
+        query = (
+            select(MEDICION_POR_HORA.voltaje_generado, MEDICION_POR_HORA.fecha)
+            .where(MEDICION_POR_HORA.id_generador == id)
+            .order_by(asc(MEDICION_POR_HORA.fecha))
+            .order_by(asc(MEDICION_POR_HORA.hora))
+        )
+        resultado = session.exec(query).all()
+        voltajes = [{"value": v, "timestamp": str(f)} for v, f in resultado]
+        if not (voltajes):
             raise HTTPException(status_code=404, detail="Voltajes no encontrados")
 
-        return {"detail": "Voltajes encontrados", "data": voltajes}
+        if len(voltajes) > 7:
+            voltajes = voltajes[-7:]
 
-def obtener_consumos(engine, macAddress: str, id_generador: int | None = None) -> dict | HTTPException:
+        return {
+            "detail": "Voltajes encontrados",
+            "data": voltajes,
+        }
+
+
+def obtener_consumos(
+    engine,
+    macAddress: str,
+    id_generador: int | None = None,
+) -> dict | HTTPException:
     with Session(engine) as session:
         id = id_generador or obtener_id(engine, macAddress)
-
-        query = select(MEDICION_POR_HORA.consumo).where(MEDICION_POR_HORA.id_generador == id)
-        consumos: list[int] = session.exec(query)
-        if not(consumos):
+        query = (
+            select(MEDICION_POR_HORA.consumo, MEDICION_POR_HORA.fecha)
+            .where(MEDICION_POR_HORA.id_generador == id)
+            .order_by(asc(MEDICION_POR_HORA.fecha))
+            .order_by(asc(MEDICION_POR_HORA.hora))
+        )
+        resultado = session.exec(query).all()
+        consumos = [{"value": v, "timestamp": str(f)} for v, f in resultado]
+        if not (consumos):
             raise HTTPException(status_code=404, detail="Consumos no encontrados")
 
-        return {"detail": "Consumos encontrados", "data": consumos}
+        if len(consumos) > 7:
+            consumos = consumos[-7:]
+
+        return {
+            "detail": "Consumos encontrados",
+            "data": consumos,
+        }

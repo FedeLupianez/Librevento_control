@@ -84,7 +84,23 @@ def config_macAddress(engine, id_usuario: int, macAddress: str) -> dict | HTTPEx
             raise HTTPException(
                 status_code=404, detail="El usuario no tiene generadores"
             )
-        generador.macAddress = macAddress
+        if generador.macaddress == macAddress:
+            raise HTTPException(
+                status_code=400, detail="El generador ya tiene la mac configurada"
+            )
+        generador.macaddress = macAddress
         session.add(generador)
         session.commit()
         return {"message": "macAddress cambiada"}
+
+
+def obtener_macAddress(engine, id_usuario: int) -> dict | HTTPException:
+    """Esta función retorna la macAddress de los generadores de un usuario, así que devuelve una lista"""
+    with Session(engine) as session:
+        query = select(GENERADOR.macaddress).where(GENERADOR.id_usuario == id_usuario)
+        macAddress = list(session.exec(query).all())
+        if not (macAddress):
+            raise HTTPException(
+                status_code=404, detail="El usuario no tiene generadores"
+            )
+        return {"message": "macAddress obtenidas", "data": macAddress}
