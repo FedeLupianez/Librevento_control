@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { user, fetchUser } from '../../stores/user';
-
+	import plantita_decorativa from '../../public/plantita_decorativa_login.png';
 	let name: string = '';
 	let password: string = '';
 	const login = async () => {
@@ -27,7 +27,12 @@
 	};
 </script>
 
-<div class="flex w-full min-h-150 justify-center items-center">
+<div class="relative min-h-screen justify-center items-center">
+
+	<img src={plantita_decorativa} 
+	class="absolute bottom-0 left-0 w-full h-auto opacity-70 pointer-events-none select-none" 
+	alt="plantita decorativa" />
+
 	<div class="flex flex-col justify-center gap-5">
 		<h1 class="text-4x1 font-bold">Inicia sesión</h1>
 		<input 
