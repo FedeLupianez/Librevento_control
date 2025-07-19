@@ -15,7 +15,7 @@
 			y: {
 				beginAtZero: true,
 				min: 0,
-				max: 12,
+				max: Math.max(...data) + 1,
 				ticks: {
 					stepSize: 1
 				}
@@ -23,7 +23,7 @@
 			x: {
 				beginAtZero: true,
 				min: 0,
-				max: 7
+				max: data.length < 7 ? 7 : data.length + 1
 			}
 		}
 	};

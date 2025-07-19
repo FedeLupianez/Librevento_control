@@ -53,6 +53,12 @@
 					</button>
 				{:else}
 					<a
+						href="/signup"
+						class="flex w-full items-center justify-center rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+					>
+						<span class="rounded-2xl text-center text-white">Crear Cuenta</span>
+					</a>
+					<a
 						href="/login"
 						class="flex w-full items-center justify-center rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 					>

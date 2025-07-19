@@ -9,7 +9,7 @@
 		try {
 			const response = await fetch(`https://api.genderize.io?name=${name}`);
 			const data = await response.json();
-			return data.gender || 'unknown';  // Retorna 'unknown' si no se puede determinar el género
+			return data.gender || 'unknown'; // Retorna 'unknown' si no se puede determinar el género
 		} catch (error) {
 			console.error('Error al obtener el género:', error);
 			return 'unknown';
@@ -47,7 +47,7 @@
 	<h1 class="text-5xl font-bold">Crear Cuenta</h1>
 
 	{#if !$user}
-		<div class="flex flex-col w-full min-h-150 items-center justify-center gap-4">
+		<div class="flex min-h-150 w-full flex-col items-center justify-center gap-4">
 			<input
 				type="text"
 				name="name"
@@ -85,7 +85,7 @@
 			</button>
 		</div>
 	{:else}
-		<div class="flex flex-col w-full min-h-150">
+		<div class="flex min-h-150 w-full flex-col">
 			<p>Ya estás registrado</p>
 		</div>
 	{/if}

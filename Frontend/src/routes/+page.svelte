@@ -1,5 +1,6 @@
 <script>
-	import { user } from "../stores/user";
+	import { user } from '../stores/user';
+	import Header from '../components/Header.svelte';
 </script>
 
 <svelte:head>
@@ -7,10 +8,10 @@
 	<meta name="description" content="Página de recepción" />
 </svelte:head>
 
+<Header />
 <main class="flex flex-col items-center">
-
 	{#if !$user}
-		<div class="w-full h-100 flex flex-col items-center justify-center">
+		<div class="flex h-100 w-full flex-col items-center justify-center">
 			<h1 class="text-5xl font-bold">
 				<a href="/login">
 					<span class="text-[#7A9660]">Inicia Sesión</span>
@@ -25,3 +26,4 @@
 		<h1 class="text-5xl font-bold">Recepción</h1>
 	{/if}
 </main>
+
