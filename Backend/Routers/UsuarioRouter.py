@@ -48,9 +48,11 @@ async def crear_usuario(
     try:
         nuevoUsuario = UsuarioService.crear(engine, usuario)
         print("nuevo usuario : ", nuevoUsuario)
+        print(nuevoUsuario)
         id_usuario: int = nuevoUsuario["id"]
 
         tempUsuario = UsuarioService.obtener(engine, id_usuario)
+        print(tempUsuario)
         request.session["usuario"] = {
             "id_usuario": tempUsuario["id_usuario"],
             "nombre": tempUsuario["nombre"],

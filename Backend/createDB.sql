@@ -3,7 +3,8 @@ create table USUARIO (
 	nombre varchar(50),
 	foto_perfil varchar(100),
 	email varchar(100),
-	clave varchar(255)
+	clave varchar(255),
+   sexo varchar(15)
 );
 
 create table GENERADOR(

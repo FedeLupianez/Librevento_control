@@ -11,6 +11,7 @@ def crear(engine, usuario: USUARIO) -> dict | HTTPException:
     usuario (Tablas.USUARIO) : objeto clase USUARIO a crear
     """
     tempClave = usuario.clave.encode("utf-8")
+    print(usuario)
     # Hasheo la password
     claveHasheada = bcrypt.hashpw(tempClave, bcrypt.gensalt())
     usuario.clave = claveHasheada.decode("utf-8")
@@ -33,7 +34,7 @@ def crear(engine, usuario: USUARIO) -> dict | HTTPException:
             print(e)
             session.rollback()
             raise HTTPException(status_code=500, detail="Error inesperado")
-        return {"id":usuario.id_usuario}
+        return {"id": usuario.id_usuario}
 
 
 def borrar(engine, id_usuario: int) -> dict | HTTPException:
@@ -80,7 +81,7 @@ def obtener_id(engine, email_usuario: str) -> dict | HTTPException:
         id_usuario = session.exec(query).first()
         if not (id_usuario):
             raise HTTPException(status_code=404, detail="usuario no encontrado")
-        return {"id":id_usuario}
+        return {"id": id_usuario}
 
 
 def login(engine, email_usuario: str, clave: str) -> dict | HTTPException:
