@@ -20,7 +20,7 @@
 		const imageUrl: string = `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&size=128&background=random&color=fff&rounded=true&format=svg`;
 		const sexo: Promise<string> = getGender(name);
 
-		const response = await fetch('http://localhost:8000/user', {
+		const response = await fetch('http://localhost:8000/usuario', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

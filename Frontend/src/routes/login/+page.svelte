@@ -2,6 +2,7 @@
 	import { user, fetchUser } from '../../stores/user';
 	let name: string = '';
 	let password: string = '';
+	let error: string = '';
 	const login = async () => {
 		try {
 			const response = await fetch('http://localhost:8000/usuario/login', {
@@ -17,11 +18,15 @@
 				const data = await response.json();
 				user.set(data);
 				await fetchUser();
+				error = '';
+				// Cambio al usuario a la pagina principal
+				window.location.href = '/';
 			} else {
 				throw new Error('Login failed');
 			}
 		} catch (error) {
 			console.error(error);
+			error = 'Error al iniciar sesión';
 		}
 	};
 </script>
@@ -65,4 +70,7 @@
 			on:click|preventDefault={login}>Listo</button
 		>
 	</div>
+	{#if error}
+		<span class="bg-red-500 text-white">{error}</span>
+	{/if}
 </div>
