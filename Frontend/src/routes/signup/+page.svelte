@@ -43,26 +43,27 @@
 	};
 </script>
 
-<div class="mr-10 flex min-h-90 w-full min-w-70 flex-col items-center justify-center gap-5">
-	<h1 class="text-5xl font-bold">Crear Cuenta</h1>
-
+<div class="mr-10 flex min-h-screen">
+	<span class="
+		text-[#141414]
+		text-[50px]
+		text-left
+		mt-8
+		ml-15
+		font-bold"
+	>Crea tu cuenta</span>
+	
 	{#if !$user}
-		<div class="flex min-h-150 w-full flex-col items-center justify-center gap-4">
-			<input
-				type="text"
-				name="name"
-				placeholder="Nombre de usuario"
-				class="flex w-full items-center justify-center rounded-2xl border border-gray-500 text-center"
-				id="name-input"
-				bind:value={name}
-				required
-			/>
-
+		<div class="flex min-h-150 flex-col gap-4">
 			<input
 				type="email"
 				name="email"
-				placeholder="Correo electrónico"
-				class="flex w-full items-center justify-center rounded-2xl border border-gray-500 text-center"
+				placeholder="Tu correo electrónico"
+				class="
+					w-[375px]
+					border border-gray-800
+					px-4 py-2
+					text-left text-[15px]"
 				bind:value={email}
 				required
 			/>
@@ -70,14 +71,37 @@
 			<input
 				type="password"
 				name="clave"
-				placeholder="Contraseña"
-				class="flex w-full items-center justify-center rounded-2xl border border-gray-500 text-center"
+				placeholder="Crea una contraseña"
+				class="
+					w-[375px]
+					border border-gray-800
+					px-4 py-2
+					text-left text-[15px]"
 				bind:value={password}
 				required
 			/>
+			
+			<input
+				type="text"
+				name="name"
+				placeholder="Nombre de usuario"
+				class="
+					w-[375px]
+					border border-gray-800
+					px-4 py-2
+					text-left text-[15px]"
+				id="name-input"
+				bind:value={name}
+				required
+			/>
+			
 			<button
 				type="submit"
-				class="flex items-center justify-center rounded-2xl bg-gray-500 text-center"
+				class="
+				w-[375px]
+					border border-gray-800
+					px-4 py-2
+					text-left text-[15px]"
 				id="signup-button"
 				on:click|preventDefault={handleSignUp}
 			>
