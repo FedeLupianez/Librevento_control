@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { user, fetchUser } from '../../stores/user';
-	let name: string = '';
+	let email: string = '';
 	let password: string = '';
 	let error: string = '';
 	const login = async () => {
@@ -10,7 +10,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ email_usuario: name, clave: password }),
+				body: JSON.stringify({ email_usuario: email, clave: password }),
 				credentials: 'include'
 			});
 
@@ -31,25 +31,18 @@
 	};
 </script>
 
-<div class="relative min-h-screen items-center justify-center">
-	<img
-		src="/public/plantita_decorativa_login.png"
-		class="pointer-events-none absolute bottom-0 left-0 h-auto w-full opacity-70 select-none"
-		alt="plantita decorativa"
-	/>
-
-	<div class="flex flex-col justify-center gap-5">
-		<h1 class="text-4x1 font-bold">Inicia sesión</h1>
+<div class="relative flex min-h-screen flex-col items-center justify-center">
+	<div class="z-10 flex w-full flex-col items-center justify-center gap-5">
+		<span class="text-5xl font-bold text-black">Inicia sesión</span>
 		<input
 			type="text"
 			name="username"
-			placeholder="Tu nombre de usuario"
+			placeholder="Tu correo electrónico"
 			class="
-				w-[375px]
-				border border-gray-800
-				px-4 py-2
-				text-left text-[15px]"
-			bind:value={name}
+				w-full border-2
+				border-black px-4
+				py-2 text-left text-[15px] sm:w-1/2 lg:w-1/3 xl:w-1/4"
+			bind:value={email}
 			required
 		/>
 		<input
@@ -57,19 +50,23 @@
 			name="password"
 			placeholder="Tu contraseña"
 			class="
-				w-[375px]
-				border border-gray-800
-				px-4 py-2
-				text-left text-[15px]"
+				w-full border-2
+				border-black px-4
+				py-2 text-left text-[15px] sm:w-1/2 lg:w-1/3 xl:w-1/4"
 			bind:value={password}
 			required
 		/>
 		<button
 			type="submit"
-			class="cursor-pointer bg-[#7A9660] p-2 text-white hover:bg-[#6b8755]"
+			class="w-full cursor-pointer bg-[#7A9660] p-2 text-white hover:bg-[#6b8755] sm:w-1/2 lg:w-1/3 xl:w-1/4"
 			on:click|preventDefault={login}>Listo</button
 		>
 	</div>
+	<img
+		src="/public/images/plantita_decorativa_login_sin_fondo.svg"
+		class="pointer-events-none absolute bottom-0 h-auto w-2xl opacity-70 select-none"
+		alt="plantita decorativa"
+	/>
 	{#if error}
 		<span class="bg-red-500 text-white">{error}</span>
 	{/if}
