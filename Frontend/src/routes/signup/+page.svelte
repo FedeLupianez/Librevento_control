@@ -19,6 +19,7 @@
 	const handleSignUp = async () => {
 		const imageUrl: string = `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&size=128&background=random&color=fff&rounded=true&format=svg`;
 		const sexo: Promise<string> = getGender(name);
+		console.log(email)
 
 		const response = await fetch('http://localhost:8000/usuario', {
 			method: 'POST',
@@ -27,7 +28,7 @@
 			},
 			body: JSON.stringify({
 				nombre: name,
-				email_usuario: email,
+				email: email,
 				clave: password,
 				sexo: (await sexo).toString(),
 				foto_perfil: imageUrl
@@ -109,7 +110,7 @@
 			</button>
 		</div>
 	{:else}
-		<div class="flex min-h-150 w-full flex-col">
+		<div class="flex min-h-screen w-full flex-col">
 			<p>Ya estás registrado</p>
 		</div>
 	{/if}
