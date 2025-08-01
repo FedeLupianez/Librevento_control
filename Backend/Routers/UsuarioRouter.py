@@ -23,7 +23,7 @@ async def login(
         request.session["usuario"] = {
             "id_usuario": usuario["id_usuario"],
             "nombre": usuario["nombre"],
-            "email_usuario": usuario["email"],
+            "email": usuario["email"],
             "foto_perfil": usuario["foto_perfil"],
             "sexo": usuario["sexo"],
         }
@@ -56,7 +56,7 @@ async def crear_usuario(
         request.session["usuario"] = {
             "id_usuario": tempUsuario["id_usuario"],
             "nombre": tempUsuario["nombre"],
-            "email_usuario": tempUsuario["email"],
+            "email": tempUsuario["email"],
             "foto_perfil": tempUsuario["foto_perfil"],
         }
         return {"message": "Usuario creado", "usuario": request.session["usuario"]}
