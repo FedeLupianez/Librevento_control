@@ -4,103 +4,92 @@ from Tablas import GENERADOR
 from fastapi import HTTPException
 
 
-def crear(engine, generador: GENERADOR) -> dict | HTTPException:
+def crear(session: Session, generador: GENERADOR) -> dict:
     """Función para crear un nuevo generador
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         generador (Tablas.GENERADOR) : objeto clase GENERADOR a subir
     """
     # Creo la sesión con la base de datos
-    with Session(engine) as session:
-        try:
-            session.add(generador)  # Agrego el objeto a la session
-            session.commit()  # Confirmo los cambios
-        except IntegrityError:
-            session.rollback()
-            raise HTTPException(
-                status_code=400, detail="Violación de restricción de datos"
-            )
-        except OperationalError:
-            session.rollback()
-            raise HTTPException(status_code=500, detail="Error en base de datos")
-        except Exception:
-            session.rollback()
-            raise HTTPException(status_code=500, detail="Error inesperado")
-        return {"message": "generador creado exitosamente"}
+    try:
+        session.add(generador)  # Agrego el objeto a la session
+        session.commit()  # Confirmo los cambios
+    except IntegrityError:
+        session.rollback()
+        raise HTTPException(status_code=400, detail="Violación de restricción de datos")
+    except OperationalError:
+        session.rollback()
+        raise HTTPException(status_code=500, detail="Error en base de datos")
+    except Exception:
+        session.rollback()
+        raise HTTPException(status_code=500, detail="Error inesperado")
+    return {"message": "generador creado exitosamente"}
 
 
-def borrar(engine, id_generador: int) -> dict | HTTPException:
+def borrar(session: Session, id_generador: int) -> dict:
     """Función para borrar un registro de la tabla generador
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         macAddress (str) : dirección mac del dispositivo
     """
-    with Session(engine) as session:
-        # Obtengo el objeto (registro) de la tabla por su id (macAddress)
-        query = select(GENERADOR).where(GENERADOR.id_generador == id_generador)
-        # Ejecuto la query y obtengo el objeto
-        generador = session.exec(query).first()
+    # Obtengo el objeto (registro) de la tabla por su id (macAddress)
+    query = select(GENERADOR).where(GENERADOR.id_generador == id_generador)
+    # Ejecuto la query y obtengo el objeto
+    generador = session.exec(query).first()
 
-        if not (generador):
-            raise HTTPException(status_code=404, detail="generador no encontrado")
+    if not (generador):
+        raise HTTPException(status_code=404, detail="generador no encontrado")
 
-        session.delete(generador)
-        session.commit()
-        return {"message": "generador borrado exitosamente"}
+    session.delete(generador)
+    session.commit()
+    return {"message": "generador borrado exitosamente"}
 
 
-def obtener(engine, id_generador: int) -> GENERADOR | HTTPException:
+def obtener(session: Session, id_generador: int) -> GENERADOR:
     """Función para obtener un registro de generador
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         macAddress (str) : dirección mac del dispositivo a obtener
     """
-    with Session(engine) as session:
-        query = select(GENERADOR).where(GENERADOR.id_generador == id_generador)
-        generador = session.exec(query).first()
-        if not (generador):
-            # Devuelve un error si no encuentra el generador
-            raise HTTPException(status_code=404, detail="Generador no encontrado")
+    query = select(GENERADOR).where(GENERADOR.id_generador == id_generador)
+    generador = session.exec(query).first()
+    if not (generador):
+        # Devuelve un error si no encuentra el generador
+        raise HTTPException(status_code=404, detail="Generador no encontrado")
 
-        return generador
+    return generador
 
 
-def config_macAddress(engine, id_usuario: int, macAddress: str) -> dict | HTTPException:
+def config_macAddress(session: Session, id_usuario: int, macAddress: str) -> dict:
     """Función para configurar una macAddress de un generador en la base de datos
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         id_usuario (int) : id del usuario
         macAddress (str) : macAddress del dispositivo
     """
-    with Session(engine) as session:
-        query = (
-            select(GENERADOR)
-            .where(GENERADOR.id_usuario == id_usuario)
-            .order_by(desc(GENERADOR.id_generador))
+    query = (
+        select(GENERADOR)
+        .where(GENERADOR.id_usuario == id_usuario)
+        .order_by(desc(GENERADOR.id_generador))
+    )
+    generador = session.exec(query).first()
+
+    if not (generador):
+        raise HTTPException(status_code=404, detail="El usuario no tiene generadores")
+    if generador.mac_address == macAddress:
+        raise HTTPException(
+            status_code=400, detail="El generador ya tiene la mac configurada"
         )
-        generador = session.exec(query).first()
-
-        if not (generador):
-            raise HTTPException(
-                status_code=404, detail="El usuario no tiene generadores"
-            )
-        if generador.macaddress == macAddress:
-            raise HTTPException(
-                status_code=400, detail="El generador ya tiene la mac configurada"
-            )
-        generador.macaddress = macAddress
-        session.add(generador)
-        session.commit()
-        return {"message": "macAddress cambiada"}
+    generador.mac_address = macAddress
+    session.add(generador)
+    session.commit()
+    return {"message": "macAddress cambiada"}
 
 
-def obtener_macAddress(engine, id_usuario: int) -> dict | HTTPException:
+def obtener_macAddress(session: Session, id_usuario: int) -> dict:
     """Esta función retorna la macAddress de los generadores de un usuario, así que devuelve una lista"""
-    with Session(engine) as session:
-        query = select(GENERADOR.macaddress).where(GENERADOR.id_usuario == id_usuario)
-        macAddress = list(session.exec(query).all())
-        if not (macAddress):
-            raise HTTPException(
-                status_code=404, detail="El usuario no tiene generadores"
-            )
-        return {"message": "macAddress obtenidas", "data": macAddress}
+    query = select(GENERADOR.mac_address).where(GENERADOR.id_usuario == id_usuario)
+    macAddress = list(session.exec(query).all())
+    if not (macAddress):
+        raise HTTPException(status_code=404, detail="El usuario no tiene generadores")
+    return {"message": "macAddress obtenidas", "data": macAddress}

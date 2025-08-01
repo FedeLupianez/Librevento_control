@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 import Tablas
 from Services import MedicionService
-from sqlalchemy.engine import Engine
-from dependencies import get_engine
+from sqlmodel import Session
+from dependencies import get_session
 
 router = APIRouter(prefix="/medicion", tags=["Medicion"])
 
@@ -10,28 +10,28 @@ router = APIRouter(prefix="/medicion", tags=["Medicion"])
 # Endpoints para las mediciones:
 @router.post("/")
 async def crear(
-    medicion: Tablas.MEDICION_POR_HORA, engine: Engine = Depends(get_engine)
+    medicion: Tablas.MEDICION_POR_HORA, session: Session = Depends(get_session)
 ):
     try:
-        return MedicionService.crear(engine, medicion)
+        return MedicionService.crear(session, medicion)
     except HTTPException as error:
         print(error)
         raise error
 
 
 @router.get("/id")
-async def obtener(id_medicion: int, engine: Engine = Depends(get_engine)):
+async def obtener(id_medicion: int, sessin: Session = Depends(get_session)):
     try:
-        return MedicionService.obtener(engine, id_medicion)
+        return MedicionService.obtener(session, id_medicion)
     except HTTPException as error:
         print(error)
         raise error
 
 
 @router.get("/obtener_id")
-async def obtener_medicion_id(macAddress: str, engine: Engine = Depends(get_engine)):
+async def obtener_medicion_id(macAddress: str, session: Session = Depends(get_session)):
     try:
-        return MedicionService.obtener_id(engine, macAddress)
+        return MedicionService.obtener_id(session, macAddress)
     except HTTPException as error:
         print(error)
         raise error
@@ -42,11 +42,11 @@ async def obtener_voltajes(
     macAddress: str,
     id_generador: int | None = None,
     filter: str | None = None,
-    engine: Engine = Depends(get_engine),
+    session: Session = Depends(get_session),
 ):
     try:
         return MedicionService.obtener_voltajes(
-            engine, macAddress, filter, id_generador
+            session, macAddress, filter, id_generador
         )
     except HTTPException as error:
         print(error)
@@ -58,11 +58,11 @@ async def obtener_consumos(
     macAddress: str,
     filter: str | None = None,
     id_generador: int | None = None,
-    engine: Engine = Depends(get_engine),
+    session: Session = Depends(get_session),
 ):
     try:
         return MedicionService.obtener_consumos(
-            engine, macAddress, filter, id_generador
+            session, macAddress, filter, id_generador
         )
     except HTTPException as error:
         print(error)

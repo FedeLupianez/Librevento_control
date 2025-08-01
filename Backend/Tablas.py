@@ -4,7 +4,8 @@ from typing import Optional
 from sqlalchemy import text
 from dependencies import get_config
 
-is_ssh_active = get_config()["SSH_USER"]
+is_ssh_active = get_config().get("SSH_USER", None)
+
 
 class USUARIO(SQLModel, table=True):
     __tablename__ = "USUARIO" if (is_ssh_active) else "usuario"

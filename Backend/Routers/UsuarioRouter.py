@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 import Tablas
 from Services import UsuarioService
 from pydantic import BaseModel
-from sqlalchemy.engine import Engine
-from dependencies import get_engine
+from sqlmodel import Session
+from dependencies import get_session
 
 router = APIRouter(prefix="/usuario", tags=["Usuario"])
 
@@ -16,10 +16,10 @@ class loginInput(BaseModel):
 
 @router.post("/login")
 async def login(
-    data: loginInput, request: Request, engine: Engine = Depends(get_engine)
+    data: loginInput, request: Request, session: Session = Depends(get_session)
 ):
     try:
-        usuario = UsuarioService.login(engine, data.email_usuario, data.clave)
+        usuario = UsuarioService.login(session, data.email_usuario, data.clave)
         request.session["usuario"] = {
             "id_usuario": usuario["id_usuario"],
             "nombre": usuario["nombre"],
@@ -43,15 +43,15 @@ async def logout(request: Request):
 # Endpoints de usuario :
 @router.post("/")
 async def crear_usuario(
-    usuario: Tablas.USUARIO, request: Request, engine: Engine = Depends(get_engine)
+    usuario: Tablas.USUARIO, request: Request, session: Session = Depends(get_session)
 ):
     try:
-        nuevoUsuario = UsuarioService.crear(engine, usuario)
+        nuevoUsuario = UsuarioService.crear(session, usuario)
         print("nuevo usuario : ", nuevoUsuario)
         print(nuevoUsuario)
         id_usuario: int = nuevoUsuario["id"]
 
-        tempUsuario = UsuarioService.obtener(engine, id_usuario)
+        tempUsuario = UsuarioService.obtener(session, id_usuario)
         print(tempUsuario)
         request.session["usuario"] = {
             "id_usuario": tempUsuario["id_usuario"],
@@ -66,27 +66,27 @@ async def crear_usuario(
 
 
 @router.get("/")
-async def obtener_usuario(id_usuario: int, engine: Engine = Depends(get_engine)):
+async def obtener_usuario(id_usuario: int, session: Session = Depends(get_session)):
     try:
-        return UsuarioService.obtener(engine, id_usuario)
+        return UsuarioService.obtener(session, id_usuario)
     except HTTPException as error:
         print(error)
         raise error
 
 
 @router.get("/obtener_id")
-async def obtener_id(email_usuario: str, engine: Engine = Depends(get_engine)):
+async def obtener_id(email_usuario: str, session: Session = Depends(get_session)):
     try:
-        return UsuarioService.obtener_id(engine, email_usuario)
+        return UsuarioService.obtener_id(session, email_usuario)
     except HTTPException as error:
         print(error)
         raise error
 
 
 @router.delete("/")
-async def borrar_usuario(id_usuario: int, engine: Engine = Depends(get_engine)):
+async def borrar_usuario(id_usuario: int, session: Session = Depends(get_session)):
     try:
-        return UsuarioService.borrar(engine, id_usuario)
+        return UsuarioService.borrar(session, id_usuario)
     except HTTPException as error:
         print(error)
         raise error
