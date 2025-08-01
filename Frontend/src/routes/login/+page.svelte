@@ -74,7 +74,7 @@
 			{#if show_success}
 				<button
 					in:fade={{ duration: 500 }}
-					class="z-0 mr-2 bg-[#7A9660] text-white"
+					class="z-0 mr-2 cursor-pointer bg-[#7A9660] text-white"
 					on:click={() => (window.location.href = '/')}
 				>
 					Ir a la página principal

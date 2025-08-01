@@ -98,7 +98,7 @@
 <Header />
 <h1>Voltaje generado</h1>
 
-<main class="flex flex-col gap-4 p-5">
+<main class="flex min-h-screen flex-col gap-4 p-5">
 	{#if allGenerators.length > 0}
 		{#each allGenerators as { mac, data }}
 			<section class="flex flex-col gap-2">
@@ -117,7 +117,17 @@
 				/>
 			</section>
 		{/each}
-	{:else}
+	{:else if $user}
 		<p class="w-full text-center text-2xl">Cargando datos...</p>
+	{:else}
+		<div class="flex flex-col items-center justify-center">
+			<span class="text-2xl text-red-500">No estás logueado</span>
+			<button
+				on:click={() => {
+					window.location.href = '/get_generator';
+				}}
+				class="w-1/2 rounded-full bg-[#7A9660] p-2 text-white">Obtener Generador</button
+			>
+		</div>
 	{/if}
 </main>

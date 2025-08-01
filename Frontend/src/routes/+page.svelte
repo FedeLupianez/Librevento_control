@@ -9,7 +9,7 @@
 </svelte:head>
 
 <Header />
-<main class="flex flex-col items-center">
+<main class="flex min-h-screen flex-col items-center">
 	{#if !$user}
 		<div class="flex h-100 w-full flex-col items-center justify-center">
 			<h1 class="text-5xl font-bold">
@@ -24,6 +24,11 @@
 		</div>
 	{:else}
 		<h1 class="text-5xl font-bold">Recepción</h1>
+		<button
+			on:click={() => {
+				window.location.href = '/get_generator';
+			}}
+			class="w-1/2 rounded-full bg-[#7A9660] p-2 text-white">Obtener Generador</button
+		>
 	{/if}
 </main>
-
