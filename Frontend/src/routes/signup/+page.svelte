@@ -44,15 +44,16 @@
 </script>
 
 <div class="mr-10 flex min-h-screen">
-	<span class="
-		text-[#141414]
-		text-[50px]
-		text-left
+	<span
+		class="
 		mt-8
 		ml-15
-		font-bold"
-	>Crea tu cuenta</span>
-	
+		text-left
+		text-[50px]
+		font-bold
+		text-[#141414]">Crea tu cuenta</span
+	>
+
 	{#if !$user}
 		<div class="flex min-h-150 flex-col gap-4">
 			<input
@@ -80,7 +81,7 @@
 				bind:value={password}
 				required
 			/>
-			
+
 			<input
 				type="text"
 				name="name"
@@ -94,7 +95,7 @@
 				bind:value={name}
 				required
 			/>
-			
+
 			<button
 				type="submit"
 				class="
