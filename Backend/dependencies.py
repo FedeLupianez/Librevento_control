@@ -18,15 +18,13 @@ def _build_database_url(host: str, port: int = 5432) -> str:
     )
 
 
-Config = dotenv_values("local.env")  # Configuraciones
+Config = dotenv_values("school.env")  # Configuraciones
 engine: Optional[Engine] = None
 tunnel: Optional[SSHTunnelForwarder] = None
 
 # Verifico si la configuración tiene algo de SSH
 if Config.get("SSH_USER", None) is not None:
     # Si es así, creo un tunel ssh hacia el servidor del colegio
-    from sshtunnel import SSHTunnelForwarder
-
     assert Config["SSH_PORT"] is not None
     assert Config["REMOTE_BIND_PORT"] is not None
     assert Config["LOCAL_BIND_HOST"] is not None
