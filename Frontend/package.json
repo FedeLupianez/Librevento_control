@@ -39,6 +39,7 @@
 	},
 	"dependencies": {
 		"@iconify/svelte": "^5.0.0",
+		"@svelte-web-fonts/google": "^1.0.4",
 		"chart.js": "^4.5.0"
 	}
 }
