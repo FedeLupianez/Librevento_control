@@ -51,22 +51,24 @@ def obtener_id(session: Session, macAddress: str) -> int:
 
 def obtener_voltajes(
     session: Session,
-    macAddress: str,
+    macAddress: str | None = None,
     filter: str | None = None,
     id_generador: int | None = None,
+    fecha_minima: str | None = None,
+    fecha_actual: str | None = None,
 ) -> dict:
     id = id_generador or obtener_id(session, macAddress)
 
     if not filter:
         query = select(
-            MEDICION_POR_HORA.voltaje_generado, MEDICION_POR_HORA.fecha
+            MEDICION_POR_HORA.voltaje, MEDICION_POR_HORA.fecha
         ).where(MEDICION_POR_HORA.id_generador == id)
         query = query.order_by(asc(MEDICION_POR_HORA.fecha))
         query = query.order_by(asc(MEDICION_POR_HORA.hora))
     elif filter == "dia":
         query = (
             select(
-                func.avg(MEDICION_POR_HORA.voltaje_generado),
+                func.avg(MEDICION_POR_HORA.voltaje),
                 MEDICION_POR_HORA.fecha,
             )
             .where(MEDICION_POR_HORA.id_generador == id)
@@ -76,7 +78,7 @@ def obtener_voltajes(
     elif filter == "hora":
         query = (
             select(
-                func.avg(MEDICION_POR_HORA.voltaje_generado),
+                func.avg(MEDICION_POR_HORA.voltaje),
                 MEDICION_POR_HORA.hora,
             )
             .where(MEDICION_POR_HORA.id_generador == id)
@@ -84,13 +86,15 @@ def obtener_voltajes(
             .order_by(MEDICION_POR_HORA.hora)
         )
 
+    if fecha_minima and fecha_actual:
+        query = query.filter(
+            MEDICION_POR_HORA.fecha.between(fecha_minima, fecha_actual)
+        )
+
     resultado = session.exec(query).all()
     voltajes = [{"value": v, "timestamp": str(f)} for v, f in resultado]
     if not (voltajes):
         raise HTTPException(status_code=404, detail="Voltajes no encontrados")
-
-    if len(voltajes) > 7:
-        voltajes = voltajes[-7:]
 
     return {
         "detail": "Voltajes encontrados",

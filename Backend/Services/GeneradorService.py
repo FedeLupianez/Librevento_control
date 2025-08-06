@@ -1,4 +1,4 @@
-from sqlmodel import Session, desc, select
+from sqlmodel import Session, desc, select, update
 from sqlalchemy.exc import IntegrityError, OperationalError
 from Tablas import GENERADOR
 from fastapi import HTTPException
@@ -67,21 +67,12 @@ def config_macAddress(session: Session, id_usuario: int, macAddress: str) -> dic
         id_usuario (int) : id del usuario
         macAddress (str) : macAddress del dispositivo
     """
-    query = (
-        select(GENERADOR)
-        .where(GENERADOR.id_usuario == id_usuario)
-        .order_by(desc(GENERADOR.id_generador))
+    query = update(GENERADOR).where(GENERADOR.id_usuario == id_usuario).values(
+        mac_address=macAddress
     )
-    generador = session.exec(query).first()
-
-    if not (generador):
+    if not (query):
         raise HTTPException(status_code=404, detail="El usuario no tiene generadores")
-    if generador.mac_address == macAddress:
-        raise HTTPException(
-            status_code=400, detail="El generador ya tiene la mac configurada"
-        )
-    generador.mac_address = macAddress
-    session.add(generador)
+    session.exec(query)
     session.commit()
     return {"message": "macAddress cambiada"}
 

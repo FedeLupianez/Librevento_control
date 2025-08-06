@@ -20,7 +20,7 @@ async def crear(
 
 
 @router.get("/id")
-async def obtener(id_medicion: int, sessin: Session = Depends(get_session)):
+async def obtener(id_medicion: int, session: Session = Depends(get_session)):
     try:
         return MedicionService.obtener(session, id_medicion)
     except HTTPException as error:
@@ -39,14 +39,14 @@ async def obtener_medicion_id(macAddress: str, session: Session = Depends(get_se
 
 @router.get("/obtener_voltajes")
 async def obtener_voltajes(
-    macAddress: str,
+    macAddress: str | None = None,
     id_generador: int | None = None,
-    filter: str | None = None,
+    filtro: str | None = None,
     session: Session = Depends(get_session),
 ):
     try:
         return MedicionService.obtener_voltajes(
-            session, macAddress, filter, id_generador
+            session, macAddress, filtro, id_generador
         )
     except HTTPException as error:
         print(error)
