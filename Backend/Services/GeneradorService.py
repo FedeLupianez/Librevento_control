@@ -67,10 +67,11 @@ def config_macAddress(session: Session, id_usuario: int, macAddress: str) -> dic
         id_usuario (int) : id del usuario
         macAddress (str) : macAddress del dispositivo
     """
-    query = update(GENERADOR).where(GENERADOR.id_usuario == id_usuario).values(
-        mac_address=macAddress
-    )
-    if not (query):
+    try :
+        query = update(GENERADOR).where(GENERADOR.id_usuario == id_usuario).values(
+            mac_address=macAddress
+        )
+    except Exception:
         raise HTTPException(status_code=404, detail="El usuario no tiene generadores")
     session.exec(query)
     session.commit()

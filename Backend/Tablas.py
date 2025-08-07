@@ -21,7 +21,7 @@ class GENERADOR(SQLModel, table=True):
     __tablename__ = "GENERADOR" if (is_ssh_active) else "generador"
     id_generador: int = Field(primary_key=True)
     mac_address: Optional[str] = Field(default=None, nullable=True)
-    id_usuario: int = Field(foreign_key="usuario.id_usuario")
+    id_usuario: int = Field(foreign_key="USUARIO.id_usuario")
     ciudad: str
     calle: str
     numero_vivienda: int
@@ -30,7 +30,7 @@ class GENERADOR(SQLModel, table=True):
 class MEDICION_POR_HORA(SQLModel, table=True):
     __tablename__ = "MEDICION" if (is_ssh_active) else "medicion_por_hora"
     id_medicion: int = Field(primary_key=True)
-    id_generador: int = Field(foreign_key="generador.id_generador")
+    id_generador: int = Field(foreign_key="GENERADOR.id_generador")
     voltaje: int
     consumo: int
     velocidad: int
