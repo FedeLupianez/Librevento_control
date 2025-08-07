@@ -6,17 +6,26 @@
 	import { page } from '$app/stores';
 
 	let filter: string | null = '';
+	const today = new Date();
+	const current_date = today.toISOString().split('T')[0];
+	let temp_seven = new Date(today);
+	temp_seven.setDate(temp_seven.getDate() - 7);
+	let seven_days_ago = temp_seven.toISOString().split('T')[0];
+	let actual_date = current_date;
+
 	$: if ($page.url.searchParams.get('filter')) {
 		filter = $page.url.searchParams.get('filter');
-		console.log(filter);
 	}
 
 	let unsubscribe: () => void;
 	let filterUnsubscribe: () => void;
 
 	type Measurement = {
-		value: number;
-		timestamp: string;
+		date: string;
+		voltage: number;
+		meditions: number;
+		min_voltage: number;
+		max_voltage: number;
 	};
 
 	type GeneratorData = {
@@ -27,9 +36,9 @@
 	let allGenerators: GeneratorData[] = [];
 
 	const backgroundColors = (value: number) => {
-		if (value >= 8) return '#789262';
-		if (value >= 5 && value < 8) return '#ebdaa8';
-		if (value < 5) return '#c85d4d';
+		if (value >= 5) return '#789262';
+		if (value >= 4 && value < 5) return '#ebdaa8';
+		if (value < 4) return '#c85d4d';
 	};
 
 	async function getMacAddress(id_user: number) {
@@ -38,6 +47,7 @@
 			{ method: 'GET', credentials: 'include' }
 		);
 		const data = await response.json();
+		console.log(data);
 		return data ?? [];
 	}
 
@@ -48,7 +58,9 @@
 		// Tomamos solo la data del primer mac para graficar
 		allGenerators = [];
 		const promises = macAddresses.data.map(async (mac: string) => {
-			let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}`;
+			// let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=${seven_days_ago}&fecha_maxima=${actual_date}`;
+			// let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&filtro=hora&fecha_actual=2025-08-08`;
+			let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=2025-08-08&fecha_maxima=2025-08-11`;
 			if (filter) {
 				route = route + `&filter=${filter}`;
 			}
@@ -66,8 +78,9 @@
 	}
 
 	onMount(async () => {
+		console.log(actual_date);
+		console.log(seven_days_ago);
 		unsubscribe = user.subscribe(async ($user) => {
-			console.log('Usuario : ', $user);
 			if (!$user) return;
 			getData($user.id_usuario);
 		});
@@ -89,9 +102,21 @@
 	const paddDataToMinimun = (data: Measurement[]) => {
 		const padded = [...data];
 		while (padded.length < 7) {
-			padded.push({ value: 0, timestamp: '' });
+			padded.push({ voltage: 0, date: '', meditions: 0, min_voltage: 0, max_voltage: 0 });
 		}
 		return padded;
+	};
+
+	const formatDate = (d: Measurement): string => {
+		if (!d.date) return '';
+		if (filter == 'dia') {
+			return new Date(d.date).toLocaleDateString('es-ES', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			});
+		}
+		return d.date;
 	};
 </script>
 
@@ -104,15 +129,8 @@
 			<section class="flex flex-col gap-2">
 				<h2>Generador: {mac}</h2>
 				<BarChart
-					data={paddDataToMinimun(data).map((d) => d.value)}
-					labels={paddDataToMinimun(data).map((d) => {
-						if (!d.timestamp) return '';
-						return new Date(d.timestamp).toLocaleDateString('es-ES', {
-							year: 'numeric',
-							month: 'long',
-							day: 'numeric'
-						});
-					})}
+					data={paddDataToMinimun(data).map((d) => d.voltage)}
+					labels={paddDataToMinimun(data).map((d) => formatDate(d))}
 					backgroundColorFunction={backgroundColors}
 				/>
 			</section>

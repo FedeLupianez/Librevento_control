@@ -15,4 +15,4 @@ front:
 
 all:
 	@echo "Levantando App"
-	@make back && make front
+	@make back & make front

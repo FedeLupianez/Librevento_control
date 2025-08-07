@@ -26,7 +26,6 @@
 	onMount(() => {
 		unsubscribe = user.subscribe(async ($user) => {
 			if (!$user) fetchUser();
-			console.log('usuario : ', $user);
 			updateShow();
 			setTitle();
 			window.addEventListener('resize', updateShow);

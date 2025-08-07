@@ -42,11 +42,20 @@ async def obtener_voltajes(
     macAddress: str | None = None,
     id_generador: int | None = None,
     filtro: str | None = None,
+    fecha_minima: str | None = None,
+    fecha_maxima: str | None = None,
+    fecha_actual: str | None = None,
     session: Session = Depends(get_session),
 ):
     try:
         return MedicionService.obtener_voltajes(
-            session, macAddress, filtro, id_generador
+            session,
+            macAddress,
+            filtro,
+            id_generador,
+            fecha_minima,
+            fecha_maxima,
+            fecha_actual,
         )
     except HTTPException as error:
         print(error)
