@@ -27,7 +27,7 @@ class GENERADOR(SQLModel, table=True):
     numero_vivienda: int
 
 
-class MEDICION_POR_HORA(SQLModel, table=True):
+class MEDICION(SQLModel, table=True):
     __tablename__ = "MEDICION" if (is_ssh_active) else "medicion_por_hora"
     id_medicion: int = Field(primary_key=True)
     id_generador: int = Field(foreign_key="GENERADOR.id_generador")

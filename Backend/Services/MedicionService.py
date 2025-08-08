@@ -1,13 +1,14 @@
 from sqlalchemy.exc import IntegrityError, OperationalError
+from typing import Literal
 from sqlmodel import Session, asc, select, func
-from Tablas import MEDICION_POR_HORA, GENERADOR
+from Tablas import MEDICION, GENERADOR
 from fastapi import HTTPException
 
 
-def crear(session: Session, medicion: MEDICION_POR_HORA) -> dict:
+def crear(session: Session, medicion: MEDICION) -> dict:
     """Función para crear una nueva medicion
     engine (sqlalchemy.exc.engine) : conexión con la base de datos
-    medicion (Tablas.MEDICION_POR_HORA) : objeto clase MEDICION_POR_HORA"""
+    medicion (Tablas.MEDICION) : objeto clase MEDICION"""
 
     try:
         session.add(medicion)
@@ -28,18 +29,6 @@ def crear(session: Session, medicion: MEDICION_POR_HORA) -> dict:
     return {"message": "Medicion creada exitosamente"}
 
 
-def obtener(session: Session, id_medicion: int) -> dict:
-    query = select(MEDICION_POR_HORA).where(
-        MEDICION_POR_HORA.id_medicion == id_medicion
-    )
-    medicion = session.exec(query).first()
-
-    if not (medicion):
-        raise HTTPException(status_code=404, detail="medicion no encontrada")
-    session.refresh(medicion)
-    return {"detail": "Medicion encontrada", "medicion": medicion.model_dump()}
-
-
 def obtener_id(session: Session, macAddress: str) -> int:
     id = session.exec(
         select(GENERADOR.id_generador).where(GENERADOR.mac_address == macAddress)
@@ -49,76 +38,24 @@ def obtener_id(session: Session, macAddress: str) -> int:
     return id
 
 
-def obtener_voltajes(
-    session: Session,
-    macAddress: str | None = None,
-    filtro: str | None = None,
-    id_generador: int | None = None,
-    fecha_minima: str | None = None,
-    fecha_maxima: str | None = None,
-    fecha_actual: str | None = None,
-) -> dict:
-    if not id_generador and not macAddress:
-        raise HTTPException(status_code=400, detail="No se proporcionaron filtros")
-
-    id = id_generador or obtener_id(session, macAddress)
-
-    # Query para obtener promedio por fecha
-    query = select(
-        MEDICION_POR_HORA.fecha,
-        func.hour(MEDICION_POR_HORA.hora),
-        func.avg(MEDICION_POR_HORA.voltaje).label("promedio_voltaje"),
-        func.count(MEDICION_POR_HORA.id_medicion).label("total_mediciones"),
-        func.min(MEDICION_POR_HORA.voltaje).label("voltaje_minimo"),
-        func.max(MEDICION_POR_HORA.voltaje).label("voltaje_maximo"),
-    ).where(MEDICION_POR_HORA.id_generador == id)
-    match filtro:
-        case "dia":
-            query = query.group_by(MEDICION_POR_HORA.fecha)
-            query = query.order_by(MEDICION_POR_HORA.fecha)
-
-        case "hora":
-            query = query.group_by(func.hour(MEDICION_POR_HORA.hora))
-            query = query.order_by(func.hour(MEDICION_POR_HORA.hora))
-
-        case _:
-            query = query.group_by(MEDICION_POR_HORA.fecha)
-            query = query.order_by(MEDICION_POR_HORA.fecha)
-
-    # Aplicar filtros de fecha si existen
-    if fecha_minima and fecha_maxima:
-        print(f"Filtrando entre {fecha_minima} y {fecha_maxima}")
-        query = query.filter(
-            MEDICION_POR_HORA.fecha >= fecha_minima,
-            MEDICION_POR_HORA.fecha <= fecha_maxima,
-        )
-    elif fecha_minima:
-        query = query.filter(MEDICION_POR_HORA.fecha >= fecha_minima)
-    elif fecha_maxima:
-        query = query.filter(MEDICION_POR_HORA.fecha <= fecha_maxima)
-
-    # Debug: mostrar la query SQL
-    print("Query SQL generada:", str(query))
-
-    resultado = session.exec(query).all()
-    print(f"Encontrados {len(resultado)} registros")
-
-    if not resultado:
-        raise HTTPException(
-            status_code=404,
-            detail="No se encontraron voltajes para las fechas especificadas",
-        )
-
+def formatear_datos(
+    datos, filtro: str, dato: Literal["voltaje", "consumo"] | None = None
+):
+    """
+    Función para convertir los datos de una consulta en un diccionario
+    para poder retornarlo como respuesta HTTP
+    """
+    print(datos)
     # Formatear resultados
-    voltajes = []
-    for fecha, hora, promedio, total, minimo, maximo in resultado:
-        temp = str(fecha)
-        if filtro == "hora":
-            temp = str(hora)
-        voltajes.append(
+    temp_list = []
+    for fecha, hora, promedio, total, minimo, maximo in datos:
+        temp = str(fecha) if (filtro == "dia") else str(hora)
+        temp_list.append(
             {
                 "date": temp,
-                "voltage": round(float(promedio), 2),
+                "voltage" if dato == "voltaje" else "consumption": round(
+                    float(promedio), 2
+                ),
                 "meditions": total,
                 "min_voltage": float(minimo),
                 "max_voltage": float(maximo),
@@ -127,6 +64,85 @@ def obtener_voltajes(
         print(
             f"Fecha: {temp}, Promedio: {round(float(promedio), 2)}, Mediciones: {total}"
         )
+    return temp_list
+
+
+def obtener_datos(
+    session: Session,
+    mac_address: str,
+    filtro: Literal["dia", "hora"],
+    fecha_minima: str | None = None,
+    fecha_maxima: str | None = None,
+    fecha_actual: str | None = None,
+    dato: Literal["voltaje", "consumo"] | None = None,
+):
+    id = obtener_id(session, mac_address)
+    query = select(
+        MEDICION.fecha,
+        func.hour(MEDICION.hora),
+        func.avg(MEDICION.voltaje).label("promedio_voltaje")
+        if dato == "voltaje"
+        else func.avg(MEDICION.consumo).label("promedio_consumo"),
+        func.count(MEDICION.id_medicion).label("total_mediciones"),
+        func.min(MEDICION.voltaje).label("voltaje_minimo"),
+        func.max(MEDICION.voltaje).label("voltaje_maximo"),
+    ).where(MEDICION.id_generador == id)
+
+    if filtro == "dia":
+        query = query.group_by(MEDICION.fecha)
+        query = query.order_by(MEDICION.fecha)
+    elif filtro == "hora":
+        query = query.group_by(func.hour(MEDICION.hora))
+        query = query.order_by(func.hour(MEDICION.hora))
+
+    # Aplicar filtros de fecha si existen
+    if fecha_minima and fecha_maxima:
+        print(f"Filtrando entre {fecha_minima} y {fecha_maxima}")
+        query = query.filter(
+            MEDICION.fecha >= fecha_minima,
+            MEDICION.fecha <= fecha_maxima,
+        )
+    elif fecha_minima:
+        query = query.filter(MEDICION.fecha >= fecha_minima)
+    elif fecha_maxima:
+        query = query.filter(MEDICION.fecha <= fecha_maxima)
+    elif fecha_actual:
+        query = query.filter(MEDICION.fecha == fecha_actual)
+
+    result = session.exec(query).all()
+    return result
+
+
+def obtener_voltajes(
+    session: Session,
+    mac_address: str | None = None,
+    filtro: Literal["dia", "hora"] | None = None,
+    fecha_minima: str | None = None,
+    fecha_maxima: str | None = None,
+    fecha_actual: str | None = None,
+) -> dict:
+    if not mac_address:
+        raise HTTPException(status_code=400, detail="No se proporcionó la mac_address")
+    filtro = filtro or "dia"
+
+    resultado = obtener_datos(
+        session=session,
+        mac_address=mac_address,
+        filtro=filtro,
+        fecha_minima=fecha_minima,
+        fecha_maxima=fecha_maxima,
+        fecha_actual=fecha_actual,
+        dato="voltaje",
+    )
+    print(f"Encontrados {len(resultado)} registros")
+
+    if not resultado:
+        raise HTTPException(
+            status_code=404,
+            detail="No se encontraron voltajes para las fechas especificadas",
+        )
+
+    voltajes = formatear_datos(datos=resultado, filtro=filtro, dato="voltaje")
 
     return {
         "detail": "Promedios de voltaje por fecha encontrados",
@@ -137,48 +153,37 @@ def obtener_voltajes(
 
 def obtener_consumos(
     session: Session,
-    macAddress: str,
-    filter: str | None = None,
-    id_generador: int | None = None,
+    mac_address: str | None = None,
+    filtro: Literal["dia", "hora"] | None = None,
+    fecha_minima: str | None = None,
+    fecha_maxima: str | None = None,
+    fecha_actual: str | None = None,
 ) -> dict:
-    id = id_generador or obtener_id(session, macAddress)
+    if not mac_address:
+        raise HTTPException(status_code=400, detail="No se proporcionó la mac_address")
+    filtro = filtro or "dia"
 
-    if not filter:
-        query = select(MEDICION_POR_HORA.cosumo, MEDICION_POR_HORA.fecha).where(
-            MEDICION_POR_HORA.id_generador == id
-        )
-        query = query.order_by(asc(MEDICION_POR_HORA.fecha))
-        query = query.order_by(asc(MEDICION_POR_HORA.hora))
-    elif filter == "dia":
-        query = (
-            select(
-                func.avg(MEDICION_POR_HORA.consumo),
-                MEDICION_POR_HORA.fecha,
-            )
-            .where(MEDICION_POR_HORA.id_generador == id)
-            .group_by(MEDICION_POR_HORA.fecha)
-            .order_by(MEDICION_POR_HORA.fecha)
-        )
-    elif filter == "hora":
-        query = (
-            select(
-                func.avg(MEDICION_POR_HORA.consumo),
-                MEDICION_POR_HORA.hora,
-            )
-            .where(MEDICION_POR_HORA.id_generador == id)
-            .group_by(MEDICION_POR_HORA.hora)
-            .order_by(MEDICION_POR_HORA.hora)
+    resultado = obtener_datos(
+        session=session,
+        mac_address=mac_address,
+        filtro=filtro,
+        fecha_minima=fecha_minima,
+        fecha_maxima=fecha_maxima,
+        fecha_actual=fecha_actual,
+        dato="consumo",
+    )
+    print(f"Encontrados {len(resultado)} registros")
+
+    if not resultado:
+        raise HTTPException(
+            status_code=404,
+            detail="No se encontraron voltajes para las fechas especificadas",
         )
 
-    resultado = session.exec(query).all()
-    consumos = [{"value": v, "timestamp": str(f)} for v, f in resultado]
-    if not (consumos):
-        raise HTTPException(status_code=404, detail="Consumos no encontrados")
-
-    if len(consumos) > 7:
-        consumos = consumos[-7:]
+    consumos = formatear_datos(datos=resultado, filtro=filtro, dato="consumo")
 
     return {
-        "detail": "Consumos encontrados",
+        "detail": "Promedios de voltaje por fecha encontrados",
         "data": consumos,
+        "total_fechas": len(consumos),
     }
