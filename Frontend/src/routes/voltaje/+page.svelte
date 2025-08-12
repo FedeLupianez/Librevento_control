@@ -4,13 +4,15 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { user } from '../../stores/user';
 	import { page } from '$app/stores';
+	import Efficent_day from './components/Efficent_day.svelte';
 
 	let filter: string | null = '';
 	const today = new Date();
 	const current_date = today.toISOString().split('T')[0];
-	let temp_seven = new Date(today);
-	temp_seven.setDate(temp_seven.getDate() - 7);
-	let seven_days_ago = temp_seven.toISOString().split('T')[0];
+	let min_limit = new Date(today);
+	// Restar los dias que faltan para que siempre empiece en lunes
+	min_limit.setDate(min_limit.getDate() - min_limit.getDay());
+	let min_limit_day = min_limit.toISOString().split('T')[0];
 	let actual_date = current_date;
 
 	$: if ($page.url.searchParams.get('filter')) {
@@ -58,9 +60,7 @@
 		// Tomamos solo la data del primer mac para graficar
 		allGenerators = [];
 		const promises = macAddresses.data.map(async (mac: string) => {
-			// let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=${seven_days_ago}&fecha_maxima=${actual_date}`;
-			// let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&filtro=hora&fecha_actual=2025-08-08`;
-			let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=2025-08-08&fecha_maxima=2025-08-11`;
+			let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
 			if (filter) {
 				route = route + `&filter=${filter}`;
 			}
@@ -126,13 +126,17 @@
 <main class="flex min-h-screen flex-col gap-4 p-5">
 	{#if allGenerators.length > 0}
 		{#each allGenerators as { mac, data }}
-			<section class="flex flex-col gap-2">
-				<h2>Generador: {mac}</h2>
-				<BarChart
-					data={paddDataToMinimun(data).map((d) => d.voltage)}
-					labels={paddDataToMinimun(data).map((d) => formatDate(d))}
-					backgroundColorFunction={backgroundColors}
-				/>
+			<section class="flex flex-row gap-2">
+				<div class="flex flex-col gap-5">
+					<h2>Generador: {mac}</h2>
+					<BarChart
+						data={paddDataToMinimun(data).map((d) => d.voltage)}
+						labels={paddDataToMinimun(data).map((d) => formatDate(d))}
+						backgroundColorFunction={backgroundColors}
+					/>
+				</div>
+				<Efficent_day date="2025-08-08" />
+
 			</section>
 		{/each}
 	{:else if $user}

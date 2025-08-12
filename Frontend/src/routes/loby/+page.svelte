@@ -7,8 +7,8 @@
 <main class="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
 	<section class="flex flex-col gap-2">
 		<div class="flex flex-row gap-2">
-			<span class="title title text-5xl text-black">2.</span>
-			<span class="title title text-5xl text-black">Centro de control</span>
+			<span class="title text-5xl text-black">2.</span>
+			<span class="title text-5xl text-black">Centro de control</span>
 		</div>
 		<p class="paragraph">
 			Como parte de las nuevas tecnologías integradas en nuestro aerogenerador, incorporamos una
