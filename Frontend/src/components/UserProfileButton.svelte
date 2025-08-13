@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { logoutUser, user } from '../stores/user';
 	import Icon from '@iconify/svelte';
+	import { ROUTES } from '$lib/routes';
 
 	let showProfile: boolean = false;
 </script>
@@ -53,13 +54,13 @@
 					</button>
 				{:else}
 					<a
-						href="/signup"
+						href={`${ROUTES.USER.SIGN_UP}`}
 						class="flex w-full items-center justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
 					>
 						<span class="rounded-2xl text-center text-white">Crear Cuenta</span>
 					</a>
 					<a
-						href="/login"
+						href={`${ROUTES.USER.LOGIN}`}
 						class="flex w-full items-center justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
 					>
 						<span class="rounded-2xl text-center text-white">Iniciar Sesión</span>

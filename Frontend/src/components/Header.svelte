@@ -4,6 +4,7 @@
 	import { user, fetchUser, logoutUser } from '../stores/user';
 	import UserProfileButton from './UserProfileButton.svelte';
 	import DropDownButton from './DropDownButton.svelte';
+	import { ROUTES } from '$lib/routes';
 
 	let showMobile = false;
 	let unsubscribe: () => void;
@@ -64,25 +65,28 @@
 				<slot slot="menu">
 					<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
 						<a
-							href="/voltaje"
+							href={`${ROUTES.VOLTAGE}`}
 							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 						>
 							<span class="text-white">Voltaje Generado</span>
 						</a>
 
 						<a
-							href="/consumo_dia"
+							href={`${ROUTES.CONSUMPTION}`}
 							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 						>
 							<span class="text-white">Consumo por día</span>
 						</a>
 
-						<a href="/consumo_mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+						<a
+							href={`${ROUTES.CONSUMPTION}`}
+							class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+						>
 							<span class="text-white">Consumo por mes</span>
 						</a>
 
 						<a
-							href="/alertas"
+							href={`${ROUTES.ALERTS}`}
 							class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 						>
 							<span class="text-white">Alertas de consumo</span>
@@ -94,11 +98,14 @@
 			<DropDownButton text="editar" mode="hover">
 				<slot slot="menu">
 					<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
-						<a href="/login" class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]">
+						<a
+							href={`${ROUTES.USER.LOGIN}`}
+							class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]"
+						>
 							<span class="text-white">Iniciar Sesión</span>
 						</a>
 						<a
-							href="/signup"
+							href={`${ROUTES.USER.SIGN_UP}`}
 							class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 						>
 							<span class="text-white">Crear Cuenta</span>
@@ -134,25 +141,28 @@
 					<slot slot="menu">
 						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
 							<a
-								href="/voltaje"
+								href={`${ROUTES.VOLTAGE}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 							>
 								<span class="text-white">Voltaje Generado</span>
 							</a>
 
 							<a
-								href="/consumo-dia"
+								href={`${ROUTES.CONSUMPTION}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 							>
 								<span class="text-white">Consumo por día</span>
 							</a>
 
-							<a href="/consumo-mes" class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]">
+							<a
+								href={`${ROUTES.CONSUMPTION}`}
+								class="px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
+							>
 								<span class="text-white">Consumo por mes</span>
 							</a>
 
 							<a
-								href="/alertas"
+								href={`${ROUTES.ALERTS}`}
 								class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 							>
 								<span class="text-white">Alertas de consumo</span>
@@ -164,11 +174,14 @@
 				<DropDownButton text="editar" mode="button">
 					<slot slot="menu">
 						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
-							<a href="/login" class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]">
+							<a
+								href={`${ROUTES.USER.LOGIN}`}
+								class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]"
+							>
 								<span class="text-white">Iniciar Sesión</span>
 							</a>
 							<a
-								href="/signup"
+								href={`${ROUTES.USER.SIGN_UP}`}
 								class="rounded-b-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
 							>
 								<span class="text-white">Crear Cuenta</span>

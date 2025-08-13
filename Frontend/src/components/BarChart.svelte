@@ -4,8 +4,10 @@
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart | null = null;
-	export let data: Array<number>;
 	export let labels: Array<string>;
+	export let prom: Array<number>;
+	export let min: Array<number>;
+	export let max: Array<number>;
 	export let backgroundColorFunction: Function;
 
 	const options = {
@@ -15,7 +17,7 @@
 			y: {
 				beginAtZero: true,
 				min: 0,
-				max: Math.max(...data) + 1,
+				max: Math.max(...prom) + 1,
 				ticks: {
 					stepSize: 1
 				}
@@ -23,19 +25,36 @@
 			x: {
 				beginAtZero: true,
 				min: 0,
-				max: data.length < 7 ? 7 : data.length + 1
+				max: prom.length < 7 ? 7 : prom.length + 1
+			}
+		},
+		plugins: {
+			tooltip: {
+				callbacks: {
+					label: function (context: any) {
+						const index = context.dataIndex;
+						const prom_number = prom[index];
+						const min_number = min[index];
+						const max_number = max[index];
+						return [
+							`Promedio: ${prom_number.toFixed(2)} V`,
+							`Mínimo: ${min_number.toFixed(2)} V`,
+							`Máximo: ${max_number.toFixed(2)} V`
+						];
+					}
+				}
 			}
 		}
 	};
 
 	onMount(() => {
-		data = [...data, ...Array(7 - data.length).fill(0)];
+		prom = [...prom, ...Array(7 - prom.length).fill(0)];
 		const dataSet = {
 			labels: labels,
 			datasets: [
 				{
 					label: 'Voltaje Generado',
-					data: data,
+					data: prom,
 					backgroundColor: (ctx: any) => {
 						const value = ctx.dataset.data[ctx.dataIndex];
 						return backgroundColorFunction(value);
