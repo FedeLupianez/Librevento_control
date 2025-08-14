@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Header from '../../components/Header.svelte';
 	import { user } from '../../stores/user';
+	import { API_HOST } from '$lib/routes';
 
 	let city: string = '';
 	let street: string = '';
@@ -19,7 +20,7 @@
 
 	const handleFormSubmit = async () => {
 		try {
-			const response = await fetch('http://localhost:8000/generador', {
+			const response = await fetch(`${API_HOST}/generador`, {
 				credentials: 'include',
 				method: 'POST',
 				headers: {

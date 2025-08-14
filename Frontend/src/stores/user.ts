@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
 import type User from '../types/user';
+import { API_HOST } from '$lib/routes';
 
 export const user = writable<User | null>(null);
 
 export async function fetchUser() {
    try {
-      const response = await fetch('http://localhost:8000/usuario/actual', {
+      const response = await fetch(`${API_HOST}/usuario/actual`, {
          method: 'GET',
          credentials: 'include'
       });
@@ -24,7 +25,7 @@ export async function fetchUser() {
 
 export async function logoutUser() {
    try {
-      const response = await fetch('http://localhost:8000/usuario/logout', {
+      const response = await fetch(`${API_HOST}/usuario/logout`, {
          method: 'GET',
          credentials: 'include'
       });

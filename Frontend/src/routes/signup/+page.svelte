@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fetchUser, user } from '../../stores/user';
+	import { API_HOST } from '$lib/routes';
 
 	let name: string = '';
 	let email: string = '';
@@ -19,9 +20,9 @@
 	const handleSignUp = async () => {
 		const imageUrl: string = `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&size=128&background=random&color=fff&rounded=true&format=svg`;
 		const sexo: Promise<string> = getGender(name);
-		console.log(email)
+		console.log(email);
 
-		const response = await fetch('http://localhost:8000/usuario', {
+		const response = await fetch(`${API_HOST}/usuario`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

@@ -5,6 +5,7 @@
 	import { user } from '../../stores/user';
 	import { page } from '$app/stores';
 	import Efficent_day from './components/Efficent_day.svelte';
+	import { API_HOST } from '$lib/routes';
 
 	let filter: string | null = '';
 	const today = new Date();
@@ -43,10 +44,10 @@
 	};
 
 	async function getMacAddress(id_user: number) {
-		const response = await fetch(
-			`http://localhost:8000/generador/macAddress?id_usuario=${id_user}`,
-			{ method: 'GET', credentials: 'include' }
-		);
+		const response = await fetch(`$${API_HOST}/generador/macAddress?id_usuario=${id_user}`, {
+			method: 'GET',
+			credentials: 'include'
+		});
 		const data = await response.json();
 		console.log(data);
 		return data ?? [];
@@ -59,7 +60,7 @@
 		// Tomamos solo la data del primer mac para graficar
 		allGenerators = [];
 		const promises = macAddresses.data.map(async (mac: string) => {
-			let route = `http://localhost:8000/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
+			let route = `${API_HOST}/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
 			if (filter) {
 				route = route + `&filter=${filter}`;
 			}

@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { user, fetchUser } from '../../stores/user';
 	import { fade } from 'svelte/transition';
+	import { API_HOST } from '$lib/routes';
+
 	let email: string = '';
 	let password: string = '';
 	let show_error: boolean = false;
 	let show_success: boolean = false;
 	const login = async () => {
 		try {
-			const response = await fetch('http://localhost:8000/usuario/login', {
+			const response = await fetch(`${API_HOST}/usuario/login`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
