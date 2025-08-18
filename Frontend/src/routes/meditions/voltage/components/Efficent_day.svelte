@@ -1,6 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	export let date: string;
-	let day_name = new Date(date).toLocaleDateString('es-ES', { weekday: 'long' });
+	let day_name = '';
+	onMount(() => {
+		console.log(date);
+		day_name = new Date(date).toLocaleDateString('es-ES', { weekday: 'long' });
+	});
 </script>
 
 <div class="flex flex-row items-center justify-center gap-2">
