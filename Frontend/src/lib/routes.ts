@@ -9,4 +9,5 @@ export const ROUTES = {
    CONSUMPTION: '/consumption',
    ALERTS: '/alertas'
 }
-export const API_HOST = import.meta.env.VITE_API_HOST;
+// export const API_HOST = import.meta.env.VITE_API_HOST;
+export const API_HOST = 'http://localhost:8000';

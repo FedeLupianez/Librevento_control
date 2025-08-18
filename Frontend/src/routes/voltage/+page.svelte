@@ -15,6 +15,11 @@
 	let min_limit_day = min_limit.toISOString().split('T')[0];
 	let actual_date = current_date;
 
+	const sunday_number = 0;
+
+	console.log('Fecha Maxima = ', actual_date);
+	console.log('Fecha minima = ', min_limit_day);
+
 	$: if ($page.url.searchParams.get('filter')) {
 		filter = $page.url.searchParams.get('filter');
 	}
@@ -44,7 +49,7 @@
 	};
 
 	async function getMacAddress(id_user: number) {
-		const response = await fetch(`$${API_HOST}/generador/macAddress?id_usuario=${id_user}`, {
+		const response = await fetch(`${API_HOST}/generador/macAddress?id_usuario=${id_user}`, {
 			method: 'GET',
 			credentials: 'include'
 		});
@@ -59,7 +64,10 @@
 
 		// Tomamos solo la data del primer mac para graficar
 		allGenerators = [];
+
 		const promises = macAddresses.data.map(async (mac: string) => {
+			console.log('Fecha Maxima = ', actual_date);
+			console.log('Fecha minima = ', min_limit_day);
 			let route = `${API_HOST}/medicion/obtener_voltajes?macAddress=${mac}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
 			if (filter) {
 				route = route + `&filter=${filter}`;
@@ -80,6 +88,28 @@
 		allGenerators.map((generator) => {
 			generator.data = paddDataToMinimun(generator.data);
 		});
+	}
+
+	function decrement_week() {
+		let temp = new Date(actual_date);
+		// Hago que la fecha maxima de busqueda sea el domingo pasado
+		temp.setDate(new Date(actual_date).getDate() - temp.getDay() - 1);
+		actual_date = temp.toISOString().split('T')[0];
+		// Hago que la fecha minima sea el lunes pasado
+		min_limit.setDate(min_limit.getDate() - min_limit.getDay() - 7);
+		min_limit_day = min_limit.toISOString().split('T')[0];
+		if (!$user) return;
+		getData($user.id_usuario);
+	}
+
+	function increment_week() {
+		let temp = new Date(actual_date);
+		temp.setDate(new Date(actual_date).getDate() + 7);
+		actual_date = temp.toISOString().split('T')[0];
+		min_limit.setDate(min_limit.getDate() + 7);
+		min_limit_day = min_limit.toISOString().split('T')[0];
+		if (!$user) return;
+		getData($user.id_usuario);
 	}
 
 	onMount(async () => {
@@ -130,15 +160,25 @@
 	{#if allGenerators.length > 0}
 		{#each allGenerators as { mac, data }}
 			<section class="flex flex-row items-center justify-between">
-				<div class="flex flex-col items-center justify-center gap-5">
-					<h2>Generador: {mac}</h2>
-					<BarChart
-						prom={data.map((d) => d.voltage)}
-						min={data.map((d) => d.min_voltage)}
-						max={data.map((d) => d.max_voltage)}
-						labels={data.map((d) => formatDate(d))}
-						backgroundColorFunction={backgroundColors}
-					/>
+				<div class="flex flex-col items-center justify-center">
+					<div class="flex flex-col items-center justify-center gap-5">
+						<h2>Generador: {mac}</h2>
+						<BarChart
+							prom={data.map((d) => d.voltage)}
+							min={data.map((d) => d.min_voltage)}
+							max={data.map((d) => d.max_voltage)}
+							labels={data.map((d) => formatDate(d))}
+							backgroundColorFunction={backgroundColors}
+						/>
+					</div>
+					<div id="buttons-container" class="flex flex-row items-center justify-between">
+						<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={decrement_week}>
+							Decrement
+						</button>
+						<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={increment_week}>
+							Increment
+						</button>
+					</div>
 				</div>
 				<Efficent_day date={data[0].date} />
 			</section>
