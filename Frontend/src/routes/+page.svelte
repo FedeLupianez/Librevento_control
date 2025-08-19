@@ -7,6 +7,7 @@
 <svelte:head>
 	<title>Recepción</title>
 	<meta name="description" content="Página de recepción" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
 <Header />

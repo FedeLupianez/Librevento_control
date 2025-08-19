@@ -9,8 +9,12 @@
 	let showMobile = false;
 	let unsubscribe: () => void;
 
-	function updateShow() {
-		showMobile = window.innerWidth < 900;
+	let mediaQueryList: MediaQueryList;
+
+	function updateShow(event: MediaQueryListEvent) {
+		showMobile = event.matches;
+		console.log(showMobile);
+		console.log(window.innerWidth);
 	}
 
 	let title: string = 'Bienvenido';
@@ -27,12 +31,14 @@
 	onMount(() => {
 		unsubscribe = user.subscribe(async ($user) => {
 			if (!$user) fetchUser();
-			updateShow();
 			setTitle();
-			window.addEventListener('resize', updateShow);
+			mediaQueryList = window.matchMedia('(max-width: 750px)');
+			showMobile = mediaQueryList.matches;
+
+			mediaQueryList.addEventListener('change', updateShow);
 
 			return () => {
-				window.removeEventListener('resize', updateShow);
+				mediaQueryList.removeEventListener('change', updateShow);
 			};
 		});
 	});
@@ -43,7 +49,9 @@
 </script>
 
 {#if !showMobile}
-	<div class="flex flex-row items-center justify-between border-b-0 border-b-[#2f3e2f] px-15 py-5">
+	<div
+		class="container flex flex-row items-center justify-between border-b-0 border-b-[#2f3e2f] px-15 py-5"
+	>
 		<h1 class="mr-15 items-center text-center">
 			{#if !$user}
 				<span class="text-[#2f3e2f]">{title}</span>
@@ -63,7 +71,7 @@
 
 			<DropDownButton text="estadísticas" mode="hover">
 				<slot slot="menu">
-					<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
+					<div class="min-w-flull mt-1 flex w-full flex-col rounded-md bg-[#7A9660] shadow-md">
 						<a
 							href={`${ROUTES.VOLTAGE}`}
 							class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
@@ -119,27 +127,27 @@
 	<div class="h-0.5 w-228 bg-gray-500"></div>
 {:else}
 	<div
-		class="mt-4 flex flex-row items-center justify-around rounded-md bg-[#f5f5f5] p-4 font-bold text-[#2f3e2f] shadow"
+		class="container mt-4 flex flex-row items-center justify-around rounded-md bg-[#f5f5f5] p-4 font-bold text-[#2f3e2f] shadow"
 	>
-		<div class="flex flex-col items-center justify-center">
+		<div class="container flex flex-col items-center justify-center">
 			<h1 class="items-center text-center">
 				{#if !$user}
-					<span class="text-[#2f3e2f]">{title}</span>
+					<span class="text-2xl text-[#2f3e2f]">{title}</span>
 				{:else}
-					<span class="text-[#2f3e2f]">
+					<span class="text-2xl text-[#2f3e2f]">
 						{title}
 					</span>
-					<span class="text-[#c2b280]">{$user.nombre}</span>
+					<span class="text-2xl text-[#c2b280]">{$user.nombre}</span>
 				{/if}
 			</h1>
-			<div class="flex flex-row items-center justify-around gap-4">
+			<div class="container flex flex-col items-center justify-start gap-4">
 				<button class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold">
 					principal
 					<Icon icon="bx:leaf" class="h-5 w-5" />
 				</button>
 				<DropDownButton text="estadísticas" mode="button">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div class="mt-1 flex w-full flex-col rounded-md bg-[#7A9660] shadow-md">
 							<a
 								href={`${ROUTES.VOLTAGE}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
@@ -173,7 +181,7 @@
 
 				<DropDownButton text="editar" mode="button">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div class="mt-1 flex w-full flex-col rounded-md bg-[#7A9660] shadow-md">
 							<a
 								href={`${ROUTES.USER.LOGIN}`}
 								class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]"
