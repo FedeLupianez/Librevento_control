@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { user, fetchUser } from '../../stores/user';
 	import { fade } from 'svelte/transition';
+	import Icon from '@iconify/svelte';
 	import { API_HOST } from '$lib/routes';
 
 	let email: string = '';
 	let password: string = '';
 	let show_error: boolean = false;
 	let show_success: boolean = false;
+	let view_password: boolean = false;
+
 	const login = async () => {
 		try {
 			const response = await fetch(`${API_HOST}/usuario/login`, {
@@ -17,7 +20,6 @@
 				body: JSON.stringify({ email_usuario: email, clave: password }),
 				credentials: 'include'
 			});
-
 			if (response.ok) {
 				const data = await response.json();
 				user.set(data);
@@ -51,17 +53,26 @@
 			bind:value={email}
 			required
 		/>
-		<input
-			type="password"
-			name="password"
-			placeholder="Tu contraseña"
-			class="
-				w-full border-2
-				border-black px-4
-				py-2 text-left text-[15px] sm:w-1/2 lg:w-1/3 xl:w-1/4"
-			bind:value={password}
-			required
-		/>
+		<div class="relative w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+			<input
+				type={view_password ? 'text' : 'password'}
+				name="password"
+				placeholder="Tu contraseña"
+				class="
+					w-full border-2
+					border-black px-4
+					py-2 pr-12 text-left text-[15px]"
+				bind:value={password}
+				required
+			/>
+			<button
+				type="button"
+				class="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+				on:click={() => (view_password = !view_password)}
+			>
+				<Icon icon={view_password ? 'formkit:eye' : 'formkit:eyeclosed'} />
+			</button>
+		</div>
 		<button
 			type="submit"
 			class="w-full cursor-pointer bg-[#7A9660] p-2 text-white hover:bg-[#6b8755] sm:w-1/2 lg:w-1/3 xl:w-1/4"
