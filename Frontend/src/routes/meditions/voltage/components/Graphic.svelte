@@ -124,7 +124,7 @@
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center">
-			<div class="flex flex-col items-center justify-center gap-5">
+			<div class="flex flex-col items-start justify-center gap-5">
 				<h2>Generador: {mac_address}</h2>
 				<BarChart
 					prom={data.map((d) => d.voltage)}

@@ -12,7 +12,7 @@
 			<img
 				src={$user.foto_perfil}
 				alt="Foto de perfil"
-				class="h-15 min-h-15 w-15 min-w-15 rounded-full"
+				class="h-10 min-h-10 w-10 min-w-10 rounded-full"
 			/>
 		{:else}
 			<Icon icon="bx:user" class="h-15 w-15 cursor-pointer rounded-full" />

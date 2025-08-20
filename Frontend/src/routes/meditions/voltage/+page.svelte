@@ -54,15 +54,17 @@
 </script>
 
 <Header />
-<h1>Voltaje generado</h1>
+<main class=" flex min-h-screen flex-col gap-3 px-10 py-5 justify-start">
+	<span class="text-2xl font-bold px-11 py-5">¿Cómo estuvo tu aerogenerador esta semana?</span>
 
-<main class="mt-1 flex min-h-screen flex-col gap-4 p-5">
 	{#if is_loading_macs}
 		<p class="w-full text-center text-2xl">Cargando datos...</p>
 	{:else if allMacs.length > 0}
-		{#each allMacs as mac}
-			<Graphic {filter} mac_address={mac} />
-		{/each}
+		<div class="flex flex-col justify-between px-10 gap-15">
+			{#each allMacs as mac}
+				<Graphic {filter} mac_address={mac} />
+			{/each}
+		</div>
 	{:else}
 		<div class="flex min-h-screen flex-col items-center justify-center">
 			<span class="text-2xl text-red-500">No estás logueado</span>
