@@ -54,13 +54,13 @@
 </script>
 
 <Header />
-<main class=" flex min-h-screen flex-col gap-3 px-10 py-5 justify-start">
-	<span class="text-2xl font-bold px-11 py-5">¿Cómo estuvo tu aerogenerador esta semana?</span>
+<main class=" flex min-h-screen flex-col justify-start gap-3 px-10 py-5">
+	<span class="px-11 py-5 text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
 
 	{#if is_loading_macs}
 		<p class="w-full text-center text-2xl">Cargando datos...</p>
 	{:else if allMacs.length > 0}
-		<div class="flex flex-col justify-between px-10 gap-15">
+		<div class="flex flex-col justify-between gap-15 px-10">
 			{#each allMacs as mac}
 				<Graphic {filter} mac_address={mac} />
 			{/each}

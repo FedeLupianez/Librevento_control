@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError, OperationalError
 from typing import Literal
-from sqlmodel import Session, asc, select, func
+from sqlmodel import Session, select, func
 from Tablas import MEDICION, GENERADOR
 from fastapi import HTTPException
 

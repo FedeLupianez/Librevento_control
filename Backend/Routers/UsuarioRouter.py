@@ -4,6 +4,7 @@ from Services import UsuarioService
 from pydantic import BaseModel
 from sqlmodel import Session
 from dependencies import get_session
+import base64
 
 router = APIRouter(prefix="/usuario", tags=["Usuario"])
 
@@ -19,7 +20,9 @@ async def login(
     data: loginInput, request: Request, session: Session = Depends(get_session)
 ):
     try:
-        usuario = UsuarioService.login(session, data.email_usuario, data.clave)
+        email = base64.b64decode(data.email_usuario).decode("utf-8")
+        clave = base64.b64decode(data.clave).decode("utf-8")
+        usuario = UsuarioService.login(session, email, clave)
         request.session["usuario"] = {
             "id_usuario": usuario["id_usuario"],
             "nombre": usuario["nombre"],
@@ -48,11 +51,9 @@ async def crear_usuario(
     try:
         nuevoUsuario = UsuarioService.crear(session, usuario)
         print("nuevo usuario : ", nuevoUsuario)
-        print(nuevoUsuario)
         id_usuario: int = nuevoUsuario["id"]
 
         tempUsuario = UsuarioService.obtener(session, id_usuario)
-        print(tempUsuario)
         request.session["usuario"] = {
             "id_usuario": tempUsuario["id_usuario"],
             "nombre": tempUsuario["nombre"],
@@ -77,7 +78,8 @@ async def obtener_usuario(id_usuario: int, session: Session = Depends(get_sessio
 @router.get("/obtener_id")
 async def obtener_id(email_usuario: str, session: Session = Depends(get_session)):
     try:
-        return UsuarioService.obtener_id(session, email_usuario)
+        email = base64.b64decode(email_usuario).decode("utf-8")
+        return UsuarioService.obtener_id(session, email_usuario=email)
     except HTTPException as error:
         print(error)
         raise error

@@ -17,7 +17,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ email_usuario: email, clave: password }),
+				body: JSON.stringify({ email_usuario: btoa(email), clave: btoa(password) }),
 				credentials: 'include'
 			});
 			if (response.ok) {
@@ -26,8 +26,6 @@
 				await fetchUser();
 				show_error = false;
 				show_success = true;
-				// Cambio al usuario a la pagina principal
-				// window.location.href = '/';
 			} else {
 				throw new Error('Login failed');
 			}
