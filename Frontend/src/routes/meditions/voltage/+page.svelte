@@ -6,11 +6,11 @@
 	import { API_HOST } from '$lib/routes';
 	import Graphic from './components/Graphic.svelte';
 
-	let filter: string | null = '';
+	let filter_to_aply: string | null = 'day';
 	let is_loading_macs: boolean = false;
 
 	$: if ($page.url.searchParams.get('filter')) {
-		filter = $page.url.searchParams.get('filter');
+		filter_to_aply = $page.url.searchParams.get('filter');
 	}
 
 	let unsubscribe: () => void;
@@ -62,7 +62,7 @@
 	{:else if allMacs.length > 0}
 		<div class="flex flex-col justify-between gap-15 px-10">
 			{#each allMacs as mac}
-				<Graphic {filter} mac_address={mac} />
+				<Graphic filter={filter_to_aply} mac_address={mac} />
 			{/each}
 		</div>
 	{:else}

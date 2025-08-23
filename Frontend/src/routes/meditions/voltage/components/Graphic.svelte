@@ -17,11 +17,12 @@
 	};
 
 	const today = new Date();
+	today.setDate(today.getDate() + (7 - today.getDay()));
 	const current_date = today.toISOString().split('T')[0];
-	let min_limit = new Date(today);
+	let actual_date = current_date;
+	let min_limit = new Date(current_date);
 	min_limit.setDate(min_limit.getDate() - min_limit.getDay());
 	let min_limit_day = min_limit.toISOString().split('T')[0];
-	let actual_date = current_date;
 
 	type Measurement = {
 		date: string;
@@ -75,11 +76,14 @@
 	}
 
 	async function increment_week() {
-		let temp = new Date(actual_date);
-		temp.setDate(new Date(actual_date).getDate() + 7);
-		actual_date = temp.toISOString().split('T')[0];
+		// Incremento el dia minimo
 		min_limit.setDate(min_limit.getDate() + 7);
 		min_limit_day = min_limit.toISOString().split('T')[0];
+
+		let temp = new Date(actual_date);
+		// Hago que sea el domingo siguiente
+		temp.setDate(new Date(actual_date).getDate() + 7);
+		actual_date = temp.toISOString().split('T')[0];
 
 		is_loading = true;
 		const newData = await getData(mac_address);
@@ -89,7 +93,7 @@
 	}
 
 	const paddDataToMinimun = (data: Measurement[]) => {
-		const padded = [...data];
+		const padded = data;
 		while (padded.length < 7) {
 			padded.push({ voltage: 0, date: '', meditions: 0, min_voltage: 0, max_voltage: 0 });
 		}
@@ -98,12 +102,9 @@
 
 	const formatDate = (d: Measurement): string => {
 		if (!d.date) return '';
-		if (filter == 'dia') {
-			return new Date(d.date).toLocaleDateString('es-ES', {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric'
-			});
+		if (filter == 'day') {
+			const day_name = new Date(d.date).toLocaleDateString('es-ES', { weekday: 'long' });
+			return day_name;
 		}
 		return d.date;
 	};
