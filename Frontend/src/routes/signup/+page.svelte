@@ -45,7 +45,7 @@
 	};
 </script>
 
-<div class="mr-10 flex min-h-screen">
+<div class="flex flex-col items-start min-h-screen mr-10">
 	<span
 		class="
 		mt-8
@@ -57,7 +57,7 @@
 	>
 
 	{#if !$user}
-		<div class="flex min-h-150 flex-col gap-4">
+		<div class="flex min-h-150 flex-col gap-4 pl-15">
 			<input
 				type="email"
 				name="email"
