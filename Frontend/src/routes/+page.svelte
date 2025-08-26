@@ -1,12 +1,7 @@
 <script>
 	import { user } from '../stores/user';
 	import Header from '../components/Header.svelte';
-	import { onMount } from 'svelte';
 	import { ROUTES } from '$lib/routes';
-
-	onMount(() => {
-		window.location.href = '/meditions/voltage';
-	});
 </script>
 
 <svelte:head>
