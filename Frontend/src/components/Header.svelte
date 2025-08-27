@@ -25,7 +25,7 @@
 			female: 'Bienvenida',
 			unknown: 'Hola'
 		};
-		const result = `${sex[$user.sexo]},`
+		const result = `${sex[$user.sexo]},`;
 		return result;
 	}
 
@@ -50,10 +50,8 @@
 </script>
 
 {#if !showMobile}
-	<div class="flex flex-col items-center justify-center" >
-		<div
-			class="container flex flex-row items-center justify-between px-20 py-3"
-		>
+	<div class="flex flex-col items-center justify-center">
+		<div class="container flex flex-row items-center justify-between px-20 py-3">
 			<h1 class="mr-15 items-center text-center">
 				{#if !$user}
 					<span class="text-[#2f3e2f]">{title}</span>
@@ -66,14 +64,18 @@
 			</h1>
 
 			<div class="flex flex-row items-center gap-x-20 text-lg">
-				<button class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold">
-					principal
-					<Icon icon="bx:leaf" class="h-5 w-5" />
-				</button>
+				<a href="/loby">
+					<button
+						class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold"
+					>
+						principal
+						<Icon icon="bx:leaf" class="h-5 w-5" />
+					</button>
+				</a>
 
 				<DropDownButton text="estadísticas" mode="hover">
 					<slot slot="menu">
-						<div class="min-w-42 mt-1 flex w-full flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div class="mt-1 flex w-full min-w-42 flex-col rounded-md bg-[#7A9660] shadow-md">
 							<a
 								href={`${ROUTES.VOLTAGE}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"

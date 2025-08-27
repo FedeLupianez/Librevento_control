@@ -15,7 +15,7 @@
 				class="h-10 min-h-10 w-10 min-w-10 rounded-full"
 			/>
 		{:else}
-			<Icon icon="bx:user" class="h-15 w-15 cursor-pointer rounded-full" />
+			<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
 		{/if}
 	</button>
 
