@@ -2,24 +2,72 @@
 	import '@fontsource/gruppo';
 	import '@fontsource/hammersmith-one';
 	import Icon from '@iconify/svelte';
+	import { ROUTES } from '$lib/routes';
 </script>
 
 <section class="absolute top-0 left-0 mb-5 flex h-96 w-screen items-center overflow-hidden">
 	<img
-		src="https://media.canva.com/v2/image-resize/format:JPG/height:480/quality:92/uri:ifs%3A%2F%2FM%2Fcfe95081-9dc4-424e-b0dc-a6b038033213/watermark:F/width:640?csig=AAAAAAAAAAAAAAAAAAAAAMN6INdxeZz035d5Qj4f52ho39BnXegbEDBJRQy21UUh&exp=1756231169&osig=AAAAAAAAAAAAAAAAAAAAAPzecGw1T4gk69FA7RKwsd-pQqU0Psq41h3YG2RD3rkP&signer=media-rpc&x-canva-quality=screen"
+		src="https://placehold.co/600x400"
 		alt="imagen fondo"
 		class="aspect-video w-screen object-cover object-center"
 	/>
 	<div class="absolute right-15 bottom-5 flex flex-col">
-		<span class="text-3xl">Librevento</span>
+		<span class="title text-8xl text-white">Librevento</span>
 		<div class="flex flex-row items-center justify-center gap-5">
-			<button>Crear Cuenta</button>
-			<button>Iniciar sesion</button>
+			<button
+				class=" rounded-none border-2 border-white px-4 py-2 text-white"
+				on:click={() => {
+					window.location.href = ROUTES.USER.SIGN_UP;
+				}}>Crear Cuenta</button
+			>
+			<button
+				class="rounded-none border-2 border-white px-4 py-2 text-white"
+				on:click={() => {
+					window.location.href = ROUTES.USER.LOGIN;
+				}}
+			>
+				Iniciar sesion
+			</button>
 		</div>
 	</div>
 </section>
 
 <main class="mt-96 flex min-h-screen flex-col items-center justify-center gap-4 p-8">
+	<section class="flex flex-row gap-5">
+		<div class="flex w-1/2 flex-col items-center justify-center gap-5">
+			<span class="paragraph w-full">
+				La necesidad de nuevas formas de generar energía que no contaminen nuestro planeta nos llevó
+				a construir sistemas basados en recursos renovables, que no generen nada -o casi nada- de
+				desechos.
+			</span>
+			<span class="paragraph w-full">
+				Librevento es una forma facil y economica de implementar este estilo de vida, con un
+				sencillo armado y control total de lo generado.
+			</span>
+		</div>
+
+		<div class="flex w-1/2 flex-col items-end">
+			<span class="title front-bold text-3xl">Indice</span>
+			<div class="flex w-full flex-col items-end gap-1">
+				<div class="flex w-4/5 items-start justify-between">
+					<span class="text-2xl font-bold">1.</span>
+					<span class="title text-2xl">Armado</span>
+				</div>
+				<div class="flex w-4/5 flex-row items-center justify-between">
+					<span class="text-2xl font-bold">2.</span>
+					<span class="title text-2xl">Centro de control</span>
+				</div>
+				<div class="flex w-4/5 justify-between">
+					<span class="text-2xl font-bold">3.</span>
+					<span class="title text-2xl">Repositorios</span>
+				</div>
+				<div class="flex w-4/5 justify-between">
+					<span class="text-2xl font-bold">4.</span>
+					<span class="title text-2xl">¿Quienes somos?</span>
+				</div>
+			</div>
+		</div>
+	</section>
 	<section class="flex flex-col gap-2">
 		<div class="flex flex-row gap-2">
 			<span class="title text-5xl text-black">2.</span>
