@@ -40,7 +40,7 @@
 		});
 		filterUnsubscribe = page.subscribe(($page) => {
 			if ($page.url.searchParams.get('filter')) {
-				filter = $page.url.searchParams.get('filter');
+				filter_to_aply = $page.url.searchParams.get('filter');
 				if (!$user) return;
 				updateMacs($user.id_usuario);
 			}
@@ -55,7 +55,25 @@
 
 <Header />
 <main class=" flex min-h-screen flex-col justify-start gap-3 px-10 py-5">
-	<span class="px-11 py-5 text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
+	<div class="flex flex-row items-start justify-between">
+		<span class="px-11 py-5 text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
+		<ul class="pl-5">
+			<li class="flex flex-row items-start gap-2">
+				<span class="text-3xl leading-none text-[#7A9660]">●</span>
+				<span>Eficiente</span>
+			</li>
+
+			<li class="flex flex-row items-start gap-2">
+				<span class="text-3xl leading-none text-[#ebdaa8]">●</span>
+				<span>Medianamente</span>
+			</li>
+
+			<li class="flex flex-row items-start gap-2">
+				<span class="text-3xl leading-none text-[#c85d4d]">●</span>
+				<span>Poco</span>
+			</li>
+		</ul>
+	</div>
 
 	{#if is_loading_macs}
 		<p class="w-full text-center text-2xl">Cargando datos...</p>

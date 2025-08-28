@@ -3,15 +3,14 @@
 	export let date: string;
 	let day_name = '';
 	onMount(() => {
-		console.log(date);
 		day_name = new Date(date).toLocaleDateString('es-ES', { weekday: 'long' });
 	});
 </script>
 
-<div class="flex flex-row items-center justify-center gap-2">
-	<div class="flex flex-col items-center justify-start">
-		<p>El día mas eficiente de la semana fué el</p>
+<div class="relative flex w-full flex-row items-center justify-center gap-2">
+	<div class="flex w-1/2 flex-col content-center items-start justify-start">
+		<p class="text-2xl">El día mas eficiente de la semana fué el</p>
 		<span class="text-4xl font-bold text-[#7A9660]">{day_name}</span>
 	</div>
-	<img src="/public/images/hojas.svg" alt="Hojita" />
+	<img src="/public/images/hojas.svg" alt="Hojita" class="absolute right-0 bottom-0" />
 </div>

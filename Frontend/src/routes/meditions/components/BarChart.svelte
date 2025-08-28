@@ -29,6 +29,9 @@
 			}
 		},
 		plugins: {
+			legend: {
+				display: false
+			},
 			tooltip: {
 				callbacks: {
 					label: function (context: any) {
@@ -53,7 +56,6 @@
 			labels: labels,
 			datasets: [
 				{
-					label: 'Voltaje Generado',
 					data: prom,
 					backgroundColor: (ctx: any) => {
 						const value = ctx.dataset.data[ctx.dataIndex];

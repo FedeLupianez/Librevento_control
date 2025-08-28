@@ -142,8 +142,8 @@
 	});
 </script>
 
-<section class="flex flex-row items-center justify-between">
-	<div class="flex w-full flex-col items-center justify-center">
+<section class="flex w-full flex-row gap-8">
+	<div class="flex w-1/2 flex-col items-center justify-center">
 		{#if is_loading}
 			<h1 class="min-h-[3rem] text-2xl font-bold">Cargando datos de {mac_address}</h1>
 		{:else if loading_error}
