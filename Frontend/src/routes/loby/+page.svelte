@@ -187,7 +187,7 @@
 	<section class="mt-5 flex flex-col gap-2" id="Centro de Control">
 		<div class="flex flex-row gap-2">
 			<span class="title text-5xl font-bold text-black">2.</span>
-			<a href="/">
+			<a href="/meditions/voltage">
 				<span class="title text-5xl font-bold text-black">Centro de control</span>
 			</a>
 		</div>

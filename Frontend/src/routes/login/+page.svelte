@@ -3,6 +3,8 @@
 	import { fade } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
 	import { API_HOST } from '$lib/routes';
+	import { ROUTES } from '$lib/routes';
+	import { goto } from '$app/navigation';
 
 	let email: string = '';
 	let password: string = '';
@@ -78,17 +80,19 @@
 		>
 		<div class="flex flex-row items-center justify-center">
 			{#if show_error}
-				<span in:fade={{ duration: 500 }} class="z-0 mr-2 bg-red-500 text-white"
+				<span in:fade={{ duration: 500 }} class="z-0 mr-2 bg-red-500 p-2 text-white"
 					>Error al iniciar sesión</span
 				>
 			{/if}
 			{#if show_success}
 				<button
 					in:fade={{ duration: 500 }}
-					class="z-0 mr-2 cursor-pointer bg-[#7A9660] text-white"
-					on:click={() => (window.location.href = '/')}
+					class="z-0 mr-2 cursor-pointer bg-[#7A9660] p-2 text-white"
+					on:click={() => {
+						goto(`${ROUTES.VOLTAGE}`);
+					}}
 				>
-					Ir a la página principal
+					Estadísticas
 				</button>
 			{/if}
 		</div>

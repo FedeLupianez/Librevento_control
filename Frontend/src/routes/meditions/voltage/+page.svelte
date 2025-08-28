@@ -3,7 +3,8 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { user } from '../../../stores/user';
 	import { page } from '$app/stores';
-	import { API_HOST } from '$lib/routes';
+	import { API_HOST, ROUTES } from '$lib/routes';
+	import { goto } from '$app/navigation';
 	import Graphic from './components/Graphic.svelte';
 
 	let filter_to_aply: string | null = 'day';
@@ -84,13 +85,21 @@
 			{/each}
 		</div>
 	{:else}
-		<div class="flex min-h-screen flex-col items-center justify-center">
+		<div class="flex w-full flex-col items-center justify-center gap-6">
 			<span class="text-2xl text-red-500">No estás logueado</span>
 			<button
 				on:click={() => {
-					window.location.href = '/get_generator';
+					goto(`${ROUTES.USER.SIGN_UP}`);
 				}}
-				class="w-1/2 rounded-full bg-[#7A9660] p-2 text-white">Obtener Generador</button
+				class="w-1/6 cursor-pointer rounded-full bg-[#7A9660] p-2 text-white hover:bg-[#6b8755]"
+				>Registrate</button
+			>
+			<button
+				on:click={() => {
+					goto(`${ROUTES.USER.LOGIN}`);
+				}}
+				class="w-1/6 cursor-pointer rounded-full bg-[#7A9660] p-2 text-white hover:bg-[#6b8755]"
+				>Inicia sesion</button
 			>
 		</div>
 	{/if}
