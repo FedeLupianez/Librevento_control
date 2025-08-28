@@ -8,6 +8,7 @@
 	export let filter: string | null = '';
 	export let mac_address: string;
 	let is_loading: boolean = false;
+	let loading_error: string = '';
 	let efficent_date: Measurement = {
 		date: '',
 		voltage: 0,
@@ -20,8 +21,8 @@
 	today.setDate(today.getDate() + (7 - today.getDay()));
 	const current_date = today.toISOString().split('T')[0];
 	let actual_date = current_date;
-	let min_limit = new Date(current_date);
-	min_limit.setDate(min_limit.getDate() - min_limit.getDay());
+	let min_limit = new Date(actual_date);
+	min_limit.setDate(min_limit.getDate() - min_limit.getDay() - 6);
 	let min_limit_day = min_limit.toISOString().split('T')[0];
 
 	type Measurement = {
@@ -39,6 +40,17 @@
 		if (value >= 4 && value < 5) return '#ebdaa8';
 		if (value < 4) return '#c85d4d';
 	};
+	
+	const check_data = (data: Array<Measurement> | boolean): boolean =>{
+		if (!data) {
+			is_loading = false;
+			loading_error = 'Error cargando datos';
+			return false;
+		}
+		is_loading = false;
+		loading_error = '';
+		return true;
+	}
 
 	async function getData(mac_address: string) {
 		let route = `${API_HOST}/medicion/obtener_voltajes?macAddress=${mac_address}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
@@ -47,6 +59,12 @@
 		}
 		const response = await fetch(route, { method: 'GET', credentials: 'include' });
 		const result = await response.json();
+		if (result.error) {
+			is_loading = false;
+			loading_error = "Error cargando datos";
+			return false;
+		}
+		loading_error = '';
 		return result.data;
 	}
 
@@ -60,17 +78,19 @@
 	};
 
 	async function decrement_week() {
-		let temp = new Date(actual_date);
-		// Hago que la fecha maxima de busqueda sea el domingo pasado
-		temp.setDate(new Date(actual_date).getDate() - temp.getDay() - 1);
-		actual_date = temp.toISOString().split('T')[0];
-		// Hago que la fecha minima sea el lunes pasado
-		min_limit.setDate(min_limit.getDate() - min_limit.getDay() - 7);
+		const temp = new Date(min_limit);
+		min_limit.setDate(min_limit.getDate() - 7);
 		min_limit_day = min_limit.toISOString().split('T')[0];
+		// Hago que la fecha maxima de busqueda sea el domingo pasado
+		temp.setDate(temp.getDate() - 1);
+		actual_date = temp.toISOString().split('T')[0];
 
+		// Hago que la fecha minima sea el lunes pasado
 		is_loading = true;
 		const newData = await getData(mac_address);
+		if (!check_data(newData)) return;
 		data = paddDataToMinimun(newData);
+		console.log(data);
 		getEfficentDay();
 		is_loading = false;
 	}
@@ -87,6 +107,7 @@
 
 		is_loading = true;
 		const newData = await getData(mac_address);
+		if (!check_data(newData)) return;
 		data = paddDataToMinimun(newData);
 		getEfficentDay();
 		is_loading = false;
@@ -112,6 +133,7 @@
 	onMount(async () => {
 		is_loading = true;
 		data = await getData(mac_address).then((data) => data);
+		if (!check_data(data)) return;
 		data = paddDataToMinimun(data);
 		getEfficentDay();
 		is_loading = false;
@@ -119,12 +141,12 @@
 </script>
 
 <section class="flex flex-row items-center justify-between">
-	{#if is_loading}
-		<div class="flex w-full flex-col items-center justify-center">
-			Cargando datos de {mac_address}
-		</div>
-	{:else}
-		<div class="flex flex-col items-center justify-center">
+	<div class="flex  w-full flex-col items-center justify-center">
+		{#if is_loading}
+			<h1 class="text-2xl font-bold min-h-[3rem]">Cargando datos de {mac_address}</h1>
+		{:else if loading_error}
+			<h1 class="text-2xl font-bold min-h-[3rem] text-red-500">{loading_error}</h1>
+		{:else}
 			<div class="flex flex-col items-start justify-center gap-5">
 				<h2>Generador: {mac_address}</h2>
 				<BarChart
@@ -135,17 +157,18 @@
 					backgroundColorFunction={backgroundColors}
 				/>
 			</div>
-			<div id="buttons-container" class="flex flex-row items-center justify-between gap-5">
-				<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={decrement_week}>
-					<Icon icon="maki:arrow" class="rotate-180 transform" />
-				</button>
-				<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={increment_week}>
-					<Icon icon="maki:arrow" />
-				</button>
-			</div>
-		</div>
-		{#if efficent_date.date}
-			<Efficent_day date={efficent_date.date} />
 		{/if}
+
+		<div id="buttons-container" class="flex flex-row items-center justify-between gap-5">
+			<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={decrement_week}>
+				<Icon icon="maki:arrow" class="rotate-180 transform" />
+			</button>
+			<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={increment_week}>
+				<Icon icon="maki:arrow" />
+			</button>
+		</div>
+	</div>
+	{#if efficent_date.date}
+		<Efficent_day date={efficent_date.date} />
 	{/if}
 </section>
