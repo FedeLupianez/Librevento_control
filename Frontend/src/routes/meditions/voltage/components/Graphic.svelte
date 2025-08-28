@@ -22,8 +22,9 @@
 	const current_date = today.toISOString().split('T')[0];
 	let actual_date = current_date;
 	let min_limit = new Date(actual_date);
-	min_limit.setDate(min_limit.getDate() - min_limit.getDay() - 6);
+	min_limit.setDate(min_limit.getDate() - min_limit.getDay());
 	let min_limit_day = min_limit.toISOString().split('T')[0];
+	console.log(min_limit_day, actual_date);
 
 	type Measurement = {
 		date: string;
@@ -134,6 +135,7 @@
 		is_loading = true;
 		data = await getData(mac_address).then((data) => data);
 		if (!check_data(data)) return;
+		console.log(data);
 		data = paddDataToMinimun(data);
 		getEfficentDay();
 		is_loading = false;
