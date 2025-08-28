@@ -41,17 +41,17 @@
 		if (value >= 4 && value < 5) return '#ebdaa8';
 		if (value < 4) return '#c85d4d';
 	};
-	
-	const check_data = (data: Array<Measurement> | boolean): boolean =>{
+
+	const check_data = (data: Array<Measurement> | boolean): boolean => {
 		if (!data) {
 			is_loading = false;
-			loading_error = 'Error cargando datos';
+			loading_error = 'No hay datos en esta semana';
 			return false;
 		}
 		is_loading = false;
 		loading_error = '';
 		return true;
-	}
+	};
 
 	async function getData(mac_address: string) {
 		let route = `${API_HOST}/medicion/obtener_voltajes?macAddress=${mac_address}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
@@ -62,7 +62,7 @@
 		const result = await response.json();
 		if (result.error) {
 			is_loading = false;
-			loading_error = "Error cargando datos";
+			loading_error = result.message;
 			return false;
 		}
 		loading_error = '';
@@ -143,11 +143,11 @@
 </script>
 
 <section class="flex flex-row items-center justify-between">
-	<div class="flex  w-full flex-col items-center justify-center">
+	<div class="flex w-full flex-col items-center justify-center">
 		{#if is_loading}
-			<h1 class="text-2xl font-bold min-h-[3rem]">Cargando datos de {mac_address}</h1>
+			<h1 class="min-h-[3rem] text-2xl font-bold">Cargando datos de {mac_address}</h1>
 		{:else if loading_error}
-			<h1 class="text-2xl font-bold min-h-[3rem] text-red-500">{loading_error}</h1>
+			<h1 class="min-h-[3rem] text-2xl font-bold text-red-500">{loading_error}</h1>
 		{:else}
 			<div class="flex flex-col items-start justify-center gap-5">
 				<h2>Generador: {mac_address}</h2>
