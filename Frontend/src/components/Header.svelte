@@ -50,8 +50,8 @@
 </script>
 
 {#if !showMobile}
-	<div class="flex flex-col items-center justify-center">
-		<div class="container flex flex-row items-center justify-between px-20 py-3">
+	<div class="flex flex-col items-stretch justify-center gap-5">
+		<div class="flex flex-row items-center justify-between px-20 py-3">
 			<h1 class="mr-15 items-center text-center">
 				{#if !$user}
 					<span class="text-[#2f3e2f]">{title}</span>
@@ -128,7 +128,7 @@
 				<UserProfileButton />
 			</div>
 		</div>
-		<div class="h-[1.5px] w-[87%] bg-gray-500"></div>
+		<div class="mx-auto h-[1.5px] w-[87%] bg-gray-500"></div>
 	</div>
 {:else}
 	<div
