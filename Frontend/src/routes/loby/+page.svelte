@@ -28,9 +28,9 @@
 {/if}
 <section class="absolute top-0 left-0 mb-5 flex h-96 w-screen items-center overflow-hidden">
 	<img
-		src="https://placehold.co/600x400"
+		src="/public/images/Fondo_loby.png"
 		alt="imagen fondo"
-		class="aspect-video w-screen object-cover object-center"
+		class="aspect-video w-screen"
 	/>
 	<div class="absolute right-15 bottom-5 flex flex-col">
 		<span class="title text-9xl text-white">Librevento</span>
@@ -87,7 +87,7 @@
 			<span class="title text-5xl font-bold">1. Armado</span>
 		</div>
 		<ConstructionItem
-			image_url={'https://placehold.co/400x600'}
+			image_url={"/public/images/Parts/Palas.jpg"}
 			title="Palas diseño savonius"
 			text="Esta parte del proyecto fue hecha con una impresora 3D con PETG (material de impresión 3D), elegimos este diseño vertical ya que tiene una forma que consiguió resultados de eficiencia mejores a muchos otros diseños, como también porque su construcción es sencilla y de bajo costo"
 		/>

@@ -10,14 +10,14 @@
 			<span class="title text-3xl">{title}</span>
 			<p class="paragraph">{text}</p>
 		</div>
-		<img src={image_url} alt={title} class="h-auto" />
+		<img src={image_url} alt={title} class="h-auto w-1/5  object-cover object-center" />
 	</div>
 {:else}
 	<div class="flex flex-col items-start justify-start">
 		<span class="title text-3xl">{title}</span>
 		{#if text}
 			<p class="paragraph">
-				Para elevar el voltaje de la energía generada por los motores a un nivel apto para el uso.
+				{text}
 			</p>
 		{/if}
 	</div>
