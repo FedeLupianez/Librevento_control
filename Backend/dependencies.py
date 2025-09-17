@@ -47,9 +47,9 @@ if Config.get("SSH_USER", None) is not None:
 else:
     # Si no tiene nada de ssh, creo el engine para la configuración actual
     assert Config["HOST"] is not None
-    assert Config["PORT"] is not None
+    assert Config["LOCAL_PORT"] is not None
     engine = create_engine(
-        _build_database_url(Config["HOST"], port=int(Config["PORT"]))
+        _build_database_url(Config["HOST"], port=int(Config["LOCAL_PORT"]))
     )  # motor para la base de datos
 
 # Intento conectar la base de datos  para ver si funciona
