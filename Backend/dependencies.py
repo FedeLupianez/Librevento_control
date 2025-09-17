@@ -18,7 +18,7 @@ def _build_database_url(host: str, port: int = 5432) -> str:
     )
 
 
-Config = dotenv_values("school.env")  # Configuraciones
+Config = dotenv_values(".env")  # Configuraciones
 engine: Optional[Engine] = None
 tunnel: Optional[SSHTunnelForwarder] = None
 
