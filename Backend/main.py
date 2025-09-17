@@ -15,13 +15,7 @@ handler = Mangum(app)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5173/login",
-        "http://localhost:5173/signup",
-        "http://localhost:5173/voltage",
-        "http://localhost:5173/consumption",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
