@@ -54,6 +54,11 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Mediciones</title>
+	<meta name="description" content="Mediciones" />
+</svelte:head>
+
 <Header />
 <main class=" flex min-h-screen flex-col justify-start gap-3 px-10 py-5">
 	<div class="flex flex-row items-start justify-between">

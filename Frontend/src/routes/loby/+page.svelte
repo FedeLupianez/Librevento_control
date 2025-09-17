@@ -16,6 +16,11 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Librevento</title>
+	<meta name="description" content="Nuestro proyecto" />
+</svelte:head>
+
 {#if is_scrolled}
 	<a href="#top" class="position fixed top-5 right-5">
 		<button class="rounded-full border-2 border-[#7A9660] hover:cursor-pointer hover:bg-[#7A9660]">
@@ -49,7 +54,7 @@
 	</div>
 </section>
 
-<main class="mt-96 flex min-h-screen flex-col items-center justify-center gap-9 p-8">
+<main class="mt-96 flex min-h-screen flex-col items-center justify-center gap-9 p-20">
 	<section class="flex flex-row gap-5">
 		<div class="flex w-1/2 flex-col items-center justify-center gap-5">
 			<span class="paragraph w-full">
@@ -205,7 +210,8 @@
 			<span class="title title p-2 text-5xl text-black"> Tutorial </span>
 		</div>
 
-		<div class="mb-10 flex h-56 w-full bg-[#7A9660]"></div>
+		<img src="/public/images/Tutorial.png" alt="Screenshot" class="h-auto w-full" />
+
 		<div class="flex flex-col gap-3">
 			<p class="paragraph">
 				1. Pestaña “principal”: hace referencia a la sección que se visualiza en la imagen. En esta

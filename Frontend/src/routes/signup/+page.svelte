@@ -45,7 +45,12 @@
 	};
 </script>
 
-<div class="flex flex-col items-start min-h-screen mr-10">
+<svelte:head>
+	<title>Crear Cuenta</title>
+	<meta name="description" content="Crear una Cuenta" />
+</svelte:head>
+
+<div class="mr-10 flex min-h-screen flex-col items-start">
 	<span
 		class="
 		mt-8

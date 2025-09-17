@@ -39,6 +39,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Iniciar Sesión</title>
+	<meta name="description" content="Iniciar Sesión" />
+</svelte:head>
+
 <div class="relative flex min-h-screen flex-col items-center justify-center">
 	<div class="z-10 flex h-full w-full flex-col items-center justify-start gap-5">
 		<span class="text-5xl font-bold text-black">Inicia sesión</span>
