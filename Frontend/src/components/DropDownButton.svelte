@@ -20,7 +20,7 @@
 		}}
 	>
 		{text}
-		<img src="/public/images/flechita.svg" alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+		<img src="/images/flechita.svg" alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
 	</button>
 
 	{#if mode == 'button'}

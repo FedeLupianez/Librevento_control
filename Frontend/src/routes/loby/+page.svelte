@@ -32,7 +32,7 @@
 	</a>
 {/if}
 <section class="absolute top-0 left-0 mb-5 flex h-96 w-screen items-center overflow-hidden">
-	<img src="/public/images/Fondo_loby.png" alt="imagen fondo" class="aspect-video w-screen" />
+	<img src="/images/Fondo_loby.png" alt="imagen fondo" class="aspect-video w-screen" />
 	<div class="absolute right-15 bottom-5 flex flex-col">
 		<span class="title text-9xl text-white">Librevento</span>
 		<div class="flex flex-row items-center justify-end gap-5 px-3">
@@ -88,22 +88,22 @@
 			<span class="title text-5xl font-bold">1. Armado</span>
 		</div>
 		<ConstructionItem
-			image_url={'/public/images/Parts/Palas.jpg'}
+			image_url={'/images/Parts/Palas.jpg'}
 			title="Palas diseño savonius"
 			text="Esta parte del proyecto fue hecha con una impresora 3D con PETG (material de impresión 3D), elegimos este diseño vertical ya que tiene una forma que consiguió resultados de eficiencia mejores a muchos otros diseños, como también porque su construcción es sencilla y de bajo costo"
 		/>
 		<ConstructionItem
-			image_url={'/public/images/Parts/Motores_cerca.jpg'}
+			image_url={'/images/Parts/Motores_cerca.jpg'}
 			title="Motores de corriente continua 12v"
 			text="A estos componentes los rescatamos de una impresora vieja la cual no servía. Estos son los que generan la energía al momento de que las palas sean empujadas por el viento."
 		/>
 		<ConstructionItem
-			image_url={'/public/images/Parts/Engranajes.jpg'}
+			image_url={'/images/Parts/Engranajes.jpg'}
 			title="Engranajes"
 			text="Estas piezas son clave ya que gracias a ellas el movimiento de las palas se transmite a los motores. Constan de 3 (tres) engranajes hermanados impresos en 3D con el mismo material que las palas, siendo uno más grande, el cual está unido a las palas y otros dos menores que van unidos a los ejes de los motores. "
 		/>
 		<ConstructionItem
-			image_url={'/public/images/Parts/Base.jpg'}
+			image_url={'/images/Parts/Base.jpg'}
 			title="Base, Tornillos y eje"
 			text="
             La base es usada para sostener la estructura, esta también fue impresa en 3D junto con las palas. 
@@ -112,12 +112,12 @@
          "
 		/>
 		<ConstructionItem
-			image_url={'/public/images/Parts/Rulemanes.jpg'}
+			image_url={'/images/Parts/Rulemanes.jpg'}
 			title="Rulemanes"
 			text="Uno más grande (de 3.8mm) que va en la base de la impresión de las palas, y otro más pequeño que va en la parte superior. Estos rulemanes se asientan en el eje, y con ellos se mantienen las palas. Pero no están fijados a este, siendo fácil de desmontar, lo cual ayuda a una fácil reparación y reemplazo de piezas."
 		/>
 		<ConstructionItem
-			image_url={'/public/images/Parts/Soporte.jpg'}
+			image_url={'/images/Parts/Soporte.jpg'}
 			title="Soporte"
 			text="Para los motores hecho por nosotros con distintas partes metálicas."
 		/>
@@ -210,7 +210,7 @@
 			<span class="title title p-2 text-5xl text-black"> Tutorial </span>
 		</div>
 
-		<img src="/public/images/Tutorial.png" alt="Screenshot" class="h-auto w-full" />
+		<img src="/images/Tutorial.png" alt="Screenshot" class="h-auto w-full" />
 
 		<div class="flex flex-col gap-3">
 			<p class="paragraph">

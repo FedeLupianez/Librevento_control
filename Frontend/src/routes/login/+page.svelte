@@ -103,7 +103,7 @@
 		</div>
 	</div>
 	<img
-		src="/public/images/plantita_decorativa_login_sin_fondo.svg"
+		src="/images/plantita_decorativa_login_sin_fondo.svg"
 		class="pointer-events-none absolute bottom-0 h-auto w-2xl opacity-70 select-none"
 		alt="plantita decorativa"
 	/>
