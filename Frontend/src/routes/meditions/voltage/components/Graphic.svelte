@@ -92,7 +92,6 @@
 		const newData = await getData(mac_address);
 		if (!check_data(newData)) return;
 		data = paddDataToMinimun(newData);
-		console.log(data);
 		getEfficentDay();
 		is_loading = false;
 	}

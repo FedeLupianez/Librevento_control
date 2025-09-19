@@ -146,13 +146,17 @@
 				{/if}
 			</h1>
 			<div class="container flex flex-col items-center justify-start gap-4">
-				<button class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold">
-					principal
-					<Icon icon="bx:leaf" class="h-5 w-5" />
-				</button>
+				<a href="/loby">
+					<button
+						class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold"
+					>
+						principal
+						<Icon icon="bx:leaf" class="h-5 w-5" />
+					</button>
+				</a>
 				<DropDownButton text="estadísticas" mode="button">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div class="mt-1 flex w-full min-w-42 flex-col rounded-md bg-[#7A9660] shadow-md">
 							<a
 								href={`${ROUTES.VOLTAGE}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
@@ -186,7 +190,7 @@
 
 				<DropDownButton text="editar" mode="button">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div class="mt-1 flex w-full min-w-42 flex-col rounded-md bg-[#7A9660] shadow-md">
 							<a
 								href={`${ROUTES.USER.LOGIN}`}
 								class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]"
