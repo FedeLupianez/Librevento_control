@@ -38,7 +38,10 @@
 
 	onMount(() => {
 		unsubscribe = user.subscribe(($user) => {
-			if (!$user) return;
+			if (!$user) {
+				is_loading_macs = false;
+				return;
+			}
 			updateMacs($user.id_usuario);
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
@@ -96,7 +99,9 @@
 	</div>
 
 	{#if is_loading_macs}
-		<p class="w-full text-center text-2xl">Cargando datos...</p>
+		<div class="flex min-h-[400px] w-full items-center justify-center">
+			<p class="w-full text-center text-2xl">Cargando datos...</p>
+		</div>
 	{:else if allMacs.length > 0}
 		<div class="flex flex-col gap-15">
 			{#each allMacs as mac}
@@ -104,7 +109,7 @@
 			{/each}
 		</div>
 	{:else}
-		<div class="flex w-full flex-col items-center justify-center gap-6">
+		<div class="flex min-h-[400px] w-full flex-col items-center justify-center gap-6">
 			<span class="text-2xl text-red-500">No estás logueado</span>
 			<button
 				on:click={() => {
