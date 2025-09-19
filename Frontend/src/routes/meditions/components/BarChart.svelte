@@ -78,14 +78,6 @@
 	});
 </script>
 
-<div class="chart-container">
+<div class="relative h-[45dvh] w-full">
 	<canvas bind:this={canvas}></canvas>
 </div>
-
-<style>
-	.chart-container {
-		position: relative;
-		height: 300px;
-		width: 500px;
-	}
-</style>

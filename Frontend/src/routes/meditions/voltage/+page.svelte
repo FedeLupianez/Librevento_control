@@ -9,6 +9,8 @@
 
 	let filter_to_aply: string | null = 'day';
 	let is_loading_macs: boolean = false;
+	let mediaQueryList: MediaQueryList;
+	let showMobile: boolean = false;
 
 	$: if ($page.url.searchParams.get('filter')) {
 		filter_to_aply = $page.url.searchParams.get('filter');
@@ -38,6 +40,16 @@
 		unsubscribe = user.subscribe(($user) => {
 			if (!$user) return;
 			updateMacs($user.id_usuario);
+			mediaQueryList = window.matchMedia('(max-width: 750px)');
+			showMobile = mediaQueryList.matches;
+			console.log(showMobile);
+			mediaQueryList.addEventListener('change', (event) => {
+				showMobile = event.matches;
+				console.log(showMobile);
+			});
+			return () => {
+				mediaQueryList.removeEventListener('change', (event) => {});
+			};
 		});
 		filterUnsubscribe = page.subscribe(($page) => {
 			if ($page.url.searchParams.get('filter')) {
@@ -60,9 +72,11 @@
 </svelte:head>
 
 <Header />
-<main class=" flex min-h-screen flex-col justify-start gap-3 px-10 py-5">
-	<div class="flex flex-row items-start justify-between">
-		<span class="px-11 py-5 text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
+<main
+	class={`flex min-h-screen w-full flex-col justify-start gap-3 ${showMobile ? '' : 'px-20'} py-5`}
+>
+	<div class={`flex flex-row items-start ${showMobile ? 'justify-center' : 'justify-between'}`}>
+		<span class="text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
 		<ul class="pl-5">
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#7A9660]">●</span>
@@ -84,9 +98,9 @@
 	{#if is_loading_macs}
 		<p class="w-full text-center text-2xl">Cargando datos...</p>
 	{:else if allMacs.length > 0}
-		<div class="flex flex-col justify-between gap-15 px-10">
+		<div class="flex flex-col gap-15">
 			{#each allMacs as mac}
-				<Graphic filter={filter_to_aply} mac_address={mac} />
+				<Graphic filter={filter_to_aply} mac_address={mac} show_mobile={showMobile} />
 			{/each}
 		</div>
 	{:else}

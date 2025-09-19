@@ -7,6 +7,7 @@
 
 	export let filter: string | null = '';
 	export let mac_address: string;
+	export let show_mobile: boolean = false;
 	let is_loading: boolean = false;
 	let loading_error: string = '';
 	let efficent_date: Measurement = {
@@ -142,14 +143,16 @@
 	});
 </script>
 
-<section class="flex w-full flex-row gap-8">
-	<div class="flex w-1/2 flex-col items-center justify-center">
+<section
+	class={`flex w-full ${show_mobile ? 'flex-col' : 'flex-row'} items-center justify-center gap-8`}
+>
+	<div class="flex w-full flex-col items-center justify-center">
 		{#if is_loading}
 			<h1 class="min-h-[3rem] text-2xl font-bold">Cargando datos de {mac_address}</h1>
 		{:else if loading_error}
 			<h1 class="min-h-[3rem] text-2xl font-bold text-red-500">{loading_error}</h1>
 		{:else}
-			<div class="flex flex-col items-start justify-center gap-5">
+			<div class="flex w-full flex-col items-start justify-center gap-5">
 				<h2>Generador: {mac_address}</h2>
 				<BarChart
 					prom={data.map((d) => d.voltage)}
