@@ -13,28 +13,24 @@
 	let view_password: boolean = false;
 
 	const login = async () => {
-		try {
-			const response = await fetch(`${API_HOST}/usuario/login`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ email_usuario: btoa(email), clave: btoa(password) }),
-				credentials: 'include'
-			});
-			if (response.ok) {
-				const data = await response.json();
-				user.set(data);
-				await fetchUser();
-				show_error = false;
-				show_success = true;
-			} else {
-				throw new Error('Login failed');
-			}
-		} catch (e) {
-			console.log(e);
+		const response = await fetch(`${API_HOST}/usuario/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ email_usuario: btoa(email), clave: btoa(password) }),
+			credentials: 'include'
+		});
+		if (response.ok) {
+			const data = await response.json();
+			console.log('usuario logueado');
+			user.set(data);
+			show_error = false;
+			show_success = true;
+		} else {
 			show_error = true;
 			show_success = false;
+			throw new Error('Login failed');
 		}
 	};
 </script>
@@ -68,6 +64,9 @@
 					border-black px-4
 					py-2 pr-12 text-left text-[15px]"
 				bind:value={password}
+				on:keypress={(e) => {
+					if (e.key == 'Enter') login();
+				}}
 				required
 			/>
 			<button
@@ -79,9 +78,10 @@
 			</button>
 		</div>
 		<button
+			in:fade={{ duration: 500 }}
 			type="submit"
 			class="w-full cursor-pointer bg-[#7A9660] p-2 text-white hover:bg-[#6b8755] sm:w-1/2 lg:w-1/3 xl:w-1/4"
-			on:click|preventDefault={login}>Listo</button
+			on:click|preventDefault={login}>Iniciar Sesión</button
 		>
 		<div class="flex flex-row items-center justify-center">
 			{#if show_error}

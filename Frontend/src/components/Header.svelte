@@ -31,7 +31,6 @@
 
 	onMount(() => {
 		unsubscribe = user.subscribe(async ($user) => {
-			if (!$user) fetchUser();
 			setTitle();
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
