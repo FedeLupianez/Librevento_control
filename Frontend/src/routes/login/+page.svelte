@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { user, fetchUser } from '../../stores/user';
+	import { user } from '../../stores/user';
 	import { fade } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
 	import { API_HOST } from '$lib/routes';
@@ -9,7 +9,6 @@
 	let email: string = '';
 	let password: string = '';
 	let show_error: boolean = false;
-	let show_success: boolean = false;
 	let view_password: boolean = false;
 
 	const login = async () => {
@@ -24,12 +23,12 @@
 		if (response.ok) {
 			const data = await response.json();
 			console.log('usuario logueado');
-			user.set(data);
+			user.set(data.usuario);
+			localStorage.setItem('user', JSON.stringify(data.usuario)); // Guardar en localStorage
 			show_error = false;
-			show_success = true;
+			goto(ROUTES.VOLTAGE); // Redireccionar automáticamente
 		} else {
 			show_error = true;
-			show_success = false;
 			throw new Error('Login failed');
 		}
 	};
@@ -88,17 +87,6 @@
 				<span in:fade={{ duration: 500 }} class="z-0 mr-2 bg-red-500 p-2 text-white"
 					>Error al iniciar sesión</span
 				>
-			{/if}
-			{#if show_success}
-				<button
-					in:fade={{ duration: 500 }}
-					class="z-0 mr-2 cursor-pointer bg-[#7A9660] p-2 text-white"
-					on:click={() => {
-						goto(`${ROUTES.VOLTAGE}`);
-					}}
-				>
-					Estadísticas
-				</button>
 			{/if}
 		</div>
 	</div>

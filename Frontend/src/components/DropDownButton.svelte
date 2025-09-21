@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let text: string;
 	export let mode: string;
+	import { theme } from '../stores/theme';
 
 	let view_menu: boolean = false;
 	function toggle() {
@@ -10,7 +11,9 @@
 
 <div class={`group relative ${view_menu ? 'z-30' : ''}`}>
 	<button
-		class="relative z-20 flex cursor-pointer items-center gap-1 font-bold text-[#2f3e2f]"
+		class="relative z-20 flex cursor-pointer items-center gap-1 font-bold {$theme === 'dark'
+			? 'text-white'
+			: 'text-[#2f3e2f]'}"
 		on:click={() => toggle()}
 		on:mouseenter={() => {
 			if (mode == 'hover') view_menu = true;
