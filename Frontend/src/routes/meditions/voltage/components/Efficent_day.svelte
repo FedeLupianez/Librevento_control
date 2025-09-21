@@ -1,10 +1,15 @@
 <script lang="ts">
+	import { theme } from '../../../../stores/theme';
 	export let date: string;
 	$: day_name = new Date(date).toLocaleDateString('es-ES', { weekday: 'long' });
 </script>
 
 <div class="relative flex w-full flex-row items-center justify-center">
-	<div class="flex w-full flex-col content-center items-start justify-start px-5">
+	<div
+		class="flex w-full flex-col content-center items-start justify-start px-5 {$theme === 'dark'
+			? 'text-white'
+			: ''}"
+	>
 		<p class="text-2xl">El día mas eficiente de la semana fué el</p>
 		<span class="text-4xl font-bold text-[#7A9660]">{day_name}</span>
 	</div>

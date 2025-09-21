@@ -2,6 +2,7 @@
 	import BarChart from '../../components/BarChart.svelte';
 	import Icon from '@iconify/svelte';
 	import Efficent_day from './Efficent_day.svelte';
+	import { theme } from '../../../../stores/theme';
 	import { API_HOST } from '$lib/routes';
 	import { onMount } from 'svelte';
 
@@ -145,14 +146,16 @@
 <section
 	class={`flex w-full ${show_mobile ? 'flex-col' : 'flex-row'} items-center justify-center gap-8`}
 >
-	<div class=" flex w-full flex-col items-center justify-center">
+	<div class="flex w-full flex-col items-center justify-center gap-5">
 		{#if is_loading}
-			<h1 class="min-h-52 p-28 text-2xl font-bold">Cargando datos de {mac_address}</h1>
+			<h1 class="min-h-52 p-28 text-2xl font-bold {$theme === 'dark' ? 'text-white' : ''}">
+				Cargando datos de {mac_address}
+			</h1>
 		{:else if loading_error}
 			<h1 class="min-h-52 p-28 text-2xl font-bold text-red-500">{loading_error}</h1>
 		{:else}
 			<div class="flex w-full flex-col items-start justify-center gap-5">
-				<h2>Generador: {mac_address}</h2>
+				<h2 class={$theme === 'dark' ? 'text-white' : ''}>Generador: {mac_address}</h2>
 				<BarChart
 					prom={data.map((d) => d.voltage)}
 					min={data.map((d) => d.min_voltage)}
@@ -173,6 +176,9 @@
 		</div>
 	</div>
 	{#if efficent_date.date}
-		<Efficent_day date={efficent_date.date} />
+		<div class="flex h-full w-1/2 flex-col items-center justify-between gap-5">
+			<Efficent_day date={efficent_date.date} />
+			<span class={$theme === 'dark' ? 'text-white' : ''}>Más información</span>
+		</div>
 	{/if}
 </section>

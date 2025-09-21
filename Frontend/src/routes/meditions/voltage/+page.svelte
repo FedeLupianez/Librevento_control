@@ -6,6 +6,7 @@
 	import { API_HOST, ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
 	import Graphic from './components/Graphic.svelte';
+	import { theme } from '../../../stores/theme';
 
 	let filter_to_aply: string | null = 'day';
 	let is_loading_macs: boolean = false;
@@ -80,28 +81,32 @@
 	class={`flex min-h-screen w-full flex-col justify-start gap-3 ${showMobile ? '' : 'px-20'} py-5`}
 >
 	<div class={`flex flex-row items-start ${showMobile ? 'justify-center' : 'justify-between'}`}>
-		<span class="text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
+		<span class="text-2xl font-bold {$theme === 'dark' ? 'text-white' : ''}"
+			>¿Cómo estuvo tu aerogenerador esta semana?</span
+		>
 		<ul class="pl-5">
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#7A9660]">●</span>
-				<span>Eficiente</span>
+				<span class={$theme === 'dark' ? 'text-white' : ''}>Eficiente</span>
 			</li>
 
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#ebdaa8]">●</span>
-				<span>Medianamente</span>
+				<span class={$theme === 'dark' ? 'text-white' : ''}>Medianamente</span>
 			</li>
 
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#c85d4d]">●</span>
-				<span>Poco</span>
+				<span class={$theme === 'dark' ? 'text-white' : ''}>Poco</span>
 			</li>
 		</ul>
 	</div>
 
 	{#if is_loading_macs}
 		<div class="flex min-h-[400px] w-full items-center justify-center">
-			<p class="w-full text-center text-2xl">Cargando datos...</p>
+			<p class="w-full text-center text-2xl {$theme === 'dark' ? 'text-white' : ''}">
+				Cargando datos...
+			</p>
 		</div>
 	{:else if allMacs.length > 0}
 		<div class="flex flex-col gap-15">

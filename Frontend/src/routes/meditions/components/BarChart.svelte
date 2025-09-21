@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Chart } from 'chart.js/auto';
+	import { theme } from '../../../stores/theme';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart | null = null;
@@ -78,6 +79,6 @@
 	});
 </script>
 
-<div class="relative h-[45dvh] w-full">
+<div class="relative h-[45dvh] w-full {$theme === 'dark' ? 'bg-[#2b2b2b]' : ''} p-2">
 	<canvas bind:this={canvas}></canvas>
 </div>

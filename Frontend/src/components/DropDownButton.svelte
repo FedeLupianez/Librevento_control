@@ -2,6 +2,7 @@
 	export let text: string;
 	export let mode: string;
 	import { theme } from '../stores/theme';
+	import Icon from '@iconify/svelte';
 
 	let view_menu: boolean = false;
 	function toggle() {
@@ -23,12 +24,19 @@
 		}}
 	>
 		{text}
-		<img src="/images/flechita.svg" alt="flechita" class="-top-0.4 relative h-3.5 w-3.5" />
+		<Icon
+			icon="fe:arrow-down"
+			class="h-5 w-5 font-bold text-black {$theme === 'dark' ? 'text-white' : ''}"
+		/>
 	</button>
 
 	{#if mode == 'button'}
 		{#if view_menu}
-			<div class="absolute -top-1 -left-2.5 z-10 flex flex-col rounded-md bg-[#b9c3c8] px-3 py-1">
+			<div
+				class="absolute -top-1 -left-2.5 z-10 flex flex-col rounded-md {$theme === 'dark'
+					? 'bg-[#494949]'
+					: 'bg-[#b9c3c8]'}px-3 py-1"
+			>
 				<div class="h-5 w-5"></div>
 				<slot name="menu"></slot>
 			</div>
@@ -36,7 +44,9 @@
 	{:else}
 		<div
 			aria-hidden="true"
-			class="absolute -top-1 -left-2.5 z-10 hidden flex-col rounded-md bg-[#b9c3c8] px-3 py-1 group-hover:flex"
+			class="absolute -top-1 -left-2.5 z-10 hidden flex-col rounded-md {$theme === 'dark'
+				? 'bg-[#494949]'
+				: 'bg-[#b9c3c8]'} px-3 py-1 group-hover:flex"
 			on:mouseenter={() => {
 				view_menu = true;
 			}}

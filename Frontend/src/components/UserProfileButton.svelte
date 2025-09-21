@@ -2,6 +2,7 @@
 	import { logoutUser, user } from '../stores/user';
 	import Icon from '@iconify/svelte';
 	import { ROUTES } from '$lib/routes';
+	import { theme } from '../stores/theme';
 
 	let showProfile: boolean = false;
 </script>
@@ -21,17 +22,24 @@
 
 	{#if showProfile}
 		<div
-			class="absolute -top-3.5 -right-3.5 z-10 mt-1 min-w-52 flex-col rounded-md bg-[#ddd5d5] p-4 shadow-md"
+			class="absolute -top-3.5 -right-3.5 z-10 mt-1 min-w-52 flex-col rounded-md {$theme === 'dark'
+				? 'bg-[#494949]'
+				: 'bg-[#ddd5d5]'} p-4 shadow-md"
 		>
 			<div class="flex flex-row items-center justify-around gap-5 border-b-1 border-black">
 				{#if $user}
 					{console.log($user)}
 					<div class="flex flex-col items-center justify-center gap-1">
-						<span class="text-center text-[#2f3e2f]">{$user.nombre}</span>
-						<span class="text[#2f3e2f] text-center text-[1rem]">{$user.email}</span>
+						<span class="text-center {$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'} "
+							>{$user.nombre}</span
+						>
+						<span
+							class="{$theme === 'dark' ? 'text-white' : 'text[#2f3e2f]'} text-center text-[1rem]"
+							>{$user.email}</span
+						>
 					</div>
 				{:else}
-					<span class="p-5">Usuario</span>
+					<span class="p-5 {$theme === 'dark' ? 'text-white' : ''}">Usuario</span>
 				{/if}
 				<div class="h-15 w-15"></div>
 			</div>

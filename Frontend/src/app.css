@@ -19,6 +19,16 @@
 	color: var(--color-text);
 }
 
+.light{
+	--color-bg-0: #cad8e4;
+	--color-bg-1: #f8f8f3;
+}
+
+.dark{
+	--color-bg-0: #cad8e4;
+	--color-bg-1: #141414;
+}
+
 body {
 	min-height: 100vh;
 	margin: 2rem;

@@ -10,6 +10,9 @@
 	};
 </script>
 
-<button on:click={change_theme} class="hover:cursor-pointer">
-	<Icon icon={currentTheme === 'dark' ? 'ph:sun-bold' : 'ph:moon-bold'} class="h-10 w-10" />
+<button on:click={change_theme} class="fixed top-5 right-5 hover:cursor-pointer">
+	<Icon
+		icon={currentTheme === 'dark' ? 'ph:sun-bold' : 'ph:moon-bold'}
+		class="h-10 w-10 {currentTheme === 'dark' ? 'text-white' : ''}"
+	/>
 </button>

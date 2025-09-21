@@ -82,7 +82,11 @@
 
 				<DropDownButton text="estadísticas" mode="hover">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full min-w-42 flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div
+							class="mt-1 flex w-full min-w-42 flex-col rounded-md {$theme === 'dark'
+								? 'bg-[#5b6950]'
+								: 'bg-[#7A9660]'} shadow-md"
+						>
 							<a
 								href={`${ROUTES.VOLTAGE}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
@@ -116,7 +120,11 @@
 
 				<DropDownButton text="editar" mode="hover">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full min-w-52 flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div
+							class="mt-1 flex w-full min-w-52 flex-col rounded-md {$theme === 'dark'
+								? 'bg-[#5b6950]'
+								: 'bg-[#7A9660]'} shadow-md"
+						>
 							<a
 								href={`${ROUTES.USER.LOGIN}`}
 								class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]"
@@ -141,7 +149,7 @@
 	<div
 		class="container mt-4 flex flex-row items-center justify-around rounded-md p-4 font-bold text-[#2f3e2f] shadow {$theme ===
 		'dark'
-			? 'dark:bg-[#2f3e2f]'
+			? 'dark:bg-[#141414]'
 			: 'bg-[#f5f5f5]'}"
 	>
 		<div class="container flex flex-col items-center justify-center">
@@ -159,7 +167,9 @@
 			<div class="container flex flex-col items-center justify-start gap-4">
 				<a href="/loby">
 					<button
-						class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold"
+						class="flex cursor-pointer flex-row items-center justify-center gap-1.5 font-bold
+                  {$theme === 'dark' ? 'text-white' : ''}
+                  "
 					>
 						principal
 						<Icon icon="bx:leaf" class="h-5 w-5" />
@@ -167,7 +177,11 @@
 				</a>
 				<DropDownButton text="estadísticas" mode="button">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full min-w-42 flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div
+							class="mt-1 flex w-full min-w-42 flex-col rounded-md {$theme === 'dark'
+								? 'bg-[#5b6950]'
+								: 'bg-[#7A9660]'} shadow-md"
+						>
 							<a
 								href={`${ROUTES.VOLTAGE}`}
 								class="rounded-t-md px-4 py-2 font-bold text-white hover:bg-[#6b8755]"
@@ -201,7 +215,11 @@
 
 				<DropDownButton text="editar" mode="button">
 					<slot slot="menu">
-						<div class="mt-1 flex w-full min-w-42 flex-col rounded-md bg-[#7A9660] shadow-md">
+						<div
+							class="mt-1 flex w-full min-w-42 flex-col rounded-md {$theme === 'dark'
+								? 'bg-[#5b6950]'
+								: 'bg-[#7A9660]'} shadow-md"
+						>
 							<a
 								href={`${ROUTES.USER.LOGIN}`}
 								class="rounded-t-md px-4 py-2 font-bold hover:bg-[#6b8755]"
