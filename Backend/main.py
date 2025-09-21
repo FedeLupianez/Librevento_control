@@ -17,7 +17,11 @@ handler = Mangum(app)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://librevento.vercel.app"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://librevento.vercel.app",
+        "https://librevento.vercel.app/login",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
