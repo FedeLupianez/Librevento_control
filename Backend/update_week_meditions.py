@@ -28,12 +28,13 @@ def progress_bar(current: int, total: int):
     print(actual)
 
 
+print(f"Intentando conexión con : {ssh_user}@{ssh_host} | pwd : {ssh_password}")
 with SSHTunnelForwarder(
     (ssh_host, ssh_port),
     ssh_username=ssh_user,
     ssh_password=ssh_password,
     remote_bind_address=REMOTE_BIND_ADDRESS,
-    local_bind_address=("127.0.0.1", 3307),
+    local_bind_address=("127.0.0.1", 0),
 ) as tunnel:
     try:
         engine = create_engine(

@@ -39,7 +39,7 @@
 	let data: Measurement[] = [];
 
 	const backgroundColors = (value: number) => {
-		if (value >= 5) return '#789262';
+		if (value >= 5) return $theme === 'dark' ? '#5b6950' : '#7A9660';
 		if (value >= 4 && value < 5) return '#ebdaa8';
 		if (value < 4) return '#c85d4d';
 	};
@@ -48,6 +48,7 @@
 		if (!data) {
 			is_loading = false;
 			loading_error = 'No hay datos en esta semana';
+			efficent_date.date = '';
 			return false;
 		}
 		is_loading = false;
@@ -152,7 +153,7 @@
 				Cargando datos de {mac_address}
 			</h1>
 		{:else if loading_error}
-			<h1 class="min-h-52 p-28 text-2xl font-bold text-red-500">{loading_error}</h1>
+			<h1 class="min-h-52 p-28 text-2xl font-bold text-[#c85d4d]">{loading_error}</h1>
 		{:else}
 			<div class="flex w-full flex-col items-start justify-center gap-5">
 				<h2 class={$theme === 'dark' ? 'text-white' : ''}>Generador: {mac_address}</h2>
@@ -167,10 +168,16 @@
 		{/if}
 
 		<div id="buttons-container" class="flex flex-row items-center justify-between gap-5">
-			<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={decrement_week}>
+			<button
+				class="rounded-full {$theme === 'dark' ? 'bg-[#5b6950]' : 'bg-[#7A9660]'} p-2 text-white"
+				on:click={decrement_week}
+			>
 				<Icon icon="maki:arrow" class="rotate-180 transform" />
 			</button>
-			<button class="rounded-full bg-[#7A9660] p-2 text-white" on:click={increment_week}>
+			<button
+				class="rounded-full {$theme === 'dark' ? 'bg-[#5b6950]' : 'bg-[#7A9660]'} p-2 text-white"
+				on:click={increment_week}
+			>
 				<Icon icon="maki:arrow" />
 			</button>
 		</div>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { theme } from '../stores/theme';
 
 	let show_mobile: boolean = false;
 	function updateShow() {
@@ -12,7 +13,11 @@
 	});
 </script>
 
-<footer class="absolute left-0 w-full bg-[#5b6950] py-10 text-white">
+<footer
+	class="absolute left-0 w-full {$theme === 'dark'
+		? 'bg-[#5b6950]'
+		: 'bg-[#7A9660]'} py-10 text-white"
+>
 	<div class="flex flex-col items-center justify-center space-y-0">
 		<p class="text-center text-sm text-gray-800">
 			<a

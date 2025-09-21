@@ -5,6 +5,7 @@
 	import { API_HOST } from '$lib/routes';
 	import { ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
+	import { theme } from '../../stores/theme';
 
 	let email: string = '';
 	let password: string = '';
@@ -41,15 +42,19 @@
 
 <div class="relative flex min-h-screen flex-col items-center justify-center">
 	<div class="z-10 flex h-full w-full flex-col items-center justify-start gap-5">
-		<span class="text-5xl font-bold text-black">Inicia sesión</span>
+		<span class="text-5xl font-bold {$theme === 'dark' ? 'text-white' : 'text-black'}"
+			>Inicia sesión</span
+		>
 		<input
 			type="text"
 			name="username"
 			placeholder="Tu correo electrónico"
 			class="
 				w-full border-2
-				border-black px-4
-				py-2 text-left text-[15px] sm:w-1/2 lg:w-1/3 xl:w-1/4"
+				{$theme == 'dark' ? 'border-white' : 'border-black'} px-4
+				py-2 text-left text-[15px] {$theme == 'dark'
+				? 'text-white'
+				: 'text-black'} sm:w-1/2 lg:w-1/3 xl:w-1/4"
 			bind:value={email}
 			required
 		/>
@@ -60,8 +65,8 @@
 				placeholder="Tu contraseña"
 				class="
 					w-full border-2
-					border-black px-4
-					py-2 pr-12 text-left text-[15px]"
+					{$theme == 'dark' ? 'border-white' : 'border-black'} px-4
+					py-2 pr-12 text-left text-[15px] {$theme == 'dark' ? 'text-white' : 'text-black'}"
 				bind:value={password}
 				on:keypress={(e) => {
 					if (e.key == 'Enter') login();
@@ -73,7 +78,10 @@
 				class="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-600 hover:text-gray-800"
 				on:click={() => (view_password = !view_password)}
 			>
-				<Icon icon={view_password ? 'formkit:eye' : 'formkit:eyeclosed'} />
+				<Icon
+					icon={view_password ? 'formkit:eye' : 'formkit:eyeclosed'}
+					class={$theme === 'dark' ? 'text-white' : ''}
+				/>
 			</button>
 		</div>
 		<button
