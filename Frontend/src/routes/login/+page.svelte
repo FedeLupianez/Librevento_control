@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { user } from '../../stores/user';
+	import { user } from '$lib/stores/user';
 	import { fade } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
 	import { API_HOST } from '$lib/routes';
 	import { ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
-	import { theme } from '../../stores/theme';
+	import { theme } from '$lib/stores/theme';
 
 	let email: string = '';
 	let password: string = '';

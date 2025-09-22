@@ -1,12 +1,12 @@
 <script lang="ts">
 	import Header from '../../../components/Header.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { fetchUser, user } from '../../../stores/user';
+	import { fetchUser, user } from '$lib/stores/user';
 	import { page } from '$app/stores';
 	import { API_HOST, ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
 	import Graphic from './components/Graphic.svelte';
-	import { theme } from '../../../stores/theme';
+	import {theme} from '$lib/stores/theme';
 
 	let filter_to_aply: string | null = 'day';
 	let is_loading_macs: boolean = false;

@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import { user } from '../stores/user';
+import { user } from '$lib/stores/user';
 
 export function load() {
    if (user != null) {

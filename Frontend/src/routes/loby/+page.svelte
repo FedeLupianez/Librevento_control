@@ -6,7 +6,7 @@
 	import ConstructionItem from './components/construction_item.svelte';
 	import TechIcon from './components/tech_icon.svelte';
 	import { onMount } from 'svelte';
-	import { theme } from '../../stores/theme';
+	import { theme } from '$lib/stores/theme';
 
 	$: text_color = $theme === 'dark' ? 'text-white' : 'text-black';
 

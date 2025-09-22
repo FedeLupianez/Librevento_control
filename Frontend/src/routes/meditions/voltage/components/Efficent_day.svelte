@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { theme } from '../../../../stores/theme';
+	import { theme } from '$lib/stores/theme';
 	export let date: string;
 	$: day_name = new Date(date).toLocaleDateString('es-ES', { weekday: 'long' });
 </script>

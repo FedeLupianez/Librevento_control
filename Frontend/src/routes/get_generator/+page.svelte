@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Header from '../../components/Header.svelte';
-	import { user } from '../../stores/user';
+	import { user } from '../$lib/stores/user';
 	import { API_HOST } from '$lib/routes';
 
 	let city: string = '';

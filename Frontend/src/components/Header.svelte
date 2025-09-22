@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { user, logoutUser } from '../stores/user';
+	import { user, logoutUser } from '$lib/stores/user';
 	import UserProfileButton from './UserProfileButton.svelte';
 	import DropDownButton from './DropDownButton.svelte';
 	import { ROUTES } from '$lib/routes';
-	import { theme } from '../stores/theme';
+	import { theme } from '$lib/stores/theme';
 
 	let showMobile = false;
 	let unsubscribe: () => void;

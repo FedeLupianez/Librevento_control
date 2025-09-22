@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { logoutUser, user } from '../stores/user';
+	import { logoutUser, user } from '$lib/stores/user';
 	import Icon from '@iconify/svelte';
 	import { ROUTES } from '$lib/routes';
-	import { theme } from '../stores/theme';
+	import { theme } from '$lib/stores/theme';
 
 	let showProfile: boolean = false;
 </script>

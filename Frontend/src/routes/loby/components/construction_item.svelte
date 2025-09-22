@@ -2,7 +2,7 @@
 	export let title: string;
 	export let image_url: string | null;
 	export let text: string | null;
-	import { theme } from '../../../stores/theme';
+	import { theme } from '../../$lib/stores/theme';
 	$: text_color = $theme === 'dark' ? 'text-white' : 'text-black';
 </script>
 

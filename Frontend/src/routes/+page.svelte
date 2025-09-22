@@ -1,5 +1,5 @@
 <script>
-	import { user } from '../stores/user';
+	import { user } from '$lib/stores/user';
 	import Header from '../components/Header.svelte';
 	import { ROUTES } from '$lib/routes';
 </script>

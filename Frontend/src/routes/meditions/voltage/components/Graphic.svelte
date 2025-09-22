@@ -2,7 +2,7 @@
 	import BarChart from '../../components/BarChart.svelte';
 	import Icon from '@iconify/svelte';
 	import Efficent_day from './Efficent_day.svelte';
-	import { theme } from '../../../../stores/theme';
+	import { theme } from '$lib/stores/theme';
 	import { API_HOST } from '$lib/routes';
 	import { onMount } from 'svelte';
 
@@ -183,7 +183,7 @@
 		</div>
 	</div>
 	{#if efficent_date.date}
-		<div class="flex h-full w-1/2 flex-col items-center justify-between gap-5">
+		<div class="flex h-full {show_mobile ? 'w-full' : 'w-1/2'} flex-col items-center justify-between gap-5">
 			<Efficent_day date={efficent_date.date} />
 			<span class={$theme === 'dark' ? 'text-white' : ''}>Más información</span>
 		</div>

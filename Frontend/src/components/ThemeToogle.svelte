@@ -1,5 +1,5 @@
 <script>
-	import { theme } from '../stores/theme';
+	import { theme } from '$lib/stores/theme';
 	import Icon from '@iconify/svelte';
 
 	$: currentTheme = $theme;

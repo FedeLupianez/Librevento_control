@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { theme } from '../stores/theme';
+	import { theme } from '$lib/stores/theme';
 
 	let show_mobile: boolean = false;
 	function updateShow() {

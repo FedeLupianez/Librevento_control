@@ -2,8 +2,8 @@
 	import '../app.css';
 	import Footer from '../components/Footer.svelte';
 	import { onMount } from 'svelte';
-	import { user } from '../stores/user';
-	import { theme } from '../stores/theme';
+	import { user } from '$lib/stores/user';
+	import { theme } from '$lib/stores/theme';
 	import ThemeToogle from '../components/ThemeToogle.svelte';
 
 	let { children } = $props();
