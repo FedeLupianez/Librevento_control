@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError, OperationalError
-from sqlmodel import Session, select
+from sqlmodel import Session, select, text
 from Tablas import USUARIO
 from fastapi import HTTPException
 import bcrypt
@@ -86,14 +86,14 @@ def login(session: Session, email_usuario: str, clave: str) -> dict:
         clave (str) : clave que puso el usuario
     """
     tempClave = clave.encode("utf-8")
-    usuario = session.exec(
-        select(USUARIO).where(USUARIO.email == email_usuario)
-    ).first()
+    login_approved = session.execute(
+        text("select validar_usuario(:email_usuario, :clave)"),
+        {"email_usuario": email_usuario, "clave": tempClave},
+    )
 
-    if not usuario:
+    if not login_approved:
         raise HTTPException(status_code=404, detail="usuario no encontrado")
 
-    if not bcrypt.checkpw(tempClave, usuario.clave.encode("utf-8")):
-        raise HTTPException(status_code=404, detail="clave incorrecta")
+    usuario = session.exec(select(USUARIO).where(USUARIO.email == email_usuario)).one()
 
-    return usuario.dict(exclude={"clave"})
+    return usuario.model_dump(exclude={"clave"})

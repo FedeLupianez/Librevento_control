@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fetchUser, user } from '../$lib/stores/user';
+	import { fetchUser, user } from '$lib/stores/user';
 	import { API_HOST } from '$lib/routes';
 
 	let name: string = '';
