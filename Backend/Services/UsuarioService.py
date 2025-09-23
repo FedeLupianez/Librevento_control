@@ -85,15 +85,11 @@ def login(session: Session, email_usuario: str, clave: str) -> dict:
         email_usuario (str) : email del usuario a obtener
         clave (str) : clave que puso el usuario
     """
-    tempClave = clave.encode("utf-8")
-    login_approved = session.execute(
-        text("select validar_usuario(:email_usuario, :clave)"),
-        {"email_usuario": email_usuario, "clave": tempClave},
-    )
-
-    if not login_approved:
-        raise HTTPException(status_code=404, detail="usuario no encontrado")
-
-    usuario = session.exec(select(USUARIO).where(USUARIO.email == email_usuario)).one()
-
+    usuario = session.exec(
+        select(USUARIO).where(USUARIO.email == email_usuario)
+    ).first()
+    if not (usuario) or not bcrypt.checkpw(
+        clave.encode("utf-8"), usuario.clave.encode("utf-8")
+    ):
+        raise HTTPException(status_code=404, detail="Credenciales invalidas")
     return usuario.model_dump(exclude={"clave"})
