@@ -1,5 +1,5 @@
 export default interface User {
-   id_usuario: number;
+   token_id: string;
    nombre: string;
    sexo: string;
    foto_perfil: string;

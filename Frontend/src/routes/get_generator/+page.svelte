@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Header from '../../components/Header.svelte';
-	import { user } from '../$lib/stores/user';
+	import { user } from '$lib/stores/user';
 	import { API_HOST } from '$lib/routes';
 
 	let city: string = '';
@@ -27,7 +27,7 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					id_usuario: $user?.id_usuario,
+					token_id: $user?.token_id,
 					ciudad: capitalizeWords(city),
 					calle: capitalizeWords(street),
 					numero_vivienda: house_number

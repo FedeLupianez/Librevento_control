@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from dependencies import get_session
 from Services import GeneradorService
-from sqlmodel import Session
+from sqlmodel import Session, select
 import Tablas
 
 router = APIRouter(prefix="/generador", tags=["Generador"])
@@ -42,12 +42,13 @@ async def borrar_generador(id_generador: int, session: Session = Depends(get_ses
 
 
 @router.get("/macAddress")
-async def obtener_macAddress(id_usuario: int, session: Session = Depends(get_session)):
-    try:
-        return GeneradorService.obtener_macAddress(session, id_usuario)
-    except HTTPException as error:
-        print(error)
-        raise error
+async def obtener_macAddress(token_id: str, session: Session = Depends(get_session)):
+    id_usuario = session.exec(
+        select(Tablas.USUARIO.id_usuario).where(Tablas.USUARIO.token_id == token_id)
+    ).first()
+    if not id_usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return GeneradorService.obtener_macAddress(session, id_usuario)
 
 
 #   Hardware :

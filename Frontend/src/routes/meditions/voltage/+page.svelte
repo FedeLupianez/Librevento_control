@@ -6,7 +6,7 @@
 	import { API_HOST, ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
 	import Graphic from './components/Graphic.svelte';
-	import {theme} from '$lib/stores/theme';
+	import { theme } from '$lib/stores/theme';
 
 	let filter_to_aply: string | null = 'day';
 	let is_loading_macs: boolean = false;
@@ -22,8 +22,8 @@
 
 	let allMacs: string[] = [];
 
-	async function getMacAddress(id_user: number) {
-		const response = await fetch(`${API_HOST}/generador/macAddress?id_usuario=${id_user}`, {
+	async function getMacAddress(user_token: string) {
+		const response = await fetch(`${API_HOST}/generador/macAddress?token_id=${user_token}`, {
 			method: 'GET',
 			credentials: 'include'
 		});
@@ -31,9 +31,9 @@
 		return data ?? [];
 	}
 
-	async function updateMacs(user_id: number) {
+	async function updateMacs(user_token: string) {
 		is_loading_macs = true;
-		allMacs = await getMacAddress(user_id).then((res) => res.data);
+		allMacs = await getMacAddress(user_token).then((res) => res.data);
 		is_loading_macs = false;
 	}
 
@@ -44,7 +44,7 @@
 				is_loading_macs = false;
 				return;
 			}
-			updateMacs($user.id_usuario);
+			updateMacs($user.token_id);
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
 			console.log(showMobile);
@@ -60,7 +60,7 @@
 			if ($page.url.searchParams.get('filter')) {
 				filter_to_aply = $page.url.searchParams.get('filter');
 				if (!$user) return;
-				updateMacs($user.id_usuario);
+				updateMacs($user.token_id);
 			}
 		});
 	});

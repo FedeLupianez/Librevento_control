@@ -16,7 +16,10 @@
 				class="h-10 min-h-10 w-10 min-w-10 rounded-full"
 			/>
 		{:else}
-			<Icon icon="bx:user" class="h-10 w-10 cursor-pointer rounded-full" />
+			<Icon
+				icon="bx:user"
+				class="h-10 w-10 cursor-pointer rounded-full {$theme === 'dark' ? 'text-white' : ''}"
+			/>
 		{/if}
 	</button>
 
@@ -28,7 +31,6 @@
 		>
 			<div class="flex flex-row items-center justify-around gap-5 border-b-1 border-black">
 				{#if $user}
-					{console.log($user)}
 					<div class="flex flex-col items-center justify-center gap-1">
 						<span class="text-center {$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'} "
 							>{$user.nombre}</span
@@ -47,14 +49,14 @@
 			<div class="flex flex-col items-center justify-center">
 				{#if $user}
 					<button
-						class="flex w-full items-center justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
+						class="flex w-full items-start justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
 					>
 						<Icon icon="pepicons-pencil:gear" class="h-5 w-5" />
 						<span class="rounded-2xl text-center">Configuración</span>
 					</button>
 
 					<button
-						class="flex w-full items-center justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
+						class="flex w-full items-start justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
 						on:click={logoutUser}
 					>
 						<Icon icon="bx:log-out" class="h-5 w-5" />

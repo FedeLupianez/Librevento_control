@@ -24,7 +24,7 @@ async def login(
         clave = base64.b64decode(data.clave).decode("utf-8")
         usuario = UsuarioService.login(session, email, clave)
         request.session["usuario"] = {
-            "id_usuario": usuario["id_usuario"],
+            "token_id": usuario["token_id"],
             "nombre": usuario["nombre"],
             "email": usuario["email"],
             "foto_perfil": usuario["foto_perfil"],
@@ -51,14 +51,12 @@ async def crear_usuario(
     try:
         nuevoUsuario = UsuarioService.crear(session, usuario)
         print("nuevo usuario : ", nuevoUsuario)
-        id_usuario: int = nuevoUsuario["id"]
 
-        tempUsuario = UsuarioService.obtener(session, id_usuario)
         request.session["usuario"] = {
-            "id_usuario": tempUsuario["id_usuario"],
-            "nombre": tempUsuario["nombre"],
-            "email": tempUsuario["email"],
-            "foto_perfil": tempUsuario["foto_perfil"],
+            "token_id": nuevoUsuario["token_id"],
+            "nombre": nuevoUsuario["nombre"],
+            "email": nuevoUsuario["email"],
+            "foto_perfil": nuevoUsuario["foto_perfil"],
         }
         return {"message": "Usuario creado", "usuario": request.session["usuario"]}
     except HTTPException as error:
@@ -67,9 +65,9 @@ async def crear_usuario(
 
 
 @router.get("/")
-async def obtener_usuario(id_usuario: int, session: Session = Depends(get_session)):
+async def obtener_usuario(token_id: str, session: Session = Depends(get_session)):
     try:
-        return UsuarioService.obtener(session, id_usuario)
+        return UsuarioService.obtener(session, token_id)
     except HTTPException as error:
         print(error)
         raise error
@@ -86,9 +84,9 @@ async def obtener_id(email_usuario: str, session: Session = Depends(get_session)
 
 
 @router.delete("/")
-async def borrar_usuario(id_usuario: int, session: Session = Depends(get_session)):
+async def borrar_usuario(token_id: str, session: Session = Depends(get_session)):
     try:
-        return UsuarioService.borrar(session, id_usuario)
+        return UsuarioService.borrar(session, token_id)
     except HTTPException as error:
         print(error)
         raise error

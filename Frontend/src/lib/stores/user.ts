@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type User from '../types/user';
+import type User from '../../types/user';
 import { API_HOST } from '$lib/routes';
 
 export const user = writable<User | null>(null);
@@ -31,7 +31,7 @@ export async function logoutUser() {
       const data = await response.json();
       console.log(data);
       user.set(null);
-      localStorage.removeItem('user'); // Limpiar localStorage
+      localStorage.removeItem('librevento_user'); // Limpiar localStorage
    } else {
       console.warn('Error al cerrar sesión ');
    }

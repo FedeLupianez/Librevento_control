@@ -23,7 +23,7 @@
 				user.set(JSON.parse(storedUser));
 			} catch (e) {
 				console.error('Failed to parse user from localStorage', e);
-				localStorage.removeItem('user'); // Clear corrupted data
+				localStorage.removeItem('librevento_user');
 			}
 		}
 	});

@@ -15,6 +15,7 @@ class USUARIO(SQLModel, table=True):
     sexo: str
     email: str
     clave: str
+    token_id: str
 
 
 class GENERADOR(SQLModel, table=True):

@@ -1,8 +1,9 @@
 from sqlalchemy.exc import IntegrityError, OperationalError
-from sqlmodel import Session, select, text
+from sqlmodel import Session, select
 from Tablas import USUARIO
 from fastapi import HTTPException
 import bcrypt
+import secrets
 
 
 def crear(session: Session, usuario: USUARIO) -> dict:
@@ -14,7 +15,9 @@ def crear(session: Session, usuario: USUARIO) -> dict:
     print(usuario)
     # Hasheo la password
     claveHasheada = bcrypt.hashpw(tempClave, bcrypt.gensalt())
+    new_token_id = secrets.token_hex(16)
     usuario.clave = claveHasheada.decode("utf-8")
+    usuario.token_id = new_token_id
     try:
         session.add(usuario)
         session.commit()
@@ -34,13 +37,13 @@ def crear(session: Session, usuario: USUARIO) -> dict:
     return {"id": usuario.id_usuario}
 
 
-def borrar(session: Session, id_usuario: int) -> dict:
+def borrar(session: Session, token_id: str) -> dict:
     """Función para borrar un registro de la tabla usuario
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         idUsuario (str) : dirección mac del dispositivo
     """
-    query = select(USUARIO).where(USUARIO.id_usuario == id_usuario)
+    query = select(USUARIO).where(USUARIO.token_id == token_id)
     usuario = session.exec(query).first()
 
     if not (usuario):
@@ -51,13 +54,13 @@ def borrar(session: Session, id_usuario: int) -> dict:
     return {"message": "usuario borrado exitosamente"}
 
 
-def obtener(session: Session, id_usuario: int) -> dict:
+def obtener(session: Session, token_id: str) -> dict:
     """Función para obtener un registro de usuario por su id
     Args:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         id_usuario (int) : id del usuario a obtener
     """
-    query = select(USUARIO).where(USUARIO.id_usuario == id_usuario)
+    query = select(USUARIO).where(USUARIO.token_id == token_id)
     usuario = session.exec(query).first()
     if not (usuario):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
@@ -71,11 +74,11 @@ def obtener_id(session: Session, email_usuario: str) -> dict:
         engine (sqlalchemy.exc.engine) : conexión con la base de datos
         email_usuario (str) : email del usuario a obtener
     """
-    query = select(USUARIO.id_usuario).where(USUARIO.email == email_usuario)
-    id_usuario = session.exec(query).first()
-    if not (id_usuario):
+    query = select(USUARIO.token_id).where(USUARIO.email == email_usuario)
+    token = session.exec(query).first()
+    if not (token):
         raise HTTPException(status_code=404, detail="usuario no encontrado")
-    return {"id": id_usuario}
+    return {"id": token}
 
 
 def login(session: Session, email_usuario: str, clave: str) -> dict:
@@ -92,4 +95,4 @@ def login(session: Session, email_usuario: str, clave: str) -> dict:
         clave.encode("utf-8"), usuario.clave.encode("utf-8")
     ):
         raise HTTPException(status_code=404, detail="Credenciales invalidas")
-    return usuario.model_dump(exclude={"clave"})
+    return usuario.model_dump(exclude={"clave", "id_usuario"})

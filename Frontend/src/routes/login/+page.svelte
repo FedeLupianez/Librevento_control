@@ -10,9 +10,11 @@
 	let email: string = '';
 	let password: string = '';
 	let show_error: boolean = false;
+	let load: boolean = false;
 	let view_password: boolean = false;
 
 	const login = async () => {
+		load = true;
 		const response = await fetch(`${API_HOST}/usuario/login`, {
 			method: 'POST',
 			headers: {
@@ -21,11 +23,12 @@
 			body: JSON.stringify({ email_usuario: btoa(email), clave: btoa(password) }),
 			credentials: 'include'
 		});
+		load = false;
 		if (response.ok) {
 			const data = await response.json();
 			console.log('usuario logueado');
 			user.set(data.usuario);
-			localStorage.setItem('user', JSON.stringify(data.usuario)); // Guardar en localStorage
+			localStorage.setItem('librevento_user', JSON.stringify(data.usuario)); // Guardar en localStorage
 			show_error = false;
 			goto(ROUTES.VOLTAGE); // Redireccionar automáticamente
 		} else {
@@ -91,6 +94,12 @@
 			on:click|preventDefault={login}>Iniciar Sesión</button
 		>
 		<div class="flex flex-row items-center justify-center">
+			{#if load}
+				<Icon
+					icon="eos-icons:loading"
+					class="h-10 w-10 animate-spin {$theme === 'dark' ? 'text-white' : 'text-[#7A9660]'}"
+				/>
+			{/if}
 			{#if show_error}
 				<span in:fade={{ duration: 500 }} class="z-0 mr-2 bg-red-500 p-2 text-white"
 					>Error al iniciar sesión</span
