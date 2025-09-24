@@ -65,7 +65,7 @@ def obtener(session: Session, token_id: str) -> dict:
     if not (usuario):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     session.refresh(usuario)
-    return usuario.dict(exclude={"clave"})
+    return usuario.model_dump(exclude={"clave"})
 
 
 def obtener_id(session: Session, email_usuario: str) -> dict:

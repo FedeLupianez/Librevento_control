@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from json import dumps, loads
 import Tablas
 from Services import UsuarioService
 from pydantic import BaseModel
@@ -17,29 +18,55 @@ class loginInput(BaseModel):
 
 @router.post("/login")
 async def login(
-    data: loginInput, request: Request, session: Session = Depends(get_session)
+    data: loginInput,
+    response: Response,
+    session: Session = Depends(get_session),
 ):
     try:
         email = base64.b64decode(data.email_usuario).decode("utf-8")
         clave = base64.b64decode(data.clave).decode("utf-8")
         usuario = UsuarioService.login(session, email, clave)
-        request.session["usuario"] = {
-            "token_id": usuario["token_id"],
+        temp = {
             "nombre": usuario["nombre"],
+            "sexo": usuario["sexo"],
             "email": usuario["email"],
             "foto_perfil": usuario["foto_perfil"],
-            "sexo": usuario["sexo"],
         }
-        print("usuario logueado : ", usuario)
-        return {"message": "Usuario logueado", "usuario": request.session["usuario"]}
+        max_age = 60 * 60 * 24 * 7
+        # Cookie del token de usuario para las peticiones
+        response.set_cookie(
+            key="librevento_token_id",
+            value=usuario["token_id"],
+            max_age=max_age,
+            httponly=True,
+            samesite="lax",
+        )
+
+        # Cookie del usuario para que la use el frontend
+        json_data = dumps(temp)
+        base64_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
+
+        response.set_cookie(
+            key="librevento_user",
+            value=base64_data,
+            max_age=max_age,
+            httponly=False,
+            samesite="lax",
+        )
+        print("usuario logueado : ", temp)
+        return {
+            "message": "Usuario logueado",
+            "usuario": temp,
+        }
     except HTTPException as error:
         print(error)
         raise error
 
 
 @router.get("/logout")
-async def logout(request: Request):
-    request.session.clear()
+async def logout(request: Request, response: Response):
+    response.delete_cookie("librevento_user")
+    response.delete_cookie("librevento_token_id")
     return {"message": "Usuario deslogueado"}
 
 
@@ -65,8 +92,9 @@ async def crear_usuario(
 
 
 @router.get("/")
-async def obtener_usuario(token_id: str, session: Session = Depends(get_session)):
+async def obtener_usuario(request: Request, session: Session = Depends(get_session)):
     try:
+        token_id = request.cookies["librevento_token_id"]
         return UsuarioService.obtener(session, token_id)
     except HTTPException as error:
         print(error)
@@ -74,28 +102,23 @@ async def obtener_usuario(token_id: str, session: Session = Depends(get_session)
 
 
 @router.get("/obtener_id")
-async def obtener_id(email_usuario: str, session: Session = Depends(get_session)):
-    try:
-        email = base64.b64decode(email_usuario).decode("utf-8")
-        return UsuarioService.obtener_id(session, email_usuario=email)
-    except HTTPException as error:
-        print(error)
-        raise error
+async def obtener_id(request: Request, session: Session = Depends(get_session)):
+    cookie_value = request.cookies.get("librevento_user")
+    if not cookie_value:
+        raise HTTPException(status_code=404, detail="Usuario no logueado")
+
+    decoded_json = base64.b64decode(cookie_value).decode("utf-8")
+    user_data = loads(decoded_json)
+    email = user_data["email"]
+
+    return UsuarioService.obtener_id(session, email_usuario=email)
 
 
 @router.delete("/")
-async def borrar_usuario(token_id: str, session: Session = Depends(get_session)):
+async def borrar_usuario(request: Request, session: Session = Depends(get_session)):
     try:
+        token_id = request.cookies["librevento_token_id"]
         return UsuarioService.borrar(session, token_id)
     except HTTPException as error:
         print(error)
         raise error
-
-
-@router.get("/actual")
-async def usuario_actual(request: Request):
-    usuario = request.session.get("usuario")
-    if not usuario:
-        raise HTTPException(status_code=401, detail="Usuario no logueado")
-    print("usuario devuelto : ", usuario)
-    return usuario

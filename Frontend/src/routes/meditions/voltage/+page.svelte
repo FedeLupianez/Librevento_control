@@ -22,8 +22,8 @@
 
 	let allMacs: string[] = [];
 
-	async function getMacAddress(user_token: string) {
-		const response = await fetch(`${API_HOST}/generador/macAddress?token_id=${user_token}`, {
+	async function getMacAddress() {
+		const response = await fetch(`${API_HOST}/generador/macAddress`, {
 			method: 'GET',
 			credentials: 'include'
 		});
@@ -31,9 +31,9 @@
 		return data ?? [];
 	}
 
-	async function updateMacs(user_token: string) {
+	async function updateMacs() {
 		is_loading_macs = true;
-		allMacs = await getMacAddress(user_token).then((res) => res.data);
+		allMacs = await getMacAddress().then((res) => res.data);
 		is_loading_macs = false;
 	}
 
@@ -44,7 +44,7 @@
 				is_loading_macs = false;
 				return;
 			}
-			updateMacs($user.token_id);
+			updateMacs();
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
 			console.log(showMobile);
@@ -60,7 +60,7 @@
 			if ($page.url.searchParams.get('filter')) {
 				filter_to_aply = $page.url.searchParams.get('filter');
 				if (!$user) return;
-				updateMacs($user.token_id);
+				updateMacs();
 			}
 		});
 	});

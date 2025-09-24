@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from dependencies import get_session
-from Services import GeneradorService
+from Services import GeneradorService, UsuarioService
 from sqlmodel import Session, select
 import Tablas
 
@@ -42,10 +42,11 @@ async def borrar_generador(id_generador: int, session: Session = Depends(get_ses
 
 
 @router.get("/macAddress")
-async def obtener_macAddress(token_id: str, session: Session = Depends(get_session)):
-    id_usuario = session.exec(
-        select(Tablas.USUARIO.id_usuario).where(Tablas.USUARIO.token_id == token_id)
-    ).first()
+async def obtener_macAddress(request: Request, session: Session = Depends(get_session)):
+    token_id = request.cookies.get("librevento_token_id")
+    if not token_id:
+        raise HTTPException(status_code=404, detail="Usuario no logueado")
+    id_usuario = UsuarioService.obtener(session, token_id).get("id_usuario")
     if not id_usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return GeneradorService.obtener_macAddress(session, id_usuario)
@@ -54,10 +55,9 @@ async def obtener_macAddress(token_id: str, session: Session = Depends(get_sessi
 #   Hardware :
 @router.patch("/config_mac")
 async def config_macAddress(
-    id_usuario: int, macAddress: str, session: Session = Depends(get_session)
+    email_usuario: str, macAddress: str, session: Session = Depends(get_session)
 ):
-    try:
-        return GeneradorService.config_macAddress(session, id_usuario, macAddress)
-    except HTTPException as error:
-        print(error)
-        raise error
+    id_usuario = UsuarioService.obtener_id(session, email_usuario).get("id", None)
+    if not id_usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return GeneradorService.config_macAddress(session, id_usuario, macAddress)

@@ -27,7 +27,6 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					token_id: $user?.token_id,
 					ciudad: capitalizeWords(city),
 					calle: capitalizeWords(street),
 					numero_vivienda: house_number

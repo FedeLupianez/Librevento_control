@@ -28,10 +28,10 @@
 			const data = await response.json();
 			console.log('usuario logueado');
 			user.set(data.usuario);
-			localStorage.setItem('librevento_user', JSON.stringify(data.usuario)); // Guardar en localStorage
 			show_error = false;
 			goto(ROUTES.VOLTAGE); // Redireccionar automáticamente
 		} else {
+			console.log('Error al iniciar sesion');
 			show_error = true;
 			throw new Error('Login failed');
 		}
