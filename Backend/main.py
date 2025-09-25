@@ -22,15 +22,13 @@ app.add_middleware(
         "https://librevento.vercel.app",
     ],
     allow_credentials=True,
-    same_site="none",
-    https_only=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 app.add_middleware(
     SessionMiddleware,
     secret_key=Config["SECRET_KEY"],
-    same_site="lax",
+    same_site="none",
     https_only=False,
 )
 
