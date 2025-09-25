@@ -53,7 +53,7 @@ async def login(
             max_age=max_age,
             httponly=False,
             secure=True,
-            samesite="strict",
+            samesite="none",
         )
         print("usuario logueado : ", temp)
         return {
@@ -103,7 +103,7 @@ async def crear_usuario(
             max_age=60 * 60 * 24 * 7,
             httponly=False,
             secure=True,
-            samesite="strict",
+            samesite="none",
         )
         return {"message": "Usuario creado", "usuario": temp}
     except HTTPException as error:
