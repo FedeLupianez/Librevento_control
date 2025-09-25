@@ -29,7 +29,7 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=Config["SECRET_KEY"],
     same_site="none",
-    https_only=False,
+    https_only=True,
 )
 
 # Agrego los routers :
