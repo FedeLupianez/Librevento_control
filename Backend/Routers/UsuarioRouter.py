@@ -39,7 +39,7 @@ async def login(
             value=usuario["token_id"],
             max_age=max_age,
             httponly=True,
-            samesite="lax",
+            samesite="none",
         )
 
         # Cookie del usuario para que la use el frontend
