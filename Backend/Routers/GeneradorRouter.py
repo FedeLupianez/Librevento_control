@@ -43,8 +43,7 @@ async def borrar_generador(id_generador: int, session: Session = Depends(get_ses
 
 @router.get("/macAddress")
 async def obtener_macAddress(request: Request, session: Session = Depends(get_session)):
-    token_id = request.cookies.get("librevento_token_id")
-    print(request.cookies)
+    token_id = request.session.get("librevento_token_id")
     print(token_id)
     if not token_id:
         print("Usuario no logueado")

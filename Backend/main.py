@@ -20,9 +20,10 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "https://librevento.vercel.app",
-        "https://librevento.vercel.app/login",
     ],
     allow_credentials=True,
+    same_site="none",
+    https_only=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
