@@ -3,11 +3,16 @@
 	import Footer from '../components/Footer.svelte';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme';
+	import { initializeUser } from '$lib/stores/user';
 	import ThemeToogle from '../components/ThemeToogle.svelte';
 
 	let { children } = $props();
 
 	onMount(() => {
+		// Initialize user from cookie
+		initializeUser();
+
+		// Initialize theme from local storage
 		const saved_theme = localStorage.getItem('theme') ?? 'light';
 		theme.set(saved_theme);
 
