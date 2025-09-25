@@ -66,9 +66,9 @@ async def login(
 
 
 @router.get("/logout")
-async def logout(request: Request):
-    request.cookies.pop("librevento_user")
-    request.cookies.pop("librevento_token_id")
+async def logout(response: Response):
+    response.delete_cookie(key="librevento_token_id")
+    response.delete_cookie(key="librevento_user")
     return {"message": "Usuario deslogueado"}
 
 
