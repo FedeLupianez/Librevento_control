@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from json import dumps, loads
 import Tablas
 from Services import UsuarioService
@@ -19,7 +19,7 @@ class loginInput(BaseModel):
 @router.post("/login")
 async def login(
     data: loginInput,
-    request: Request,
+    response: Response,
     session: Session = Depends(get_session),
 ):
     try:
@@ -34,21 +34,27 @@ async def login(
         }
         max_age = 60 * 60 * 24 * 7
         # Cookie del token de usuario para las peticiones
-        request.session["librevento_token_id"] = usuario["token_id"]
-        # response.set_cookie(
-        #     key="librevento_token_id",
-        #     value=usuario["token_id"],
-        #     max_age=max_age,
-        #     httponly=True,
-        #     secure=True,
-        #     samesite="none",
-        # )
+        response.set_cookie(
+            key="librevento_token_id",
+            value=usuario["token_id"],
+            max_age=max_age,
+            httponly=True,
+            secure=True,
+            samesite="none",
+        )
 
         # Cookie del usuario para que la use el frontend
         json_data = dumps(temp)
         base64_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
 
-        request.session["librevento_user"] = base64_data
+        response.set_cookie(
+            key="librevento_user",
+            value=base64_data,
+            max_age=max_age,
+            httponly=False,
+            secure=True,
+            samesite="strict",
+        )
         print("usuario logueado : ", temp)
         return {
             "message": "Usuario logueado",
@@ -61,27 +67,45 @@ async def login(
 
 @router.get("/logout")
 async def logout(request: Request):
-    request.session.clear()
+    request.cookies.pop("librevento_user")
+    request.cookies.pop("librevento_token_id")
     return {"message": "Usuario deslogueado"}
 
 
 # Endpoints de usuario :
 @router.post("/")
 async def crear_usuario(
-    usuario: Tablas.USUARIO, request: Request, session: Session = Depends(get_session)
+    usuario: Tablas.USUARIO, response: Response, session: Session = Depends(get_session)
 ):
     try:
         nuevoUsuario = UsuarioService.crear(session, usuario)
         print("nuevo usuario : ", nuevoUsuario)
 
-        request.session["librevento_user"] = {
+        response.set_cookie(
+            key="librevento_token_id",
+            value=nuevoUsuario["token_id"],
+            max_age=60 * 60 * 24 * 7,
+            httponly=True,
+            secure=True,
+            samesite="none",
+        )
+
+        temp = {
             "nombre": nuevoUsuario["nombre"],
             "sexo": nuevoUsuario["sexo"],
             "email": nuevoUsuario["email"],
             "foto_perfil": nuevoUsuario["foto_perfil"],
         }
-        request.session["librevento_token_id"] = nuevoUsuario["token_id"]
-        return {"message": "Usuario creado", "usuario": request.session["librevento_user"]}
+        base_64_data = dumps(temp)
+        response.set_cookie(
+            key="librevento_user",
+            value=base_64_data,
+            max_age=60 * 60 * 24 * 7,
+            httponly=False,
+            secure=True,
+            samesite="strict",
+        )
+        return {"message": "Usuario creado", "usuario": temp}
     except HTTPException as error:
         print(error)
         raise error
@@ -89,7 +113,7 @@ async def crear_usuario(
 
 @router.get("/")
 async def obtener_usuario(request: Request, session: Session = Depends(get_session)):
-    token_id = request.session.get("librevento_token_id")
+    token_id = request.cookies.get("librevento_token_id")
     if not token_id:
         raise HTTPException(status_code=404, detail="Usuario no logueado")
     return UsuarioService.obtener(session, token_id)
@@ -97,7 +121,7 @@ async def obtener_usuario(request: Request, session: Session = Depends(get_sessi
 
 @router.get("/obtener_id")
 async def obtener_id(request: Request, session: Session = Depends(get_session)):
-    cookie_value = request.session.get("librevento_user")
+    cookie_value = request.cookies.get("librevento_user")
     if not cookie_value:
         raise HTTPException(status_code=404, detail="Usuario no logueado")
 
@@ -110,9 +134,7 @@ async def obtener_id(request: Request, session: Session = Depends(get_session)):
 
 @router.delete("/")
 async def borrar_usuario(request: Request, session: Session = Depends(get_session)):
-    try:
-        token_id = request.session.get("librevento_token_id")
-        return UsuarioService.borrar(session, token_id)
-    except HTTPException as error:
-        print(error)
-        raise error
+    token_id = request.cookies.get("librevento_token_id")
+    if not token_id:
+        raise HTTPException(status_code=404, detail="Usuario no logueado")
+    return UsuarioService.borrar(session, token_id)
