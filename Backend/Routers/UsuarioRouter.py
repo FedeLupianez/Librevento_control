@@ -41,6 +41,7 @@ async def login(
             httponly=True,
             secure=True,
             samesite="none",
+            path="/",
         )
 
         # Cookie del usuario para que la use el frontend
@@ -54,6 +55,7 @@ async def login(
             httponly=False,
             secure=True,
             samesite="none",
+            path="/",
         )
         print("usuario logueado : ", temp)
         return {
@@ -67,8 +69,8 @@ async def login(
 
 @router.get("/logout")
 async def logout(response: Response):
-    response.delete_cookie(key="librevento_token_id")
-    response.delete_cookie(key="librevento_user")
+    response.delete_cookie(key="librevento_token_id", path="/")
+    response.delete_cookie(key="librevento_user", path="/")
     return {"message": "Usuario deslogueado"}
 
 
@@ -88,6 +90,7 @@ async def crear_usuario(
             httponly=True,
             secure=True,
             samesite="none",
+            path="/",
         )
 
         temp = {
@@ -104,6 +107,7 @@ async def crear_usuario(
             httponly=False,
             secure=True,
             samesite="none",
+            path="/",
         )
         return {"message": "Usuario creado", "usuario": temp}
     except HTTPException as error:

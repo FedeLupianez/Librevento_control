@@ -25,12 +25,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=Config["SECRET_KEY"],
-    same_site="none",
-    https_only=True,
-)
+# app.add_middleware(
+#     SessionMiddleware,
+#     secret_key=Config["SECRET_KEY"],
+#     same_site="none",
+#     https_only=True,
+# )
 
 # Agrego los routers :
 app.include_router(UsuarioRouter.router)
