@@ -28,7 +28,6 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         secure=IS_PROD,
         samesite="none" if IS_PROD else "lax",
         path="/",
-        domain=COOKIE_DOMAIN,
     )
 
     # Cookie for frontend user data
@@ -42,7 +41,6 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         secure=IS_PROD,
         samesite="none" if IS_PROD else "lax",
         path="/",
-        domain=COOKIE_DOMAIN,
     )
 
 
