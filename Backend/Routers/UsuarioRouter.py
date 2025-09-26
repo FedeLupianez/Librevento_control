@@ -4,10 +4,45 @@ import Tablas
 from Services import UsuarioService
 from pydantic import BaseModel
 from sqlmodel import Session
-from dependencies import get_session
+from dependencies import get_session, Config
 import base64
 
 router = APIRouter(prefix="/usuario", tags=["Usuario"])
+
+# --- Cookie Settings ---
+# Configuración para ver si el entorno es local o de production
+IS_PROD = Config.get("ENVIRONMENT") == "production"
+# Dominio para cookies en production
+COOKIE_DOMAIN = Config.get("COOKIE_DOMAIN") if IS_PROD else None
+
+
+# Helper function to set cookies consistently
+def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age: int):
+    # Cookie for the auth token
+    response.set_cookie(
+        key="librevento_token_id",
+        value=token_id,
+        max_age=max_age,
+        httponly=True,
+        secure=IS_PROD,
+        samesite="none" if IS_PROD else "lax",
+        path="/",
+        domain=COOKIE_DOMAIN,
+    )
+
+    # Cookie for frontend user data
+    json_data = dumps(user_data)
+    base64_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
+    response.set_cookie(
+        key="librevento_user",
+        value=base64_data,
+        max_age=max_age,
+        httponly=False,
+        secure=IS_PROD,
+        samesite="none" if IS_PROD else "lax",
+        path="/",
+        domain=COOKIE_DOMAIN,
+    )
 
 
 # Endpoints de login / logout :
@@ -32,31 +67,10 @@ async def login(
             "email": usuario["email"],
             "foto_perfil": usuario["foto_perfil"],
         }
-        max_age = 60 * 60 * 24 * 7
-        # Cookie del token de usuario para las peticiones
-        response.set_cookie(
-            key="librevento_token_id",
-            value=usuario["token_id"],
-            max_age=max_age,
-            httponly=True,
-            secure=True,
-            samesite="none",
-            path="/",
-        )
+        max_age = 60 * 60 * 24 * 7  # 7 days
 
-        # Cookie del usuario para que la use el frontend
-        json_data = dumps(temp)
-        base64_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
+        set_all_cookies(response, usuario["token_id"], temp, max_age)
 
-        response.set_cookie(
-            key="librevento_user",
-            value=base64_data,
-            max_age=max_age,
-            httponly=False,
-            secure=True,
-            samesite="none",
-            path="/",
-        )
         print("usuario logueado : ", temp)
         return {
             "message": "Usuario logueado",
@@ -69,8 +83,8 @@ async def login(
 
 @router.get("/logout")
 async def logout(response: Response):
-    response.delete_cookie(key="librevento_token_id", path="/")
-    response.delete_cookie(key="librevento_user", path="/")
+    response.delete_cookie(key="librevento_token_id", path="/", domain=COOKIE_DOMAIN)
+    response.delete_cookie(key="librevento_user", path="/", domain=COOKIE_DOMAIN)
     return {"message": "Usuario deslogueado"}
 
 
@@ -83,32 +97,16 @@ async def crear_usuario(
         nuevoUsuario = UsuarioService.crear(session, usuario)
         print("nuevo usuario : ", nuevoUsuario)
 
-        response.set_cookie(
-            key="librevento_token_id",
-            value=nuevoUsuario["token_id"],
-            max_age=60 * 60 * 24 * 7,
-            httponly=True,
-            secure=True,
-            samesite="none",
-            path="/",
-        )
-
         temp = {
             "nombre": nuevoUsuario["nombre"],
             "sexo": nuevoUsuario["sexo"],
             "email": nuevoUsuario["email"],
             "foto_perfil": nuevoUsuario["foto_perfil"],
         }
-        base_64_data = dumps(temp)
-        response.set_cookie(
-            key="librevento_user",
-            value=base_64_data,
-            max_age=60 * 60 * 24 * 7,
-            httponly=False,
-            secure=True,
-            samesite="none",
-            path="/",
-        )
+        max_age = 60 * 60 * 24 * 7  # 7 days
+
+        set_all_cookies(response, nuevoUsuario["token_id"], temp, max_age)
+
         return {"message": "Usuario creado", "usuario": temp}
     except HTTPException as error:
         print(error)
