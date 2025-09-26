@@ -12,6 +12,7 @@ router = APIRouter(prefix="/usuario", tags=["Usuario"])
 # --- Cookie Settings ---
 # Configuración para ver si el entorno es local o de production
 IS_PROD = Config.get("ENVIRONMENT") == "production"
+print(Config.get("ENVIRONMENT"))
 # Dominio para cookies en production
 COOKIE_DOMAIN = Config.get("COOKIE_DOMAIN") if IS_PROD else None
 
