@@ -80,6 +80,15 @@ async def login(
         raise error
 
 
+@router.get("/is_logued")
+async def is_logued(request: Request):
+    token_id = request.cookies.get("librevento_token_id", None)
+    if not token_id:
+        raise HTTPException(status_code=401, detail="Usuario no logueado")
+    data = request.cookies.get("librevento_user", None)
+    return {"message": "usuario logueado", "usuario": data}
+
+
 @router.get("/logout")
 async def logout(response: Response):
     response.delete_cookie(key="librevento_token_id", path="/", domain=COOKIE_DOMAIN)
