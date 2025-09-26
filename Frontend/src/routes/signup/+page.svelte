@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fetchUser, user } from '$lib/stores/user';
+	import { user } from '$lib/stores/user';
 	import { API_HOST } from '$lib/routes';
 
 	let name: string = '';
@@ -41,7 +41,6 @@
 			console.error('Error signing up:', await response.text());
 			return;
 		}
-		await fetchUser();
 	};
 </script>
 

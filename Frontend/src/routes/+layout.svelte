@@ -8,9 +8,9 @@
 
 	let { children } = $props();
 
-	onMount(() => {
+	onMount(async () => {
 		// Initialize user from cookie
-		initializeUser();
+		await initializeUser();
 
 		// Initialize theme from local storage
 		const saved_theme = localStorage.getItem('theme') ?? 'light';

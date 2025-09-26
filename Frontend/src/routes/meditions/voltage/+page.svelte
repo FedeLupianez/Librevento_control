@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Header from '../../../components/Header.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { fetchUser, user } from '$lib/stores/user';
+	import { user } from '$lib/stores/user';
 	import { page } from '$app/stores';
 	import { API_HOST, ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
@@ -38,7 +38,6 @@
 	}
 
 	onMount(async () => {
-		await fetchUser();
 		unsubscribe = user.subscribe(($user) => {
 			if (!$user) {
 				is_loading_macs = false;

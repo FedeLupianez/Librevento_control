@@ -80,7 +80,7 @@ async def login(
         raise error
 
 
-@router.get("/is_logued")
+@router.get("/auth")
 async def is_logued(request: Request):
     token_id = request.cookies.get("librevento_token_id", None)
     if not token_id:
