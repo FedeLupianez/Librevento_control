@@ -3,7 +3,6 @@
 	import '@fontsource/hammersmith-one';
 	import Icon from '@iconify/svelte';
 	import { ROUTES } from '$lib/routes';
-	import ConstructionItem from './components/construction_item.svelte';
 	import TechIcon from './components/tech_icon.svelte';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme';
@@ -88,112 +87,26 @@
 		</div>
 	</section>
 
-	<section class="flex flex-col gap-5" id="Armado">
-		<div class="flex w-full justify-start">
-			<span class="title text-5xl font-bold {text_color}">1. Armado</span>
+	<section class="flex w-full flex-col items-center justify-center gap-5" id="Armado">
+		<div class="flex w-full flex-col justify-start">
+			<span class="title text-5xl font-bold {text_color}">1. Armado y Software</span>
+			<p class="paragraph w-full {text_color}">
+				Accede al siguiente PDF para apreciar con exactitud qué materiales usamos y qué tecnologías
+				implementamos:
+			</p>
 		</div>
-		<ConstructionItem
-			image_url={'/images/Parts/Palas.jpg'}
-			title="Palas diseño savonius"
-			text="Esta parte del proyecto fue hecha con una impresora 3D con PETG (material de impresión 3D), elegimos este diseño vertical ya que tiene una forma que consiguió resultados de eficiencia mejores a muchos otros diseños, como también porque su construcción es sencilla y de bajo costo"
-		/>
-		<ConstructionItem
-			image_url={'/images/Parts/Motores_cerca.jpg'}
-			title="Motores de corriente continua 12v"
-			text="A estos componentes los rescatamos de una impresora vieja la cual no servía. Estos son los que generan la energía al momento de que las palas sean empujadas por el viento."
-		/>
-		<ConstructionItem
-			image_url={'/images/Parts/Engranajes.jpg'}
-			title="Engranajes"
-			text="Estas piezas son clave ya que gracias a ellas el movimiento de las palas se transmite a los motores. Constan de 3 (tres) engranajes hermanados impresos en 3D con el mismo material que las palas, siendo uno más grande, el cual está unido a las palas y otros dos menores que van unidos a los ejes de los motores. "
-		/>
-		<ConstructionItem
-			image_url={'/images/Parts/Base.jpg'}
-			title="Base, Tornillos y eje"
-			text="
-            La base es usada para sostener la estructura, esta también fue impresa en 3D junto con las palas. 
-            Tornillos para fijar partes móviles del dispositivo.
-            Y un eje de acero modificado por nosotros mismos con un torno.
-         "
-		/>
-		<ConstructionItem
-			image_url={'/images/Parts/Rulemanes.jpg'}
-			title="Rulemanes"
-			text="Uno más grande (de 3.8mm) que va en la base de la impresión de las palas, y otro más pequeño que va en la parte superior. Estos rulemanes se asientan en el eje, y con ellos se mantienen las palas. Pero no están fijados a este, siendo fácil de desmontar, lo cual ayuda a una fácil reparación y reemplazo de piezas."
-		/>
-		<ConstructionItem
-			image_url={'/images/Parts/Soporte.jpg'}
-			title="Soporte"
-			text="Para los motores hecho por nosotros con distintas partes metálicas."
-		/>
-		<span class="title text-3xl {text_color}">
-			Placa de desarrollo ESP32 con módulo WiFi integrado.</span
-		>
-		<span class="title text-3xl {text_color}"> Cables</span>
-		<ConstructionItem
-			image_url={null}
-			title=" Sensor de corriente LNA219"
-			text="Para monitorear tanto el voltaje generado por los motores como los wats."
-		/>
-		<ConstructionItem
-			image_url={null}
-			title="Módulo Step-up"
-			text="Para elevar el voltaje de la energía generada por los motores a un nivel apto para el uso."
-		/>
-		<ConstructionItem
-			image_url={null}
-			title="Regulador de voltaje casero"
-			text="
-				Compuesto por distintas piezas electrónicas como: Potenciómetro para regular su actuación.
-				Regulador de tensión lm317. Resistencias de 10k."
-		/>
-	</section>
 
-	<section class="flex w-full flex-col items-start justify-start gap-5" id="Software">
-		<div class="flex flex-row items-center justify-start gap-2">
-			<Icon icon="ph:arrow-down-thin" class="h-11 w-11 -rotate-45 transform {text_color}" />
-			<span class="title title p-2 text-5xl {text_color}"> Software </span>
-		</div>
-		<p class="paragraph {text_color}">
-			Podemos dividir el software desarrollado en dos bloques. El primer bloque sería el software
-			para controlar la anteriormente mencionada placa de desarrollo esp32, con el cual en los
-			primeros minutos de que este se haya activado relacionamos directamente el dispositivo físico
-			con la base de datos donde guardamos las mediciones de la energía generada. Esto lo logramos
-			por medio de una API propia de la cual se profundizará más adelante en el documento. Siguiendo
-			con la utilización de la placa, la programamos con el lenguaje C++, utilizando un entorno de
-			trabajo de PlatformIO, el cual nos facilitó la integración de dependencias, compilación de
-			código y pruebas de este. El segundo de estos bloques es el relacionado con la página web para
-			ver los datos del generador. Empezando a plantear esta parte del proyecto por el diseño, al
-			cual lo hicimos en Canva teniendo en cuenta el tener una buena navegación y una buena
-			presentación del producto. A la vez, empezamos a diseñar la base de datos que íbamos a
-			requerir para almacenar la información, y cómo íbamos a acceder a ella, pensando también en
-			las conexiones. Este bloque a la vez está dividido en el “Frontend” y el “Backend”, siendo la
-			primera la parte visual de la página, donde utilizamos principalmente la tecnología “Svelte”
-			junto con “Sveltekit” para llevar a cabo su desarrollo. Optamos por este framework (entorno de
-			trabajo) debido a que tiene una sintaxis simple y su funcionamiento es fácil de aprender,
-			siendo muy utilizada en el mundo laboral actual para el desarrollo de páginas web. Utilizamos
-			a su vez distintas librerías que nos facilitaron la implementación de componentes gráficos
-			para la representación de los datos, o recursos decorativos. En tanto al Backend, empezando a
-			hablar de la base de datos, esta está diseñada en Postgresql, un motor de base de datos
-			relacionales muy utilizado en la actualidad, como también la adaptamos a Mariadb, debido a que
-			este otro motor es el que utiliza el servidor de la institución. Y para relacionar la base de
-			datos con el resto de software creamos una API propia con el lenguaje de programación Python,
-			junto con librerías especializadas en la creación de estas APIs, conexión a bases de datos,
-			además de algunas que nos ayudaron a mantener un grado de seguridad tanto a la hora de
-			desarrollar la aplicación como también a la hora de guardar datos sensibles, como lo podría
-			ser el guardar la contraseña de las cuentas personales de los usuarios. Cabe añadir que además
-			de las tecnologías anteriormente mencionadas utilizadas íntegramente para la creación de
-			código, también utilizamos otras que nos facilitaron tareas o que nos ayudaron a mantener un
-			órden a la hora de programar. Tales como : Git, para llevar un versionado del proyecto de
-			forma correcta y ordenada, Github para almacenar el código y poder modificarlo tanto en
-			nuestras casas como en el aula sin perder ningún cambio, Vercel para hospedar la página web,
-			Render para desplegar nuestra API python en la nube y Neon como host para almacenar nuestra
-			base de datos y poder acceder a ella a través de la nube. Por último, este proyecto está
-			enfocado en ser un prototipo de una fuente de energía limpia y accesible, pero por el momento
-			este no genera la electricidad necesaria para alimentar todo un hogar o una habitación. El
-			enfoque que se debería adoptar para proyecto en un futuro debería de centrarse en asegurar una
-			capacidad de generación de energía más grande y eficiente a la hora de entregarla.
-		</p>
+		<a href="/armado_software.pdf">
+			<div
+				class="flex h-full w-full flex-row items-center justify-start gap-6 border-1 {$theme ==
+				'dark'
+					? 'border-white'
+					: 'border-black'} p-10"
+			>
+				<Icon icon="uiw:file-pdf" class="h-auto w-1/3 {text_color}" />
+				<span class="title text-5xl font-bold {text_color}">Haga click para descargar</span>
+			</div>
+		</a>
 	</section>
 
 	<section class="mt-5 flex flex-col gap-2" id="Centro de Control">
