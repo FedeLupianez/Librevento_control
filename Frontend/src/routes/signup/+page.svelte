@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { user } from '$lib/stores/user';
-	import { API_HOST } from '$lib/routes';
+	import { API_ROUTES } from '$lib/routes';
 
 	let name: string = '';
 	let email: string = '';
@@ -22,7 +22,7 @@
 		const sexo: Promise<string> = getGender(name);
 		console.log(email);
 
-		const response = await fetch(`${API_HOST}/usuario`, {
+		const response = await fetch(API_ROUTES.USER.CREATE, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

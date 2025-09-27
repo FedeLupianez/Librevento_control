@@ -1,18 +1,18 @@
 import { writable } from 'svelte/store';
 import type User from '../../types/user';
-import { API_HOST } from '$lib/routes';
+import { API_ROUTES } from '$lib/routes';
 
 export const user = writable<User | null>(null);
 
 export async function initializeUser() {
-   const response = await fetch(`${API_HOST}/usuario/auth`, {
+   const response = await fetch(API_ROUTES.USER.AUTH, {
       method: 'GET',
       credentials: 'include'
    })
 
    if (response.ok) {
       const data = await response.json();
-      const decripted = JSON.parse(atob(data.usuario));
+      const decripted = JSON.parse(atob(data.user));
       console.log("Usuario : ", decripted);
       user.set(decripted);
    } else {
@@ -21,7 +21,7 @@ export async function initializeUser() {
 }
 
 export async function logoutUser() {
-   const response = await fetch(`${API_HOST}/usuario/logout`, {
+   const response = await fetch(API_ROUTES.USER.LOGOUT, {
       method: 'GET',
       credentials: 'include'
    });

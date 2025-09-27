@@ -6,8 +6,8 @@ from mangum import Mangum
 import uvicorn
 import os
 
-# Carpeta de Routers
-from Routers import UsuarioRouter, GeneradorRouter, MedicionRouter
+# Routers folder
+from Routers import UserRouter, GeneratorRouter, MeasurementRouter
 
 
 Config: dict = get_config()
@@ -26,10 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Agrego los routers :
-app.include_router(UsuarioRouter.router)
-app.include_router(GeneradorRouter.router)
-app.include_router(MedicionRouter.router)
+# Add the routers:
+app.include_router(UserRouter.router)
+app.include_router(GeneratorRouter.router)
+app.include_router(MeasurementRouter.router)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))

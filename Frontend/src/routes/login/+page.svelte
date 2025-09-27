@@ -2,7 +2,7 @@
 	import { user } from '$lib/stores/user';
 	import { fade } from 'svelte/transition';
 	import Icon from '@iconify/svelte';
-	import { API_HOST } from '$lib/routes';
+	import { API_ROUTES } from '$lib/routes';
 	import { ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
 	import { theme } from '$lib/stores/theme';
@@ -15,19 +15,19 @@
 
 	const login = async () => {
 		load = true;
-		const response = await fetch(`${API_HOST}/usuario/login`, {
+		const response = await fetch(API_ROUTES.USER.LOGIN, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ email_usuario: btoa(email), clave: btoa(password) }),
+			body: JSON.stringify({ user_email: btoa(email), password: btoa(password) }),
 			credentials: 'include'
 		});
 		load = false;
 		if (response.ok) {
 			const data = await response.json();
 			console.log('usuario logueado');
-			user.set(data.usuario);
+			user.set(data.user);
 			show_error = false;
 			goto(ROUTES.VOLTAGE); // Redireccionar automáticamente
 		} else {

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Header from '../../components/Header.svelte';
-	import { user } from '$lib/stores/user';
-	import { API_HOST } from '$lib/routes';
+	import { API_ROUTES } from '$lib/routes';
 
 	let city: string = '';
 	let street: string = '';
@@ -20,7 +19,7 @@
 
 	const handleFormSubmit = async () => {
 		try {
-			const response = await fetch(`${API_HOST}/generador`, {
+			const response = await fetch(API_ROUTES.GENERATOR.CREATE, {
 				credentials: 'include',
 				method: 'POST',
 				headers: {

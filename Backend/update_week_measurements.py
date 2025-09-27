@@ -28,7 +28,7 @@ def progress_bar(current: int, total: int):
     print(actual)
 
 
-print(f"Intentando conexión con : {ssh_user}@{ssh_host} | pwd : {ssh_password}")
+print(f"Attempting connection with: {ssh_user}@{ssh_host} | pwd: {ssh_password}")
 with SSHTunnelForwarder(
     (ssh_host, ssh_port),
     ssh_username=ssh_user,
@@ -42,14 +42,14 @@ with SSHTunnelForwarder(
             echo=True,
         )
 
-        actual_date = datetime.datetime.now()
-        monday_date = actual_date - datetime.timedelta(days=actual_date.weekday())
-        sunday_date = actual_date + datetime.timedelta((7 - actual_date.weekday()))
+        current_date = datetime.datetime.now()
+        monday_date = current_date - datetime.timedelta(days=current_date.weekday())
+        sunday_date = current_date + datetime.timedelta((7 - current_date.weekday()))
 
-        generators_cant = 3
+        generators_count = 3
 
         with Session(engine) as session:
-            for i in range(generators_cant):
+            for i in range(generators_count):
                 for j in range(7):
                     date = monday_date + datetime.timedelta(days=j)
                     for m in range(24):
@@ -66,7 +66,7 @@ with SSHTunnelForwarder(
                         )
                         session.add(temp_table)
                         os.system("clear")
-                        print(f"Generador : {i} | fecha : {date} | hora : {m}")
+                        print(f"Generator: {i} | date: {date} | time: {m}")
                         total = (i + 1) * 7 * 24
                         current = (i + 1) * (j + 1) * (m + 1)
                         progress_bar(current, total)

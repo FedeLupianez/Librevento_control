@@ -23,9 +23,9 @@ Config = dotenv_values("school.env")
 engine: Optional[Engine] = None
 tunnel: Optional[SSHTunnelForwarder] = None
 
-# Verifico si la configuración tiene algo de SSH
+# I check if the configuration has any SSH
 if Config.get("SSH_USER", None) is not None:
-    # Si es así, creo un tunel ssh hacia el servidor del colegio
+    # If so, I create an ssh tunnel to the school server
     assert Config["SSH_PORT"] is not None
     assert Config["REMOTE_BIND_PORT"] is not None
     assert Config["LOCAL_BIND_HOST"] is not None
@@ -40,26 +40,26 @@ if Config.get("SSH_USER", None) is not None:
         ),
         local_bind_address=(Config["LOCAL_BIND_HOST"], int(Config["LOCAL_BIND_PORT"])),
     )
-    tunnel.start()  # Inicio el tunel, el cual no se cierra hasta que lo diga
-    print("Tunel ssh inicializado")
+    tunnel.start()  # I start the tunnel, which does not close until I say so
+    print("SSH tunnel initialized")
     engine = create_engine(
         _build_database_url(Config["LOCAL_BIND_HOST"], port=tunnel.local_bind_port)
     )
 else:
-    # Si no tiene nada de ssh, creo el engine para la configuración actual
+    # If it has nothing of ssh, I create the engine for the current configuration
     assert Config["HOST"] is not None
     assert Config["LOCAL_PORT"] is not None
     engine = create_engine(
         _build_database_url(Config["HOST"], port=int(Config["LOCAL_PORT"]))
-    )  # motor para la base de datos
+    )  # database engine
 
-# Intento conectar la base de datos  para ver si funciona
+# I try to connect the database to see if it works
 try:
     with engine.connect() as connection:
         pass
-    print("✅ Base de datos conectada exitosamente")
+    print("✅ Database connected successfully")
 except OperationalError as e:
-    print("❌Error al conectar la base de datos")
+    print("❌Error connecting to the database")
     print("Details : ", e)
     if tunnel:
         tunnel.stop()
@@ -71,7 +71,7 @@ def get_config() -> dict[str, str | None]:
 
 def get_engine() -> Engine:
     if not engine:
-        raise RuntimeError("Motor no inicializado")
+        raise RuntimeError("Engine not initialized")
     return engine
 
 

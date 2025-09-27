@@ -26,7 +26,7 @@
 			female: 'Bienvenida',
 			unknown: 'Hola'
 		};
-		const result = `${sex[$user.sexo]},`;
+		const result = `${sex[$user.gender]},`;
 		return result;
 	}
 
@@ -64,7 +64,7 @@
 					<span class={$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'}>
 						{title},
 					</span>
-					<span class="text-[#c2b280]">{$user.nombre}</span>
+					<span class="text-[#c2b280]">{$user.name}</span>
 				{/if}
 			</h1>
 
@@ -161,7 +161,7 @@
 					<span class="text-2xl {$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'}">
 						{title}
 					</span>
-					<span class="text-2xl text-[#c2b280]">{$user.nombre}</span>
+					<span class="text-2xl text-[#c2b280]">{$user.name}</span>
 				{/if}
 			</h1>
 			<div class="container flex flex-col items-center justify-start gap-4">

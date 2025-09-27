@@ -1,6 +1,6 @@
 export default interface User {
-   nombre: string;
-   sexo: string;
-   foto_perfil: string;
+   name: string;
+   gender: string;
+   profile_picture: string;
    email: string;
 }

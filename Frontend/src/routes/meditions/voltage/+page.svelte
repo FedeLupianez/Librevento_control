@@ -3,7 +3,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { user } from '$lib/stores/user';
 	import { page } from '$app/stores';
-	import { API_HOST, ROUTES } from '$lib/routes';
+	import { ROUTES, API_ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
 	import Graphic from './components/Graphic.svelte';
 	import { theme } from '$lib/stores/theme';
@@ -23,7 +23,7 @@
 	let allMacs: string[] = [];
 
 	async function getMacAddress() {
-		const response = await fetch(`${API_HOST}/generador/macAddress`, {
+		const response = await fetch(API_ROUTES.GENERATOR.GET_MACADDRESS, {
 			method: 'GET',
 			credentials: 'include'
 		});

@@ -11,7 +11,7 @@
 	<button class="relative z-20 cursor-pointer" on:click={() => (showProfile = !showProfile)}>
 		{#if $user}
 			<img
-				src={$user.foto_perfil}
+				src={$user.profile_picture}
 				alt="Foto de perfil"
 				class="h-10 min-h-10 w-10 min-w-10 rounded-full"
 			/>
@@ -33,7 +33,7 @@
 				{#if $user}
 					<div class="flex flex-col items-center justify-center gap-1">
 						<span class="text-center {$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'} "
-							>{$user.nombre}</span
+							>{$user.name}</span
 						>
 						<span
 							class="{$theme === 'dark' ? 'text-white' : 'text[#2f3e2f]'} text-center text-[1rem]"

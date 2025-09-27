@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import Efficent_day from './Efficent_day.svelte';
 	import { theme } from '$lib/stores/theme';
-	import { API_HOST } from '$lib/routes';
+	import { API_ROUTES } from '$lib/routes';
 	import { onMount } from 'svelte';
 
 	export let filter: string | null = '';
@@ -57,9 +57,9 @@
 	};
 
 	async function getData(mac_address: string) {
-		let route = `${API_HOST}/medicion/obtener_voltajes?macAddress=${mac_address}&fecha_minima=${min_limit_day}&fecha_maxima=${actual_date}`;
+		let route = `${API_ROUTES.MEASUREMENT.VOLTAGES}?macAddress=${mac_address}&min_date=${min_limit_day}&max_date=${actual_date}`;
 		if (filter) {
-			route = route + `&filter=${filter}`;
+			route = route + `&filter_by=${filter}`;
 		}
 		const response = await fetch(route, { method: 'GET', credentials: 'include' });
 		const result = await response.json();
@@ -69,6 +69,7 @@
 			return false;
 		}
 		loading_error = '';
+		console.log(result.data);
 		return result.data;
 	}
 
@@ -183,7 +184,11 @@
 		</div>
 	</div>
 	{#if efficent_date.date}
-		<div class="flex h-full {show_mobile ? 'w-full' : 'w-1/2'} flex-col items-center justify-between gap-5">
+		<div
+			class="flex h-full {show_mobile
+				? 'w-full'
+				: 'w-1/2'} flex-col items-center justify-between gap-5"
+		>
 			<Efficent_day date={efficent_date.date} />
 			<span class={$theme === 'dark' ? 'text-white' : ''}>Más información</span>
 		</div>
