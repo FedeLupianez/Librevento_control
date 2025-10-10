@@ -56,7 +56,9 @@
 	</div>
 </section>
 
-<main class="mt-96 flex min-h-screen flex-col items-center justify-center gap-9 p-20">
+<main
+	class="mt-96 flex min-h-screen flex-col items-center justify-center gap-9 overflow-y-auto scroll-smooth p-20"
+>
 	<section class="flex flex-row gap-5">
 		<div class="flex w-1/2 flex-col items-center justify-center gap-5">
 			<span class="paragraph w-full {text_color}">

@@ -25,6 +25,8 @@ export const API_ROUTES = {
    MEASUREMENT: {
       VOLTAGES: `${API_HOST}/measurement/get_voltages`,
       CONSUMPTIONS: `${API_HOST}/measurement/get_consumptions`,
+      ALL_VOLTAGES: `${API_HOST}/measurement/get_all_voltages`,
+      ALL_CONSUMPTIONS: `${API_HOST}/measurement/get_all_consumptions`
    },
    GENERATOR: {
       CREATE: `${API_HOST}/generator/create`,

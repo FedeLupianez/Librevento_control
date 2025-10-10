@@ -131,16 +131,23 @@ async def get_user(request: Request, session: Session = Depends(get_session)):
 
 
 @router.get("/get_id")
-async def get_id(request: Request, session: Session = Depends(get_session)):
-    cookie_value = request.cookies.get("librevento_user")
-    if not cookie_value:
-        raise HTTPException(status_code=404, detail="User not logged in")
+async def get_id(
+    request: Request, session: Session = Depends(get_session), email: str = ""
+):
+    result: str = ""
+    if not email:
+        cookie_value = request.cookies.get("librevento_user")
+        if not cookie_value:
+            raise HTTPException(status_code=404, detail="User not logged in")
 
-    decoded_json = base64.b64decode(cookie_value).decode("utf-8")
-    user_data = loads(decoded_json)
-    email = user_data["email"]
-
-    return UserService.get_id(session, user_email=email)
+        decoded_json = base64.b64decode(cookie_value).decode("utf-8")
+        user_data = loads(decoded_json)
+        user_email: str | None = user_data.get("email", None)
+        if user_email:
+            result = user_data["email"]
+    else:
+        result = email
+    return UserService.get_id(session, user_email=result)
 
 
 @router.delete("/delete")
