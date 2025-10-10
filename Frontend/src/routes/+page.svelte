@@ -14,13 +14,13 @@
 <main class="flex min-h-screen flex-col items-center">
 	{#if !$user}
 		<div class="flex h-100 w-full flex-col items-center justify-center">
-			<h1 class="text-5xl font-bold">
+			<h1 class="text-5xl font-bold text-[#7A9660]">
 				<a href={`${ROUTES.USER.LOGIN}`}>
-					<span class="text-[#7A9660]">Inicia Sesión</span>
+					<span>Inicia Sesión</span>
 				</a>
 				o
 				<a href={`${ROUTES.USER.SIGN_UP}`}>
-					<span class="text-[#7A9660]">Crear una Cuenta</span>
+					<span>Crear una Cuenta</span>
 				</a>
 			</h1>
 		</div>
