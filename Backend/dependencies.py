@@ -20,6 +20,11 @@ def _build_database_url(host: str, port: int = 5432) -> str:
 
 # --- Dynamic Environment Loading ---
 Config = dotenv_values("school.env")
+Config["COOKIE_DOMAIN"] = (
+    "http://localhost:8000"
+    if Config["ENVIRONMENT"] == "dev"
+    else Config["COOKIE_DOMAIN"]
+)
 engine: Optional[Engine] = None
 tunnel: Optional[SSHTunnelForwarder] = None
 
@@ -78,3 +83,4 @@ def get_engine() -> Engine:
 def get_session():
     with Session(engine) as session:
         yield session
+
