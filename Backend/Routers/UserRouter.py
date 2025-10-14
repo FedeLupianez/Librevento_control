@@ -26,9 +26,8 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         max_age=max_age,
         httponly=True,
         secure=IS_PROD,
-        samesite="none" if IS_PROD else "lax",
+        samesite="none",
         path="/",
-        domain=COOKIE_DOMAIN,
     )
 
     # User data en el frontend
@@ -40,9 +39,8 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         max_age=max_age,
         httponly=False,
         secure=IS_PROD,
-        samesite="none" if IS_PROD else "lax",
+        samesite="none",
         path="/",
-        domain=COOKIE_DOMAIN,
     )
 
 

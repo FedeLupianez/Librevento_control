@@ -7,7 +7,7 @@ APP_MODULE=main:app
 
 back :
 	@echo "Levantando Backend"
-	@cd $(BACKEND_DIR) && $(UVICORN) $(APP_MODULE) --reload
+	@cd $(BACKEND_DIR) && $(UVICORN) $(APP_MODULE) --host 0.0.0.0 --reload
 
 front:
 	@echo "Levantando Frontend"
