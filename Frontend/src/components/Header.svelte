@@ -32,12 +32,11 @@
 
 	onMount(() => {
 		unsubscribe = user.subscribe(async ($user) => {
-			if (!$user) return;
-			setTitle();
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
-
 			mediaQueryList.addEventListener('change', updateShow);
+
+			setTitle();
 
 			return () => {
 				mediaQueryList.removeEventListener('change', updateShow);
