@@ -25,7 +25,7 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         value=token_id,
         max_age=max_age,
         httponly=True,
-        secure=IS_PROD,
+        secure=True,
         samesite="none",
         path="/",
     )
@@ -38,7 +38,7 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         value=base64_data,
         max_age=max_age,
         httponly=False,
-        secure=IS_PROD,
+        secure=True,
         samesite="none",
         path="/",
     )
