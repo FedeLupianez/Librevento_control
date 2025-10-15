@@ -68,9 +68,13 @@ def config_macAddress(session: Session, id_user: int, macAddress: str) -> dict:
         macAddress (str): device macAddress
     """
     try:
+        generator = select(GENERADOR).where(GENERADOR.id_usuario == id_user).first()
+        if not (generator):
+            raise HTTPException(status_code=404, detail="The user has no generators")
+
         query = (
             update(GENERADOR)
-            .where(GENERADOR.id_usuario == id_user)
+            .where(GENERADOR.id_generador == generator.id_generador)
             .values(mac_address=macAddress)
         )
     except Exception:
