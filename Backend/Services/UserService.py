@@ -75,11 +75,11 @@ def get_id(session: Session, user_email: str) -> dict:
         session (sqlmodel.Session): connection to the database
         user_email (str): email of the user to get
     """
-    query = select(USUARIO.token_id).where(USUARIO.email == user_email)
-    token = session.exec(query).first()
-    if not (token):
+    query = select(USUARIO.id_usuario).where(USUARIO.email == user_email)
+    id = session.exec(query).first()
+    if not (id):
         raise HTTPException(status_code=404, detail="user not found")
-    return {"id": token}
+    return {"id": id}
 
 
 def login(session: Session, user_email: str, password: str) -> dict:
