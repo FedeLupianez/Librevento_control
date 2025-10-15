@@ -38,13 +38,13 @@
 	}
 
 	onMount(async () => {
-		if (!$user) {
-			is_loading_macs = false;
-			goto(`${ROUTES.HOME}`);
-			console.log('redirigiendo a home');
-			return;
-		}
 		unsubscribe = user.subscribe(($user) => {
+			if (!$user) {
+				is_loading_macs = false;
+				goto(`${ROUTES.HOME}`);
+				console.log('redirigiendo a home');
+				return;
+			}
 			updateMacs();
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
