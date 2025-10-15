@@ -107,10 +107,10 @@ async def create_user(
         print("new user: ", newUser)
 
         temp = {
-            "name": newUser["nombre"],
-            "gender": newUser["sexo"],
-            "email": newUser["email"],
-            "profile_picture": newUser["foto_perfil"],
+            "name": user.nombre,
+            "gender": user.sexo,
+            "email": user.email,
+            "profile_picture": user.foto_perfil,
         }
         max_age = 60 * 60 * 24 * 7  # 7 days
 
