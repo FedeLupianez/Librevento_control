@@ -7,7 +7,6 @@
 	import { goto } from '$app/navigation';
 	import Graphic from './components/Graphic.svelte';
 	import { theme } from '$lib/stores/theme';
-	import {initializeUser} from '$lib/stores/user';
 
 	let filter_to_aply: string | null = 'day';
 	let is_loading_macs: boolean = false;
@@ -39,12 +38,9 @@
 	}
 
 	onMount(async () => {
-		await initializeUser();
 		unsubscribe = user.subscribe(($user) => {
 			if (!$user) {
 				is_loading_macs = false;
-				goto(`${ROUTES.HOME}`);
-				console.log('redirigiendo a home');
 				return;
 			}
 			updateMacs();

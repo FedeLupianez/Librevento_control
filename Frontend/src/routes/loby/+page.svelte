@@ -50,7 +50,15 @@
 					window.location.href = ROUTES.USER.LOGIN;
 				}}
 			>
-				Iniciar sesion
+				Iniciar sesión
+			</button>
+			<button
+				class="rounded-none border-2 border-white px-4 py-2 hover:cursor-pointer hover:bg-white hover:text-black"
+				on:click={() => {
+					window.location.href = ROUTES.VOLTAGE;
+				}}
+			>
+				Centro
 			</button>
 		</div>
 	</div>
@@ -67,7 +75,7 @@
 				desechos.
 			</p>
 			<p class="w-full">
-				Librevento es una forma facil y economica de implementar este estilo de vida, con un
+				Librevento es una forma fácil y económica de implementar este estilo de vida, con un
 				sencillo armado y control total de lo generado.
 			</p>
 		</div>
@@ -96,7 +104,7 @@
 			</p>
 		</div>
 
-		<a href="/armado_software.pdf">
+		<a href="/armado_software.pdf" target="_blank">
 			<div
 				class="flex h-full w-full flex-row items-center justify-start gap-6 border-1 {$theme ==
 				'dark'

@@ -3,6 +3,13 @@
 	import Icon from '@iconify/svelte';
 	import { ROUTES } from '$lib/routes';
 	import { theme } from '$lib/stores/theme';
+	import { goto } from '$app/navigation';
+
+	const log_out = () => {
+		logoutUser();
+		showProfile = false;
+		goto(`${ROUTES.HOME}`);
+	};
 
 	let showProfile: boolean = false;
 </script>
@@ -57,7 +64,7 @@
 
 					<button
 						class="flex w-full items-start justify-center gap-5 rounded-2xl px-4 py-2 font-bold text-white hover:bg-[#b4b1b1]"
-						on:click={logoutUser}
+						on:click={log_out}
 					>
 						<Icon icon="bx:log-out" class="h-5 w-5" />
 						<span class="rounded-2xl text-center text-[#c85d4d]">Cerrar Sesión</span>

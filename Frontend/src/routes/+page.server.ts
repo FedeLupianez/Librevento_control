@@ -1,8 +1,9 @@
 import { redirect } from "@sveltejs/kit";
-import { user } from '$lib/stores/user';
+import type { PageServerLoad } from "./$types";
 
-export function load() {
-   if (user != null) {
+export const load: PageServerLoad = ({ cookies }) => {
+   const user = cookies.get("librevento_user")
+   if (user) {
       throw redirect(307, '/meditions/voltage')
    }
    throw redirect(307, '/loby')
