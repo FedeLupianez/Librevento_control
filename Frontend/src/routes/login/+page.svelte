@@ -29,7 +29,7 @@
 			console.log('usuario logueado');
 			user.set(data.user);
 			show_error = false;
-			goto(ROUTES.VOLTAGE); // Redireccionar automáticamente
+			goto(`${ROUTES.VOLTAGE}`); // Redireccionar automáticamente
 		} else {
 			console.log('Error al iniciar sesion');
 			show_error = true;

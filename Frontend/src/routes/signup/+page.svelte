@@ -119,7 +119,13 @@
 					view_gender_menu = !view_gender_menu;
 				}} class="w-full text-start px-4 py-2">
 				{#if gender}
-				{gender}
+					{#if gender == "male"}
+						Hombre
+					{:else if gender == "female"}
+						Mujer
+					{:else}
+						No Binario
+					{/if}
 				{:else}
 				Género
 				{/if}
