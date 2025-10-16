@@ -16,6 +16,7 @@ export async function initializeUser() {
       console.log("Usuario : ", decripted);
       user.set(decripted);
    } else {
+      console.log('No se pudo obtener el usuario');
       user.set(null)
    }
 }

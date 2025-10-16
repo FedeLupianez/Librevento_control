@@ -1,5 +1,5 @@
 export const ROUTES = {
-   HOME: '/',
+   HOME: '/loby',
    USER: {
       LOGIN: '/login',
       SIGN_UP: '/signup'
@@ -11,6 +11,7 @@ export const ROUTES = {
 }
 
 export const API_HOST = import.meta.env.VITE_API_HOST;
+// export const API_HOST = 'http://localhost:8000';
 
 export const API_ROUTES = {
    USER: {
@@ -25,6 +26,8 @@ export const API_ROUTES = {
    MEASUREMENT: {
       VOLTAGES: `${API_HOST}/measurement/get_voltages`,
       CONSUMPTIONS: `${API_HOST}/measurement/get_consumptions`,
+      ALL_VOLTAGES: `${API_HOST}/measurement/get_all_voltages`,
+      ALL_CONSUMPTIONS: `${API_HOST}/measurement/get_all_consumptions`
    },
    GENERATOR: {
       CREATE: `${API_HOST}/generator/create`,

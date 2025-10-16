@@ -60,7 +60,8 @@ async def get_macAddress(request: Request, session: Session = Depends(get_sessio
 async def config_macAddress(
     user_email: str, macAddress: str, session: Session = Depends(get_session)
 ):
-    id_user = UserService.get_id(session, user_email).get("id", None)
-    if not id_user:
+    user_id = UserService.get_id(session, user_email).get("id", None)
+    print(user_id)
+    if not user_id:
         raise HTTPException(status_code=404, detail="User not found")
-    return GeneratorService.config_macAddress(session, id_user, macAddress)
+    return GeneratorService.config_macAddress(session, user_id, macAddress)

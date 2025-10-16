@@ -6,6 +6,7 @@
 	import { ROUTES } from '$lib/routes';
 	import { goto } from '$app/navigation';
 	import { theme } from '$lib/stores/theme';
+	import { initializeUser } from '$lib/stores/user';
 
 	let email: string = '';
 	let password: string = '';
@@ -30,6 +31,7 @@
 			user.set(data.user);
 			show_error = false;
 			goto(`${ROUTES.VOLTAGE}`); // Redireccionar automáticamente
+			await initializeUser();
 		} else {
 			console.log('Error al iniciar sesion');
 			show_error = true;

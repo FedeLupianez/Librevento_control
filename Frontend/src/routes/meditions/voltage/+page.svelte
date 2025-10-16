@@ -79,24 +79,24 @@
 <main
 	class={`flex min-h-screen w-full flex-col justify-start gap-3 ${showMobile ? '' : 'px-20'} py-5`}
 >
-	<div class={`flex flex-row items-start ${showMobile ? 'justify-center' : 'justify-between'}`}>
-		<span class="text-2xl font-bold {$theme === 'dark' ? 'text-white' : ''}"
-			>¿Cómo estuvo tu aerogenerador esta semana?</span
-		>
-		<ul class="pl-5">
+	<div
+		class={`flex flex-row items-start ${showMobile ? 'justify-center' : 'justify-between'} ${$theme === 'dark' ? 'text-white' : 'text-black'}`}
+	>
+		<span class="text-2xl font-bold">¿Cómo estuvo tu aerogenerador esta semana?</span>
+		<ul class="pl-5 {$theme === 'dark' ? 'text-white' : ''}">
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#7A9660]">●</span>
-				<span class={$theme === 'dark' ? 'text-white' : ''}>Eficiente</span>
+				<span>Eficiente</span>
 			</li>
 
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#ebdaa8]">●</span>
-				<span class={$theme === 'dark' ? 'text-white' : ''}>Medianamente</span>
+				<span>Medianamente</span>
 			</li>
 
 			<li class="flex flex-row items-start gap-2">
 				<span class="text-3xl leading-none text-[#c85d4d]">●</span>
-				<span class={$theme === 'dark' ? 'text-white' : ''}>Poco</span>
+				<span>Poco</span>
 			</li>
 		</ul>
 	</div>

@@ -153,6 +153,24 @@ def get_voltages(
     }
 
 
+def get_all_voltages(session: Session, user_id: int, min_date: str, max_date: str):
+    all_generators = session.exec(
+        select(GENERADOR.mac_address).where(GENERADOR.id_usuario == user_id)
+    ).all()
+    if not all_generators:
+        raise HTTPException(status_code=404, detail="Generators not found")
+    all_voltages = [[] for generator in all_generators]
+    for mac in all_generators:
+        if mac:
+            data: dict = get_data(
+                session, mac, "day", min_date, max_date, data_type="voltage"
+            )
+            all_voltages.extend(data)
+
+    all_voltages = format_data(data=all_voltages, filter_by="day", data_type="voltage")
+    return {"detail": "All voltages per date found", "data": all_voltages}
+
+
 def get_consumptions(
     session: Session,
     mac_address: str | None = None,
@@ -182,7 +200,9 @@ def get_consumptions(
             detail="No voltages found for the specified dates",
         )
 
-    consumptions = format_data(data=result, filter_by=filter_by, data_type="consumption")
+    consumptions = format_data(
+        data=result, filter_by=filter_by, data_type="consumption"
+    )
 
     return {
         "detail": "Average voltages per date found",

@@ -1,4 +1,4 @@
-from sqlmodel import Session, select, update
+from sqlmodel import Session, select, update, desc
 from sqlalchemy.exc import IntegrityError, OperationalError
 from Tablas import GENERADOR
 from fastapi import HTTPException
@@ -67,14 +67,17 @@ def config_macAddress(session: Session, id_user: int, macAddress: str) -> dict:
         id_user (int): user id
         macAddress (str): device macAddress
     """
-    try:
-        query = (
-            update(GENERADOR)
-            .where(GENERADOR.id_usuario == id_user)
-            .values(mac_address=macAddress)
-        )
-    except Exception:
+    query_generator = select(GENERADOR).where(GENERADOR.id_usuario == id_user).order_by(desc(GENERADOR.id_generador))
+    generator = session.exec(query_generator).first()
+    print(generator)
+    if not (generator):
         raise HTTPException(status_code=404, detail="The user has no generators")
+
+    query = (
+        update(GENERADOR)
+        .where(GENERADOR.id_generador == generator.id_generador)
+        .values(mac_address=macAddress)
+    )
     session.exec(query)
     session.commit()
     return {"message": "macAddress changed"}

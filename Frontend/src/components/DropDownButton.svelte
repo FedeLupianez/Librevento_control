@@ -10,11 +10,13 @@
 	}
 </script>
 
-<div class={`group relative ${view_menu ? 'z-30' : ''}`}>
+<div
+	class={`group relative ${view_menu ? 'z-30' : ''} ${
+		$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'
+	}`}
+>
 	<button
-		class="relative z-20 flex cursor-pointer items-center gap-1 font-bold {$theme === 'dark'
-			? 'text-white'
-			: 'text-[#2f3e2f]'}"
+		class="relative z-20 flex cursor-pointer items-center gap-1 font-bold"
 		on:click={() => toggle()}
 		on:mouseenter={() => {
 			if (mode == 'hover') view_menu = true;
@@ -24,10 +26,7 @@
 		}}
 	>
 		{text}
-		<Icon
-			icon="fe:arrow-down"
-			class="h-5 w-5 font-bold text-black {$theme === 'dark' ? 'text-white' : ''}"
-		/>
+		<Icon icon="fe:arrow-down" class="h-5 w-5 font-bold " />
 	</button>
 
 	{#if mode == 'button'}

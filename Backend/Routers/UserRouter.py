@@ -25,8 +25,8 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         value=token_id,
         max_age=max_age,
         httponly=True,
-        secure=IS_PROD,
-        samesite="none" if IS_PROD else "lax",
+        secure=True,
+        samesite="none",
         path="/",
     )
 
@@ -38,8 +38,8 @@ def set_all_cookies(response: Response, token_id: str, user_data: dict, max_age:
         value=base64_data,
         max_age=max_age,
         httponly=False,
-        secure=IS_PROD,
-        samesite="none" if IS_PROD else "lax",
+        secure=True,
+        samesite="none",
         path="/",
     )
 
@@ -107,10 +107,10 @@ async def create_user(
         print("new user: ", newUser)
 
         temp = {
-            "name": newUser["nombre"],
-            "gender": newUser["sexo"],
-            "email": newUser["email"],
-            "profile_picture": newUser["foto_perfil"],
+            "name": user.nombre,
+            "gender": user.sexo,
+            "email": user.email,
+            "profile_picture": user.foto_perfil,
         }
         max_age = 60 * 60 * 24 * 7  # 7 days
 
@@ -131,16 +131,23 @@ async def get_user(request: Request, session: Session = Depends(get_session)):
 
 
 @router.get("/get_id")
-async def get_id(request: Request, session: Session = Depends(get_session)):
-    cookie_value = request.cookies.get("librevento_user")
-    if not cookie_value:
-        raise HTTPException(status_code=404, detail="User not logged in")
+async def get_id(
+    request: Request, session: Session = Depends(get_session), email: str = ""
+):
+    result: str = ""
+    if not email:
+        cookie_value = request.cookies.get("librevento_user")
+        if not cookie_value:
+            raise HTTPException(status_code=404, detail="User not logged in")
 
-    decoded_json = base64.b64decode(cookie_value).decode("utf-8")
-    user_data = loads(decoded_json)
-    email = user_data["email"]
-
-    return UserService.get_id(session, user_email=email)
+        decoded_json = base64.b64decode(cookie_value).decode("utf-8")
+        user_data = loads(decoded_json)
+        user_email: str | None = user_data.get("email", None)
+        if user_email:
+            result = user_data["email"]
+    else:
+        result = email
+    return UserService.get_id(session, user_email=result)
 
 
 @router.delete("/delete")

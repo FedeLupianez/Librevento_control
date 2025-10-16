@@ -32,12 +32,11 @@
 
 	onMount(() => {
 		unsubscribe = user.subscribe(async ($user) => {
-			if (!$user) return;
-			setTitle();
 			mediaQueryList = window.matchMedia('(max-width: 750px)');
 			showMobile = mediaQueryList.matches;
-
 			mediaQueryList.addEventListener('change', updateShow);
+
+			setTitle();
 
 			return () => {
 				mediaQueryList.removeEventListener('change', updateShow);
@@ -56,15 +55,16 @@
 			? 'dark:bg-[#141414]'
 			: 'bg-[#f8f8f3]'}"
 	>
-		<div class="flex flex-row items-center justify-between px-20 py-3">
+		<div class="flex flex-row items-center justify-between px-20 py-2">
 			<h1 class="mr-15 items-center text-center">
 				{#if !$user}
-					<span class={$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'}>{title}</span>
+					<span class="{$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'} text-6xl">{title}</span
+					>
 				{:else}
-					<span class={$theme === 'dark' ? 'text-white' : 'text-[#2f3e2f]'}>
+					<span class="{$theme === 'dark' ? 'text-white' : ' text-[#2f3e2f]'} text-6xl">
 						{title},
 					</span>
-					<span class="text-[#c2b280]">{$user.name}</span>
+					<span class="text-6xl text-[#c2b280]">{$user.name}</span>
 				{/if}
 			</h1>
 
