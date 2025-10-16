@@ -113,7 +113,6 @@
 				required
 			/>
 
-<<<<<<< HEAD
 			<div class="group relative border justify-start {$theme == 'dark' ? 'border-white' : 'border-gray-800'}">
 				<button on:click={() => {
 					view_gender_menu = !view_gender_menu;
@@ -129,23 +128,7 @@
 				{:else}
 				Género
 				{/if}
-=======
-			<div
-				class="group relative justify-start border
-					{$theme == 'dark' ? 'border-[#ffffff] text-[#ffffff]' : 'border-gray-800 text-[#141414]'}"
-			>
-				<button
-					on:click={() => {
-						view_gender_menu = !view_gender_menu;
-					}}
-					class="w-full cursor-pointer px-4 py-2 text-start hover:bg-gray-800 hover:text-white"
-				>
-					{#if gender}
-						{gender}
-					{:else}
-						Género
-					{/if}
->>>>>>> 8afb2cb53d5e3b17c468701dc727d835267f6064
+			
 				</button>
 
 				{#if view_gender_menu}
