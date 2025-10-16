@@ -9,7 +9,7 @@
 
 	$: text_color = $theme === 'dark' ? 'text-white' : 'text-black';
 
-	const sections = ['Armado', 'Software', 'Centro de Control', 'Repositorios', '¿Quienes somos?'];
+	const sections = ['Armado y Software', 'Centro de Control', 'Repositorios', '¿Quienes somos?'];
 	let is_scrolled = false;
 	onMount(() => {
 		window.addEventListener('scroll', () => {
@@ -33,30 +33,26 @@
 		</button>
 	</a>
 {/if}
-<section class="absolute top-0 left-0 mb-5 flex h-96 w-screen items-center overflow-hidden">
-	<img src="/images/Fondo_loby.png" alt="imagen fondo" class="aspect-video w-screen" />
-	<div class="absolute right-15 bottom-5 flex flex-col">
-		<span class="title text-9xl text-white">Librevento</span>
-		<div class="flex flex-row items-center justify-end gap-5 px-3 text-white">
-			<button
-				class=" rounded-none border-2 border-white px-4 py-2 hover:cursor-pointer hover:bg-white hover:text-black"
-				on:click={() => {
-					window.location.href = ROUTES.USER.SIGN_UP;
-				}}>Crear Cuenta</button
-			>
+<section class="absolute top-0 left-0 flex h-auto max-h-96 w-screen items-center overflow-hidden">
+	<img src="/images/Fondo_loby.png" alt="imagen fondo" class="h-auto w-full object-cover" />
+	<div class="absolute right-5 bottom-5 flex flex-col items-end text-right">
+		<span class="title text-6xl text-white sm:text-8xl md:text-9xl">Librevento</span>
+		<div class="mt-2 flex flex-row flex-wrap justify-end gap-3 text-white">
 			<button
 				class="rounded-none border-2 border-white px-4 py-2 hover:cursor-pointer hover:bg-white hover:text-black"
-				on:click={() => {
-					window.location.href = ROUTES.USER.LOGIN;
-				}}
+				on:click={() => (window.location.href = ROUTES.USER.SIGN_UP)}
+			>
+				Crear Cuenta
+			</button>
+			<button
+				class="rounded-none border-2 border-white px-4 py-2 hover:cursor-pointer hover:bg-white hover:text-black"
+				on:click={() => (window.location.href = ROUTES.USER.LOGIN)}
 			>
 				Iniciar sesión
 			</button>
 			<button
 				class="rounded-none border-2 border-white px-4 py-2 hover:cursor-pointer hover:bg-white hover:text-black"
-				on:click={() => {
-					window.location.href = ROUTES.VOLTAGE;
-				}}
+				on:click={() => (window.location.href = ROUTES.VOLTAGE)}
 			>
 				Centro
 			</button>
@@ -65,7 +61,7 @@
 </section>
 
 <main
-	class="mt-96 flex min-h-screen flex-col items-center justify-center gap-9 overflow-y-auto scroll-smooth p-20"
+	class="mt-96 flex min-h-screen flex-col items-center justify-center gap-24 overflow-y-auto scroll-smooth p-10 md:p-20"
 >
 	<section class="flex flex-row gap-5">
 		<div class="paragraph flex w-1/2 flex-col items-center justify-center gap-5 {text_color}">
@@ -81,11 +77,11 @@
 		</div>
 
 		<div class="flex w-1/2 flex-col items-end {text_color}">
-			<span class="title front-bold text-5xl text-black">Indice</span>
+			<span class="title front-bold text-5xl">Indice</span>
 			<div class="flex w-full flex-col items-end gap-1">
 				{#each sections as section, i}
 					<div class="flex w-4/5 items-start justify-between text-2xl">
-						<span class="font-bold {text_color}">{i + 1}.</span>
+						<span class="font-bold">{i + 1}.</span>
 						<a href={`#${section}`} class="title hover:cursor-pointer hover:text-[#7A9660]"
 							>{section}</a
 						>
@@ -95,7 +91,7 @@
 		</div>
 	</section>
 
-	<section class="flex w-full flex-col items-center justify-center gap-5" id="Armado">
+	<section class="flex w-full flex-col items-center justify-center gap-5" id="Armado y Software">
 		<div class="flex w-full flex-col justify-start {text_color}">
 			<span class="title text-5xl font-bold">1. Armado y Software</span>
 			<p class="paragraph w-full">
@@ -111,7 +107,7 @@
 					? 'border-white'
 					: 'border-black'} p-10 {text_color}"
 			>
-				<Icon icon="uiw:file-pdf" class="h-auto w-1/3" />
+				<Icon icon="teenyicons:pdf-outline" class="h-auto w-1/5" />
 				<span class="title text-5xl font-bold">Haga click para descargar</span>
 			</div>
 		</a>
@@ -138,7 +134,11 @@
 			<span class="title title p-2 text-5xl"> Tutorial </span>
 		</div>
 
-		<img src="/images/Tutorial.png" alt="Screenshot" class="h-auto w-full" />
+		<img
+			src="/images/Tutorial.png"
+			alt="Screenshot"
+			class="h-auto w-full border-1 border-[#7A9660]"
+		/>
 
 		<div class="flex flex-col gap-3 {text_color} paragraph">
 			<p>
@@ -178,19 +178,23 @@
 			<span class="title text-5xl font-bold {text_color}">Repositorios</span>
 			<Icon icon="akar-icons:github-fill" class="h-10 w-10 {text_color}" />
 		</div>
-		<div class="flex w-full flex-row gap-4">
+		<div class="flex w-full flex-col gap-4 md:flex-row">
 			<div
 				class="flex h-48 w-full flex-col gap-2 border {$theme === 'dark'
 					? 'border-white'
-					: 'border-black'} p-5"
+					: 'border-black'} relative p-5 {text_color}"
 			>
 				<a
 					href="https://github.com/FedeLupianez/Librevento_control"
 					class="flex h-full flex-col items-start justify-start"
 				>
-					<span class="title text-4xl font-bold {text_color}">Centro de </span>
-					<span class="title text-4xl font-bold {text_color}">Control</span>
+					<span class="title text-4xl font-bold">Centro de </span>
+					<span class="title text-4xl font-bold">Control</span>
 				</a>
+				<Icon
+					icon="stash:leaf-light"
+					class="absolute right-2 bottom-3 h-auto w-1/4 -rotate-45 md:top-3"
+				/>
 				<div class="flex h-auto w-1/2 flex-row items-center justify-between">
 					<TechIcon icon_name="devicon:svelte" />
 					<TechIcon icon_name="logos:python" />
@@ -202,7 +206,7 @@
 			<div
 				class="flex h-48 w-full flex-col gap-2 border {$theme === 'dark'
 					? 'border-white'
-					: 'border-black'} p-5 {text_color}"
+					: 'border-black'} p-5 {text_color} relative"
 			>
 				<a
 					href="https://github.com/FedeLupianez/Librevento_robotica"
@@ -211,6 +215,10 @@
 					<span class="title">Código en </span>
 					<span class="title">Placa ESP-32 </span>
 				</a>
+				<Icon
+					icon="stash:leaf-light"
+					class="absolute right-2 bottom-3 h-auto w-1/4 -rotate-45 md:top-3"
+				/>
 				<div class="flex h-auto w-1/2 flex-row items-center justify-between">
 					<TechIcon icon_name="vscode-icons:file-type-cpp2" />
 					<TechIcon icon_name="vscode-icons:file-type-platformio" />
