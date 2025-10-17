@@ -92,8 +92,8 @@ async def is_logged_in(request: Request):
 
 @router.get("/logout")
 async def logout(response: Response):
-    response.delete_cookie(key="librevento_token_id", path="/", domain=COOKIE_DOMAIN)
-    response.delete_cookie(key="librevento_user", path="/", domain=COOKIE_DOMAIN)
+    response.delete_cookie(key="librevento_token_id", path="/")
+    response.delete_cookie(key="librevento_user", path="/")
     return {"message": "User logged out"}
 
 
