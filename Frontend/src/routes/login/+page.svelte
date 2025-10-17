@@ -29,7 +29,7 @@
 			const data = await response.json();
 			console.log('usuario logueado');
 			user.set(data.user);
-			goto(ROUTES.HOME);
+			goto(ROUTES.VOLTAGE);
 		} else {
 			console.log('Error al iniciar sesion');
 			show_error = true;
