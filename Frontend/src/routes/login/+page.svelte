@@ -30,7 +30,7 @@
 			console.log('usuario logueado');
 			user.set(data.user);
 			show_error = false;
-			goto(ROUTES.VOLTAGE); // Redireccionar automáticamente
+			window.location.href = "/meditions/voltage?filter=day"
 			await initializeUser();
 		} else {
 			console.log('Error al iniciar sesion');

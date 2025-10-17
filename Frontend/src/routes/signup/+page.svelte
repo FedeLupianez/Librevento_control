@@ -113,21 +113,22 @@
 				required
 			/>
 
-			<div
-				class="group relative justify-start border
-					{$theme == 'dark' ? 'border-[#ffffff] text-[#ffffff]' : 'border-gray-800 text-[#141414]'}"
-			>
-				<button
-					on:click={() => {
-						view_gender_menu = !view_gender_menu;
-					}}
-					class="w-full cursor-pointer px-4 py-2 text-start hover:bg-gray-800 hover:text-white"
-				>
-					{#if gender}
-						{gender}
+			<div class="group relative border justify-start {$theme == 'dark' ? 'border-white' : 'border-gray-800'}">
+				<button on:click={() => {
+					view_gender_menu = !view_gender_menu;
+				}} class="w-full text-start px-4 py-2">
+				{#if gender}
+					{#if gender == "male"}
+						Hombre
+					{:else if gender == "female"}
+						Mujer
 					{:else}
-						Género
+						No Binario
 					{/if}
+				{:else}
+				Género
+				{/if}
+			
 				</button>
 
 				{#if view_gender_menu}
