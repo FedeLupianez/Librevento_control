@@ -4,7 +4,7 @@ export const ROUTES = {
       LOGIN: '/login',
       SIGN_UP: '/signup'
    },
-   VOLTAGE: '/meditions/voltage',
+   VOLTAGE: '/meditions/voltage?filter=day',
    GET_GENERATOR: '/get_generator',
    CONSUMPTION: '/consumption',
    ALERTS: '/alertas'
