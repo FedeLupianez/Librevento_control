@@ -10,14 +10,12 @@
 	let email: string = '';
 	let password: string = '';
 	let show_error: boolean = false;
-	let show_button: boolean = false;
 	let load: boolean = false;
 	let view_password: boolean = false;
 
 	const login = async () => {
 		load = true;
 		show_error = false;
-		show_button = false;
 		const response = await fetch(API_ROUTES.USER.LOGIN, {
 			method: 'POST',
 			headers: {
@@ -31,11 +29,10 @@
 			const data = await response.json();
 			console.log('usuario logueado');
 			user.set(data.user);
-			show_button = true;
+			goto(ROUTES.HOME);
 		} else {
 			console.log('Error al iniciar sesion');
 			show_error = true;
-			show_button = false;
 			throw new Error('Login failed');
 		}
 	};
@@ -106,14 +103,6 @@
 			{#if show_error}
 				<span in:fade={{ duration: 500 }} class="z-0 mr-2 bg-red-500 p-2 text-white"
 					>Error al iniciar sesión</span
-				>
-			{:else if show_button}
-				<button
-					on:click={() => {
-						goto(ROUTES.VOLTAGE);
-					}}
-					class="w-full cursor-pointer rounded-full bg-[#7A9660] p-2 text-white hover:bg-[#6b8755]"
-					>Ir al centro</button
 				>
 			{/if}
 		</div>
