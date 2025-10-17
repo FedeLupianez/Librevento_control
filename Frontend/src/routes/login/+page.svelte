@@ -16,6 +16,7 @@
 
 	const login = async () => {
 		load = true;
+		show_error = false;
 		const response = await fetch(API_ROUTES.USER.LOGIN, {
 			method: 'POST',
 			headers: {
@@ -29,9 +30,7 @@
 			const data = await response.json();
 			console.log('usuario logueado');
 			user.set(data.user);
-			show_error = false;
-			await initializeUser();
-			goto('/meditions/voltage?filter=day');
+			goto(ROUTES.VOLTAGE);
 		} else {
 			console.log('Error al iniciar sesion');
 			show_error = true;
